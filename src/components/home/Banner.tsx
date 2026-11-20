@@ -1,146 +1,276 @@
 'use client';
 
-import React from 'react';
-import NextLink from 'next/link';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Shield, Sparkles, ArrowRight, CheckCircle, Search } from 'lucide-react';
+import {
+  Search,
+  MapPin,
+  Calendar,
+  Layers,
+  Sparkles,
+  ShieldCheck,
+  CheckCircle2,
+  TrendingUp,
+  ArrowRight
+} from 'lucide-react';
 
 export const Banner: React.FC = () => {
+  const router = useRouter();
+
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('All');
+  const [location, setLocation] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (name.trim()) params.append('search', name.trim());
+    if (category && category !== 'All') params.append('category', category);
+    if (location.trim()) params.append('search', location.trim());
+    router.push(`/equipment?${params.toString()}`);
+  };
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 via-base-100 to-base-100 py-16 lg:py-24 border-b border-base-200">
+    <section className="relative overflow-hidden pt-12 pb-24 lg:pt-16 lg:pb-32">
       
-      {/* Decorative background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Background Soft Glows & Ambient Gradient */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-electric-500/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
+      <div className="absolute top-1/3 right-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          {/* Left Column: Headlines & CTA */}
+        
+        {/* Top Header Text */}
+        <div className="text-center max-w-3xl mx-auto space-y-5">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="lg:col-span-7 space-y-6 text-center lg:text-left"
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass-surface border border-electric-500/30 text-electric-500 text-xs font-black uppercase tracking-widest shadow-sm"
           >
-            {/* Pill Badge */}
-            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" />
-              <span>Next-Gen Equipment Marketplace</span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-base-content tracking-tight leading-[1.15]">
-              Rent Top Equipment.{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-500 to-teal-400">
-                Anytime. Anywhere.
-              </span>
-            </h1>
-
-            {/* Description */}
-            <p className="text-base sm:text-lg text-base-content/75 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Connect with verified equipment owners across construction, cinema, commercial transport, and agriculture. Secure booking with instant Stripe checkout and verified owner protection.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <NextLink
-                href="/equipment"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-2xl text-base font-bold text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                <Search className="w-5 h-5 mr-2" />
-                <span>Explore All Equipment</span>
-              </NextLink>
-
-              <NextLink
-                href="/dashboard/owner"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-2xl text-base font-bold text-base-content bg-base-200 hover:bg-base-300 border border-base-300 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span>List Your Gear</span>
-                <ArrowRight className="w-5 h-5 ml-2 text-primary" />
-              </NextLink>
-            </div>
-
-            {/* Trust points */}
-            <div className="pt-4 grid grid-cols-3 gap-4 border-t border-base-200 text-left">
-              <div>
-                <p className="text-2xl font-black text-base-content">1,200+</p>
-                <p className="text-xs text-base-content/60 font-medium">Verified Equipment</p>
-              </div>
-              <div>
-                <p className="text-2xl font-black text-primary">99.8%</p>
-                <p className="text-xs text-base-content/60 font-medium">Rental Satisfaction</p>
-              </div>
-              <div>
-                <p className="text-2xl font-black text-secondary">100%</p>
-                <p className="text-xs text-base-content/60 font-medium">Stripe Protected</p>
-              </div>
-            </div>
-
+            <Sparkles className="w-4 h-4 text-orange-500" />
+            <span>Next-Generation Heavy Equipment Marketplace</span>
           </motion.div>
 
-          {/* Right Column: High-Res Interactive Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
-            className="lg:col-span-5 relative"
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl sm:text-6xl lg:text-7xl font-black text-navy-900 tracking-tight leading-[1.1]"
           >
-            <div className="relative mx-auto max-w-md lg:max-w-none">
+            Rent Smarter.{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-500 via-blue-600 to-orange-500">
+              Build Bigger.
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-base sm:text-lg text-base-content/75 font-medium max-w-2xl mx-auto leading-relaxed"
+          >
+            Find the right equipment, at the right price, exactly when you need it.
+            Direct from verified contractors, industrial owners, and equipment dealers nationwide.
+          </motion.p>
+        </div>
+
+        {/* Interactive Multi-Parameter Search Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-10 max-w-5xl mx-auto"
+        >
+          <form
+            onSubmit={handleSearch}
+            className="glass-card p-4 sm:p-5 rounded-3xl border border-white/60 shadow-glass-lg backdrop-blur-xl"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-center">
               
-              {/* Outer Glow Card */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-base-100 bg-base-200 aspect-[4/3]">
-                <img
-                  src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80"
-                  alt="Industrial Excavator Equipment"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                
-                <div className="absolute bottom-4 left-4 right-4 text-white p-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/20">
-                  <p className="text-sm font-bold flex items-center gap-1.5">
-                    <Shield className="w-4 h-4 text-emerald-400" />
-                    Verified Inspection Guaranteed
-                  </p>
-                  <p className="text-xs text-white/80">Every piece inspected before handover</p>
+              {/* 1. Equipment Name / Keyword */}
+              <div className="p-2.5 rounded-2xl bg-base-100/90 border border-base-300/80 focus-within:border-electric-500 focus-within:ring-2 focus-within:ring-electric-500/20 transition-all">
+                <label className="text-[10px] font-black uppercase text-base-content/50 block tracking-wider">
+                  Equipment
+                </label>
+                <div className="flex items-center space-x-2 mt-0.5">
+                  <Search className="w-4 h-4 text-electric-500 shrink-0" />
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Excavator, Crane..."
+                    className="w-full bg-transparent text-xs font-bold text-base-content placeholder-base-content/40 focus:outline-none"
+                  />
                 </div>
               </div>
 
-              {/* Floating verified badge card */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="absolute -top-6 -left-6 bg-base-100 rounded-2xl p-4 shadow-xl border border-base-300 hidden sm:flex items-center space-x-3 z-10"
-              >
-                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
-                  <CheckCircle className="w-6 h-6" />
+              {/* 2. Category Dropdown */}
+              <div className="p-2.5 rounded-2xl bg-base-100/90 border border-base-300/80 focus-within:border-electric-500 focus-within:ring-2 focus-within:ring-electric-500/20 transition-all">
+                <label className="text-[10px] font-black uppercase text-base-content/50 block tracking-wider">
+                  Category
+                </label>
+                <div className="flex items-center space-x-2 mt-0.5">
+                  <Layers className="w-4 h-4 text-orange-500 shrink-0" />
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full bg-transparent text-xs font-bold text-base-content focus:outline-none cursor-pointer"
+                  >
+                    <option value="All">All Categories</option>
+                    <option value="Excavators">Excavators</option>
+                    <option value="Cranes">Cranes</option>
+                    <option value="Generators">Generators</option>
+                    <option value="Forklifts">Forklifts</option>
+                    <option value="Bulldozers">Bulldozers</option>
+                    <option value="Loaders">Loaders</option>
+                    <option value="Concrete Mixers">Concrete Mixers</option>
+                    <option value="Trucks">Trucks</option>
+                    <option value="Lifting Equipment">Lifting Equipment</option>
+                    <option value="Other Machinery">Other Machinery</option>
+                  </select>
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-base-content">Instant Booking</p>
-                  <p className="text-[11px] text-base-content/60">Zero paper hassle</p>
-                </div>
-              </motion.div>
+              </div>
 
-              {/* Floating stats card */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="absolute -bottom-6 -right-6 bg-base-100 rounded-2xl p-4 shadow-xl border border-base-300 hidden sm:flex items-center space-x-3 z-10"
-              >
-                <div className="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary">
-                  <Sparkles className="w-6 h-6" />
+              {/* 3. Location */}
+              <div className="p-2.5 rounded-2xl bg-base-100/90 border border-base-300/80 focus-within:border-electric-500 focus-within:ring-2 focus-within:ring-electric-500/20 transition-all">
+                <label className="text-[10px] font-black uppercase text-base-content/50 block tracking-wider">
+                  Location
+                </label>
+                <div className="flex items-center space-x-2 mt-0.5">
+                  <MapPin className="w-4 h-4 text-electric-500 shrink-0" />
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="City, State"
+                    className="w-full bg-transparent text-xs font-bold text-base-content placeholder-base-content/40 focus:outline-none"
+                  />
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-base-content">Commercial Grade</p>
-                  <p className="text-[11px] text-base-content/60">Ready to work</p>
-                </div>
-              </motion.div>
+              </div>
 
+              {/* 4. Rental Start Date */}
+              <div className="p-2.5 rounded-2xl bg-base-100/90 border border-base-300/80 focus-within:border-electric-500 focus-within:ring-2 focus-within:ring-electric-500/20 transition-all">
+                <label className="text-[10px] font-black uppercase text-base-content/50 block tracking-wider">
+                  Start Date
+                </label>
+                <div className="flex items-center space-x-2 mt-0.5">
+                  <Calendar className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <input
+                    type="date"
+                    value={startDate}
+                    min={new Date().toISOString().split('T')[0]}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full bg-transparent text-xs font-bold text-base-content focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* 5. Animated Search Button */}
+              <div className="w-full lg:w-auto">
+                <button
+                  type="submit"
+                  className="w-full btn-premium-orange py-4 px-6 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2"
+                >
+                  <Search className="w-4 h-4" />
+                  <span>Search Gear</span>
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </motion.div>
+
+        {/* Hero Machinery Showcase & Floating Glass Cards */}
+        <div className="mt-14 relative max-w-5xl mx-auto">
+          
+          {/* Main Hero Machinery Image Card */}
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/60 bg-base-100 aspect-[16/9]">
+            <img
+              src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1600&q=80"
+              alt="Heavy Machinery Fleet"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent" />
+            
+            <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-4">
+              <div>
+                <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[11px] font-bold uppercase tracking-wider">
+                  Featured Fleet
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black mt-2">
+                  CAT 320 Next Gen Hydraulic Excavator
+                </h3>
+                <p className="text-xs text-white/80 max-w-md mt-1">
+                  Available for immediate jobsite dispatch with Grade Assist and 1.2 cu yd bucket.
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-3 shrink-0">
+                <div className="text-right">
+                  <span className="text-[10px] text-white/70 block uppercase font-bold">Daily Rate</span>
+                  <span className="text-2xl font-black text-white">$480/day</span>
+                </div>
+                <button
+                  onClick={() => router.push('/equipment')}
+                  className="btn-premium-primary px-5 py-3 text-xs"
+                >
+                  <span>Rent Now</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Glassmorphism Card 1: Available Equipment */}
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-6 -left-6 sm:top-8 sm:-left-8 glass-card p-4 rounded-3xl border border-white/80 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-electric-500/15 text-electric-500 flex items-center justify-center font-bold">
+              <Layers className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-lg font-black text-navy-900">1,450+ Units</p>
+              <p className="text-[11px] font-semibold text-base-content/60">Available for Rent</p>
+            </div>
+          </motion.div>
+
+          {/* Floating Glassmorphism Card 2: Verified Rental Providers */}
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-1/2 -right-6 sm:-right-8 glass-card p-4 rounded-3xl border border-white/80 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-orange-500/15 text-orange-500 flex items-center justify-center font-bold">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-lg font-black text-navy-900">380+ Verified</p>
+              <p className="text-[11px] font-semibold text-base-content/60">Inspected Equipment Owners</p>
+            </div>
+          </motion.div>
+
+          {/* Floating Glassmorphism Card 3: Successful Bookings */}
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -bottom-6 left-12 glass-card p-4 rounded-3xl border border-white/80 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center font-bold">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-lg font-black text-navy-900">12,800+</p>
+              <p className="text-[11px] font-semibold text-base-content/60">Successful Bookings</p>
             </div>
           </motion.div>
 
         </div>
+
       </div>
     </section>
   );
