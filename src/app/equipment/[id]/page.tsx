@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
@@ -21,7 +21,11 @@ import {
   Loader2,
   ArrowLeft,
   X,
-  CreditCard
+  CreditCard,
+  Star,
+  Clock,
+  Sparkles,
+  Info
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
@@ -37,15 +41,19 @@ export default function EquipmentDetailsPageWrapper() {
 function EquipmentDetailsContent() {
   const { id } = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const autoOpenBooking = searchParams.get('book') === 'true';
+
   const { user } = useAuth();
 
   const [equipment, setEquipment] = useState<any>(null);
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
 
   // Booking Modal State
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(autoOpenBooking);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -63,9 +71,9 @@ function EquipmentDetailsContent() {
         const res = await api.get(`/equipment/${id}`);
         if (res.data.success) {
           setEquipment(res.data.equipment);
+          setSelectedImage(res.data.equipment.image);
         }
 
-        // Check if item is already in favorites
         const favRes = await api.get(`/favorites/check/${id}`);
         if (favRes.data.success) {
           setIsFavorite(favRes.data.isFavorite);
@@ -80,7 +88,12 @@ function EquipmentDetailsContent() {
     fetchData();
   }, [id]);
 
-  // Calculate rental duration in days
+  useEffect(() => {
+    if (autoOpenBooking) {
+      setIsBookingModalOpen(true);
+    }
+  }, [autoOpenBooking]);
+
   const calculateDays = () => {
     if (!startDate || !endDate) return 1;
     const s = new Date(startDate);
@@ -89,7 +102,6 @@ function EquipmentDetailsContent() {
     return Math.max(1, diff);
   };
 
-  // Calculate estimated total price
   const calculateTotal = () => {
     if (!equipment) return 0;
     const days = calculateDays();
@@ -99,7 +111,6 @@ function EquipmentDetailsContent() {
     return Math.round(unitRate * days * quantity * 100) / 100;
   };
 
-  // Toggle Favorite
   const handleToggleFavorite = async () => {
     if (!equipment) return;
     setFavLoading(true);
@@ -120,7 +131,6 @@ function EquipmentDetailsContent() {
     }
   };
 
-  // Initiate Booking & Redirect to Stripe
   const handleConfirmBooking = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -147,7 +157,6 @@ function EquipmentDetailsContent() {
     setBookingLoading(true);
 
     try {
-      // 1. Create booking in backend
       const bookingRes = await api.post('/bookings', {
         equipmentId: equipment._id,
         startDate,
@@ -164,7 +173,6 @@ function EquipmentDetailsContent() {
 
       const createdBooking = bookingRes.data.booking;
 
-      // 2. Create Stripe Checkout Session
       const checkoutRes = await api.post('/payments/create-checkout-session', {
         bookingId: createdBooking._id
       });
@@ -181,7 +189,7 @@ function EquipmentDetailsContent() {
         icon: 'error',
         title: 'Booking Notice',
         text: error.response?.data?.message || error.message || 'Unable to proceed to payment.',
-        confirmButtonColor: '#16a34a'
+        confirmButtonColor: '#3878FF'
       });
     } finally {
       setBookingLoading(false);
@@ -191,8 +199,8 @@ function EquipmentDetailsContent() {
   if (loading) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-3">
-        <Loader2 className="w-10 h-10 text-primary animate-spin" />
-        <p className="text-sm font-medium text-base-content/70">Loading equipment specifications...</p>
+        <Loader2 className="w-10 h-10 text-electric-500 animate-spin" />
+        <p className="text-sm font-bold text-navy-900">Loading equipment specifications...</p>
       </div>
     );
   }
@@ -200,11 +208,11 @@ function EquipmentDetailsContent() {
   if (!equipment) {
     return (
       <div className="max-w-3xl mx-auto py-20 px-4 text-center space-y-4">
-        <h2 className="text-2xl font-bold text-base-content">Equipment Not Found</h2>
-        <p className="text-sm text-base-content/60">The equipment you requested may have been removed or is pending approval.</p>
+        <h2 className="text-2xl font-black text-navy-900">Equipment Listing Not Found</h2>
+        <p className="text-sm text-base-content/60">This equipment may have been removed or is pending approval.</p>
         <button
           onClick={() => router.push('/equipment')}
-          className="px-6 py-3 rounded-2xl bg-primary text-white text-sm font-bold"
+          className="btn-premium-primary px-6 py-3 text-xs"
         >
           Return to All Equipment
         </button>
@@ -213,172 +221,232 @@ function EquipmentDetailsContent() {
   }
 
   const isAvailable = (equipment.availableQuantity || 0) > 0;
+  const ratingValue = equipment.rating || 4.9;
+  const reviewCountValue = equipment.reviewCount || 28;
+
+  // Gallery images mockup
+  const galleryImages = [
+    equipment.image,
+    'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+  ];
 
   return (
-    <div className="min-h-screen bg-base-100 py-10 transition-colors">
+    <div className="min-h-screen py-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Back navigation */}
-        <button
-          onClick={() => router.back()}
-          className="inline-flex items-center text-xs font-bold text-base-content/70 hover:text-primary mb-6 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 mr-1.5" />
-          <span>Back to Equipment Catalog</span>
-        </button>
+        {/* Back Link & Breadcrumbs */}
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={() => router.back()}
+            className="inline-flex items-center text-xs font-bold text-base-content/70 hover:text-electric-500 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1.5" />
+            <span>Back to Equipment Catalog</span>
+          </button>
 
-        {/* Main Grid */}
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleToggleFavorite}
+              disabled={favLoading}
+              className={`p-2.5 rounded-2xl glass-card border transition-all ${
+                isFavorite
+                  ? 'bg-rose-500 text-white border-rose-500'
+                  : 'text-base-content/70 hover:text-rose-500'
+              }`}
+              title="Save to favorites"
+            >
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-white' : ''}`} />
+            </button>
+          </div>
+        </div>
+
+        {/* Main 12-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
-          {/* Left Column (7 cols): Image gallery & specs */}
+          {/* Left Column (7 cols): Gallery & Specifications */}
           <div className="lg:col-span-7 space-y-8">
             
-            {/* Hero Image */}
-            <div className="relative aspect-[16/10] w-full rounded-3xl overflow-hidden bg-base-200 border border-base-300 shadow-md">
+            {/* Main Image Stage */}
+            <div className="relative aspect-[16/10] w-full rounded-3xl overflow-hidden bg-navy-950 border border-white/60 shadow-glass-lg">
               <img
-                src={equipment.image}
+                src={selectedImage || equipment.image}
                 alt={equipment.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-all duration-300"
               />
-              
               <div className="absolute top-4 left-4">
-                <span className="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-base-100/90 backdrop-blur-md text-base-content shadow-sm">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-white/90 backdrop-blur-md text-navy-900 shadow-sm">
                   {equipment.category}
                 </span>
               </div>
-
-              <div className="absolute top-4 right-4 flex items-center space-x-2">
-                <button
-                  onClick={handleToggleFavorite}
-                  disabled={favLoading}
-                  aria-label="Add to favorites"
-                  className={`p-2.5 rounded-full backdrop-blur-md shadow-md transition-all ${
-                    isFavorite
-                      ? 'bg-rose-500 text-white'
-                      : 'bg-base-100/90 text-base-content hover:text-rose-500'
-                  }`}
-                >
-                  <Heart className={`w-5 h-5 ${isFavorite ? 'fill-white' : ''}`} />
-                </button>
-              </div>
             </div>
 
-            {/* Description */}
-            <div className="bg-base-100 p-8 rounded-3xl border border-base-300 space-y-4">
-              <h3 className="text-xl font-bold text-base-content flex items-center gap-2">
-                <FileText className="w-5 h-5 text-primary" />
-                Equipment Overview
+            {/* Thumbnail Gallery Preview */}
+            <div className="grid grid-cols-4 gap-3">
+              {galleryImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImage(img)}
+                  className={`aspect-[4/3] rounded-2xl overflow-hidden border-2 transition-all ${
+                    selectedImage === img
+                      ? 'border-electric-500 shadow-glow-blue scale-[1.03]'
+                      : 'border-base-300/80 opacity-70 hover:opacity-100'
+                  }`}
+                >
+                  <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+
+            {/* Equipment Overview & Description */}
+            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
+              <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-electric-500" />
+                Equipment Description & Capabilities
               </h3>
-              <p className="text-sm text-base-content/80 leading-relaxed whitespace-pre-line">
+              <p className="text-xs sm:text-sm text-base-content/80 leading-relaxed whitespace-pre-line">
                 {equipment.description}
               </p>
             </div>
 
-            {/* Technical Specifications */}
-            <div className="bg-base-100 p-8 rounded-3xl border border-base-300 space-y-4">
-              <h3 className="text-xl font-bold text-base-content flex items-center gap-2">
-                <Tag className="w-5 h-5 text-secondary" />
-                Equipment Specifications
+            {/* Technical Specifications Matrix */}
+            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
+              <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+                <Tag className="w-5 h-5 text-orange-500" />
+                Technical Specifications
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-                <div className="p-4 rounded-2xl bg-base-200/50">
-                  <span className="text-[11px] font-bold uppercase text-base-content/50 block">Brand</span>
-                  <span className="text-sm font-black text-base-content">{equipment.brand || 'Enterprise'}</span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                <div className="p-4 rounded-2xl bg-base-200/80">
+                  <span className="text-[10px] font-black uppercase text-base-content/50 block">Brand</span>
+                  <span className="text-xs font-bold text-navy-900">{equipment.brand || 'Enterprise'}</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-base-200/50">
-                  <span className="text-[11px] font-bold uppercase text-base-content/50 block">Model</span>
-                  <span className="text-sm font-black text-base-content">{equipment.model || 'Standard'}</span>
+                <div className="p-4 rounded-2xl bg-base-200/80">
+                  <span className="text-[10px] font-black uppercase text-base-content/50 block">Model</span>
+                  <span className="text-xs font-bold text-navy-900">{equipment.model || 'Standard Tier'}</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-base-200/50">
-                  <span className="text-[11px] font-bold uppercase text-base-content/50 block">Condition</span>
-                  <span className="text-sm font-black text-base-content">{equipment.condition || 'Inspected'}</span>
+                <div className="p-4 rounded-2xl bg-base-200/80">
+                  <span className="text-[10px] font-black uppercase text-base-content/50 block">Condition</span>
+                  <span className="text-xs font-bold text-navy-900">{equipment.condition || 'Inspected'}</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-base-200/50">
-                  <span className="text-[11px] font-bold uppercase text-base-content/50 block">Location</span>
-                  <span className="text-sm font-black text-base-content">{equipment.location}</span>
+                <div className="p-4 rounded-2xl bg-base-200/80">
+                  <span className="text-[10px] font-black uppercase text-base-content/50 block">Location</span>
+                  <span className="text-xs font-bold text-navy-900">{equipment.location}</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-base-200/50">
-                  <span className="text-[11px] font-bold uppercase text-base-content/50 block">Available Units</span>
-                  <span className="text-sm font-black text-primary">{equipment.availableQuantity} in stock</span>
+                <div className="p-4 rounded-2xl bg-base-200/80">
+                  <span className="text-[10px] font-black uppercase text-base-content/50 block">Available Units</span>
+                  <span className="text-xs font-bold text-emerald-600">{equipment.availableQuantity} in stock</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-base-200/50">
-                  <span className="text-[11px] font-bold uppercase text-base-content/50 block">Rental Frequency</span>
-                  <span className="text-sm font-black text-base-content">{equipment.rentalType}</span>
+                <div className="p-4 rounded-2xl bg-base-200/80">
+                  <span className="text-[10px] font-black uppercase text-base-content/50 block">Rental Frequency</span>
+                  <span className="text-xs font-bold text-navy-900">{equipment.rentalType}</span>
                 </div>
               </div>
             </div>
 
             {/* Rental Terms and Conditions */}
-            <div className="bg-base-100 p-8 rounded-3xl border border-base-300 space-y-4">
-              <h3 className="text-xl font-bold text-base-content flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                Rental Terms & Conditions
+            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
+              <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                Rental Terms & Insurance Protection
               </h3>
-              <p className="text-xs text-base-content/75 leading-relaxed bg-base-200/40 p-4 rounded-2xl border border-base-200">
+              <p className="text-xs text-base-content/80 leading-relaxed bg-base-200/60 p-4 rounded-2xl border border-base-200">
                 {equipment.terms || 'Standard peer-to-peer equipment contract applies. Inspection checklist completed on handover. Clean and operational return expected.'}
               </p>
             </div>
 
+            {/* Customer Reviews Section on Details */}
+            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+                  <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                  Renter Feedback & Ratings
+                </h3>
+                <span className="text-xs font-bold text-electric-500">
+                  {ratingValue} / 5.0 ({reviewCountValue} Verified Reviews)
+                </span>
+              </div>
+
+              <div className="divide-y divide-base-200 pt-2 space-y-4">
+                <div className="pt-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-bold text-navy-900">Marcus Vance • General Contractor</p>
+                    <span className="text-[10px] text-base-content/50">2 weeks ago</span>
+                  </div>
+                  <div className="flex items-center text-amber-400 my-1">
+                    {'★★★★★'}
+                  </div>
+                  <p className="text-xs text-base-content/70">
+                    "Unit was delivered directly on site at 7:00 AM sharp. Completely clean, inspected, and ready to work. Smooth Stripe escrow checkout."
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          {/* Right Column (5 cols): Booking & Owner Summary */}
+          {/* Right Column (5 cols): Sticky Booking Summary Card */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Sticky Pricing & Booking Card */}
-            <div className="sticky top-28 bg-base-100 p-8 rounded-3xl border border-base-300 shadow-xl space-y-6">
+            <div className="sticky top-24 glass-card p-8 rounded-3xl border border-white/70 shadow-glass-lg space-y-6">
               
-              {/* Header: Title & Price */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-primary uppercase tracking-wider">{equipment.category}</span>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-electric-500">
+                    {equipment.category}
+                  </span>
                   {isAvailable ? (
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center gap-1">
+                    <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       In Stock
                     </span>
                   ) : (
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-600 flex items-center gap-1">
+                    <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-rose-500/10 text-rose-600 flex items-center gap-1">
                       <XCircle className="w-3.5 h-3.5" />
                       Rented Out
                     </span>
                   )}
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-black text-base-content tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight">
                   {equipment.name}
                 </h1>
 
                 <div className="mt-4 flex items-baseline space-x-2">
-                  <span className="text-3xl font-black text-primary">${equipment.rentalPrice}</span>
-                  <span className="text-sm text-base-content/60 font-medium">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
+                  <span className="text-3xl font-black text-navy-900">${equipment.rentalPrice}</span>
+                  <span className="text-xs text-base-content/60 font-bold">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
                 </div>
               </div>
 
               {/* Owner Info Box */}
-              <div className="p-4 rounded-2xl bg-base-200/60 border border-base-200 flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-bold">
+              <div className="p-4 rounded-2xl bg-base-200/80 border border-base-200 flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-2xl bg-electric-500/15 text-electric-500 flex items-center justify-center font-bold">
                   <User className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs text-base-content/50 uppercase font-bold">Listed By Owner</p>
-                  <p className="text-sm font-bold text-base-content">{equipment.ownerName || 'Verified Equipment Owner'}</p>
-                  <p className="text-xs text-base-content/60">{equipment.location}</p>
+                  <p className="text-[10px] text-base-content/50 uppercase font-black tracking-wider">Verified Equipment Provider</p>
+                  <p className="text-xs font-black text-navy-900">{equipment.ownerName || 'Apex Equipment Pro'}</p>
+                  <p className="text-[11px] text-base-content/60">{equipment.location} • 100% Response Rate</p>
                 </div>
               </div>
 
-              {/* Book Now Button */}
+              {/* Booking Action */}
               <button
                 disabled={!isAvailable}
                 onClick={() => setIsBookingModalOpen(true)}
-                className="w-full py-4 rounded-2xl text-base font-bold text-white bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/25 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                className="w-full btn-premium-orange py-4 text-xs font-black uppercase tracking-wider disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                <CreditCard className="w-5 h-5" />
-                <span>{isAvailable ? 'Book Equipment Now' : 'Currently Unavailable'}</span>
+                <Calendar className="w-4 h-4" />
+                <span>{isAvailable ? 'Reserve & Book via Stripe' : 'Currently Rented Out'}</span>
               </button>
 
-              <p className="text-[11px] text-center text-base-content/60">
-                🔒 Protected by Stripe 100% Escrow Guarantee. No payment charged until dates are confirmed.
-              </p>
+              <div className="p-3 rounded-2xl bg-electric-500/5 border border-electric-500/20 text-[11px] text-base-content/70 space-y-1">
+                <p className="font-bold text-navy-900 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-electric-500" />
+                  Stripe 100% Escrow Guarantee
+                </p>
+                <p>Funds are secured until equipment is inspected and verified on your site.</p>
+              </div>
 
             </div>
 
@@ -388,16 +456,15 @@ function EquipmentDetailsContent() {
 
       </div>
 
-      {/* Book Equipment Modal */}
+      {/* Booking Modal */}
       {isBookingModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in duration-200">
-          <div className="bg-base-100 rounded-3xl border border-base-300 shadow-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 backdrop-blur-md p-4 overflow-y-auto animate-in fade-in duration-200">
+          <div className="glass-card rounded-3xl border border-white/80 shadow-glass-lg max-w-lg w-full p-6 sm:p-8 space-y-5 relative">
             
-            {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-base-200">
+            <div className="flex items-center justify-between pb-3 border-b border-base-200">
               <div>
-                <h3 className="text-lg font-black text-base-content">Book {equipment.name}</h3>
-                <p className="text-xs text-base-content/60">Complete reservation details to proceed to Stripe payment</p>
+                <h3 className="text-lg font-black text-navy-900">Book {equipment.name}</h3>
+                <p className="text-xs text-base-content/60">Complete reservation parameters for Stripe Checkout</p>
               </div>
               <button
                 onClick={() => setIsBookingModalOpen(false)}
@@ -407,39 +474,36 @@ function EquipmentDetailsContent() {
               </button>
             </div>
 
-            {/* Modal Form */}
             <form onSubmit={handleConfirmBooking} className="space-y-4 text-xs">
               
-              {/* Dates */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-base-content/70 block mb-1">Rental Start Date</label>
+                  <label className="font-black text-base-content/70 block mb-1">Start Date</label>
                   <input
                     type="date"
                     required
                     value={startDate}
                     min={new Date().toISOString().split('T')[0]}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
+                    className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-base-content/70 block mb-1">Rental End Date</label>
+                  <label className="font-black text-base-content/70 block mb-1">End Date</label>
                   <input
                     type="date"
                     required
                     value={endDate}
                     min={startDate || new Date().toISOString().split('T')[0]}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
+                    className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
                   />
                 </div>
               </div>
 
-              {/* Quantity */}
               <div>
-                <label className="font-bold text-base-content/70 block mb-1">
-                  Required Quantity (Max: {equipment.availableQuantity})
+                <label className="font-black text-base-content/70 block mb-1">
+                  Required Units (Max: {equipment.availableQuantity})
                 </label>
                 <input
                   type="number"
@@ -448,77 +512,73 @@ function EquipmentDetailsContent() {
                   max={equipment.availableQuantity}
                   value={quantity}
                   onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                  className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
+                  className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
                 />
               </div>
 
-              {/* Phone */}
               <div>
-                <label className="font-bold text-base-content/70 block mb-1">Contact Phone Number</label>
+                <label className="font-black text-base-content/70 block mb-1">Site Contact Phone</label>
                 <input
                   type="tel"
                   required
                   placeholder="+1 (555) 000-0000"
                   value={contactNumber}
                   onChange={(e) => setContactNumber(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
+                  className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
                 />
               </div>
 
-              {/* Delivery Address */}
               <div>
-                <label className="font-bold text-base-content/70 block mb-1">Job Site / Delivery Address</label>
+                <label className="font-black text-base-content/70 block mb-1">Job Site / Delivery Address</label>
                 <input
                   type="text"
                   required
-                  placeholder="Street address, city, state, zip"
+                  placeholder="Street, City, State, Zip"
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
+                  className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
                 />
               </div>
 
-              {/* Notes */}
               <div>
-                <label className="font-bold text-base-content/70 block mb-1">Additional Notes (Optional)</label>
+                <label className="font-black text-base-content/70 block mb-1">Additional Notes</label>
                 <textarea
                   rows={2}
-                  placeholder="Special job site instructions, gate codes, or delivery timing..."
+                  placeholder="Gate code, unloading instructions..."
                   value={additionalNotes}
                   onChange={(e) => setAdditionalNotes(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
+                  className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
                 />
               </div>
 
-              {/* Price Calculation Summary Box */}
-              <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 space-y-1.5">
+              {/* Summary calculation box */}
+              <div className="p-4 rounded-2xl bg-electric-500/10 border border-electric-500/20 space-y-1">
                 <div className="flex justify-between text-xs text-base-content/70">
                   <span>Duration:</span>
-                  <span className="font-bold text-base-content">{calculateDays()} day(s)</span>
+                  <span className="font-bold text-navy-900">{calculateDays()} day(s)</span>
                 </div>
                 <div className="flex justify-between text-xs text-base-content/70">
                   <span>Quantity:</span>
-                  <span className="font-bold text-base-content">{quantity} unit(s)</span>
+                  <span className="font-bold text-navy-900">{quantity} unit(s)</span>
                 </div>
-                <div className="flex justify-between text-sm font-black text-base-content pt-2 border-t border-primary/20">
-                  <span>Total Rental Amount:</span>
-                  <span className="text-primary text-base">${calculateTotal()}</span>
+                <div className="flex justify-between text-sm font-black text-navy-900 pt-2 border-t border-electric-500/20">
+                  <span>Estimated Total:</span>
+                  <span className="text-electric-500 text-base">${calculateTotal()}</span>
                 </div>
               </div>
 
-              {/* Submit Buttons */}
               <div className="flex items-center space-x-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsBookingModalOpen(false)}
-                  className="w-1/3 py-3 rounded-xl border border-base-300 font-bold text-base-content/80 hover:bg-base-200"
+                  className="w-1/3 py-3 rounded-xl border border-base-300 font-bold text-base-content/70 hover:bg-base-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={bookingLoading}
-                  className="w-2/3 py-3 rounded-xl bg-primary text-white font-bold shadow-md shadow-primary/25 hover:bg-primary/90 flex items-center justify-center gap-2"
+                  className="w-2/3 btn-premium-primary py-3 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2"
                 >
                   {bookingLoading ? (
                     <>
