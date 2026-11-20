@@ -90,7 +90,7 @@ export const CategoriesSection: React.FC = () => {
               <Sparkles className="w-3.5 h-3.5 text-orange-500" />
               <span>Heavy Fleet Taxonomy</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-navy-900 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-black text-navy-900 dark:text-white tracking-tight">
               Explore Equipment by Category
             </h2>
             <p className="text-sm text-base-content/70 max-w-xl">

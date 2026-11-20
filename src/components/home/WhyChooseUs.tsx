@@ -46,7 +46,7 @@ export const WhyChooseUs: React.FC = () => {
             <Sparkles className="w-3.5 h-3.5 text-orange-500" />
             <span>The GearUp Standard</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-navy-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-navy-900 dark:text-white tracking-tight">
             Why Contractors & Creators Choose Us
           </h2>
           <p className="text-sm text-base-content/70">
@@ -76,7 +76,7 @@ export const WhyChooseUs: React.FC = () => {
                   </span>
                 </div>
 
-                <h3 className="text-base font-black text-navy-900 group-hover:text-electric-500 transition-colors">
+                <h3 className="text-base font-black text-navy-900 dark:text-white group-hover:text-electric-500 transition-colors">
                   {b.title}
                 </h3>
                 <p className="text-xs text-base-content/70 mt-2 leading-relaxed font-medium">

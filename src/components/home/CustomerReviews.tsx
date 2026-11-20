@@ -42,7 +42,7 @@ export const CustomerReviews: React.FC = () => {
             <Sparkles className="w-3.5 h-3.5 text-orange-500" />
             <span>Verified Customer Feedback</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-navy-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-navy-900 dark:text-white tracking-tight">
             What Contractors & Clients Say
           </h2>
           <p className="text-sm text-base-content/70">
@@ -89,7 +89,7 @@ export const CustomerReviews: React.FC = () => {
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-1">
-                    <p className="text-xs font-bold text-navy-900 truncate">{rev.customerName}</p>
+                    <p className="text-xs font-bold text-navy-900 dark:text-white truncate">{rev.customerName}</p>
                     <CheckCircle2 className="w-3.5 h-3.5 text-electric-500 shrink-0" />
                   </div>
                   <p className="text-[10px] text-base-content/50 truncate font-semibold">{rev.role || 'Verified Customer'}</p>

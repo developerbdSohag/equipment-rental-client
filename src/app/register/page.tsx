@@ -116,12 +116,12 @@ export default function RegisterPage() {
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-navy-900 via-electric-500 to-cyan-400 flex items-center justify-center text-white shadow-glow-blue">
               <Truck className="w-5 h-5" />
             </div>
-            <span className="text-2xl font-black text-navy-900">
+            <span className="text-2xl font-black text-navy-900 dark:text-white">
               Gear<span className="text-electric-500">Up</span>
             </span>
           </NextLink>
 
-          <h2 className="text-2xl font-black text-navy-900 tracking-tight">
+          <h2 className="text-2xl font-black text-navy-900 dark:text-white tracking-tight">
             Create Your Account
           </h2>
           <p className="text-xs text-base-content/60">
@@ -166,7 +166,7 @@ export default function RegisterPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. John Miller or Vertex Builders"
-                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-navy-900 focus:outline-none focus:border-electric-500"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
                   />
                 </div>
               </div>
@@ -181,7 +181,7 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-navy-900 focus:outline-none focus:border-electric-500"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
                   />
                 </div>
               </div>
@@ -195,7 +195,7 @@ export default function RegisterPage() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+1 (555) 000-0000"
-                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-navy-900 focus:outline-none focus:border-electric-500"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
                   />
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-navy-900 focus:outline-none focus:border-electric-500"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
                   />
                 </div>
               </div>
@@ -246,7 +246,7 @@ export default function RegisterPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-navy-900 focus:outline-none focus:border-electric-500"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
                   />
                 </div>
               </div>
@@ -316,7 +316,7 @@ export default function RegisterPage() {
                   <div className="w-12 h-12 rounded-2xl bg-electric-500/15 text-electric-500 flex items-center justify-center mb-3">
                     <ShoppingBag className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-black text-navy-900">Customer / Renter</h4>
+                  <h4 className="text-sm font-black text-base-content">Customer / Renter</h4>
                   <p className="text-[11px] text-base-content/70 mt-1">
                     Rent machinery, generators, and tools for your jobsites and shoots.
                   </p>
@@ -334,7 +334,7 @@ export default function RegisterPage() {
                   <div className="w-12 h-12 rounded-2xl bg-orange-500/15 text-orange-500 flex items-center justify-center mb-3">
                     <Wrench className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-black text-navy-900">Equipment Owner</h4>
+                  <h4 className="text-sm font-black text-base-content">Equipment Owner</h4>
                   <p className="text-[11px] text-base-content/70 mt-1">
                     Monetize idle machinery, list fleet units, and receive Stripe payouts.
                   </p>
@@ -373,14 +373,14 @@ export default function RegisterPage() {
               className="space-y-4 text-xs"
             >
               <div className="p-4 rounded-2xl bg-base-200/80 border border-base-300/80 space-y-2 text-xs">
-                <h4 className="font-black text-navy-900">Registration Summary:</h4>
+                <h4 className="font-black text-base-content">Registration Summary:</h4>
                 <div className="flex justify-between text-base-content/70">
                   <span>Name:</span>
-                  <span className="font-bold text-navy-900">{name}</span>
+                  <span className="font-bold text-base-content">{name}</span>
                 </div>
                 <div className="flex justify-between text-base-content/70">
                   <span>Email:</span>
-                  <span className="font-bold text-navy-900">{email}</span>
+                  <span className="font-bold text-base-content">{email}</span>
                 </div>
                 <div className="flex justify-between text-base-content/70">
                   <span>Selected Role:</span>
@@ -445,7 +445,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-2xl font-black text-navy-900 tracking-tight">Account Created!</h3>
+                <h3 className="text-2xl font-black text-base-content tracking-tight">Account Created!</h3>
                 <p className="text-xs text-base-content/70">
                   Welcome to GearUp, {name}. Your {role} session has been established.
                 </p>

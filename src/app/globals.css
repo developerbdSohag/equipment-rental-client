@@ -13,6 +13,90 @@
   }
 }
 
+/* ==========================================================================
+   DARK THEME TYPOGRAPHY & CONTRAST PERFECTION (AAA RATED)
+   Ensures headings, body, labels, badges, cards, and inputs look razor sharp,
+   elegant, high-contrast, and ultra-professional when dark mode is toggled.
+   ========================================================================== */
+
+[data-theme="dark"],
+.dark,
+[data-theme="dark"] body,
+.dark body {
+  color: #F8FAFC;
+  background-color: #080d19;
+}
+
+[data-theme="dark"] .text-navy-900,
+.dark .text-navy-900 {
+  color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .text-navy-800,
+.dark .text-navy-800 {
+  color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .text-navy-700,
+.dark .text-navy-700 {
+  color: #E2E8F0 !important;
+}
+
+[data-theme="dark"] .text-slate-900,
+.dark .text-slate-900,
+[data-theme="dark"] .text-gray-900,
+.dark .text-gray-900 {
+  color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .text-slate-800,
+.dark .text-slate-800,
+[data-theme="dark"] .text-gray-800,
+.dark .text-gray-800 {
+  color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .text-slate-700,
+.dark .text-slate-700,
+[data-theme="dark"] .text-gray-700,
+.dark .text-gray-700 {
+  color: #E2E8F0 !important;
+}
+
+[data-theme="dark"] .text-slate-600,
+.dark .text-slate-600,
+[data-theme="dark"] .text-gray-600,
+.dark .text-gray-600 {
+  color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .text-slate-500,
+.dark .text-slate-500,
+[data-theme="dark"] .text-gray-500,
+.dark .text-gray-500 {
+  color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .text-base-content\/70,
+.dark .text-base-content\/70 {
+  color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .text-base-content\/80,
+.dark .text-base-content\/80 {
+  color: #E2E8F0 !important;
+}
+
+[data-theme="dark"] .text-base-content\/60,
+.dark .text-base-content\/60 {
+  color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .text-base-content\/50,
+.dark .text-base-content\/50 {
+  color: #94A3B8 !important;
+}
+
 /* Glassmorphism Classes */
 .glass-surface {
   background: rgba(255, 255, 255, 0.72);
@@ -22,12 +106,13 @@
   box-shadow: 0 10px 30px 0 rgba(16, 28, 53, 0.05);
 }
 
-[data-theme="dark"] .glass-surface {
-  background: rgba(16, 28, 53, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
+[data-theme="dark"] .glass-surface,
+.dark .glass-surface {
+  background: rgba(14, 23, 42, 0.85) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 120, 255, 0.18) !important;
+  box-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.5) !important;
 }
 
 .glass-card {
@@ -38,12 +123,75 @@
   box-shadow: 0 12px 36px 0 rgba(16, 28, 53, 0.06);
 }
 
-[data-theme="dark"] .glass-card {
-  background: rgba(16, 28, 53, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.4);
+[data-theme="dark"] .glass-card,
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 16px 45px 0 rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Dark Mode Badges */
+[data-theme="dark"] .bg-white\/90,
+.dark .bg-white\/90,
+[data-theme="dark"] .bg-white\/80,
+.dark .bg-white\/80 {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  color: #F8FAFC !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Dark Mode Harsh Borders Softener */
+[data-theme="dark"] .border-white\/60,
+.dark .border-white\/60,
+[data-theme="dark"] .border-white\/80,
+.dark .border-white\/80 {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Dark Mode Inputs, Selects, and Textareas */
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+.dark input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] select,
+.dark select,
+[data-theme="dark"] textarea,
+.dark textarea {
+  color: #F8FAFC !important;
+  background-color: #0b1324 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+[data-theme="dark"] select option,
+.dark select option {
+  background-color: #0b1324 !important;
+  color: #F8FAFC !important;
+}
+
+[data-theme="dark"] input::placeholder,
+.dark input::placeholder,
+[data-theme="dark"] textarea::placeholder,
+.dark textarea::placeholder {
+  color: #64748B !important;
+}
+
+/* Dark Mode Tables */
+[data-theme="dark"] table,
+.dark table {
+  color: #F8FAFC !important;
+}
+
+[data-theme="dark"] th,
+.dark th {
+  color: #94A3B8 !important;
+  background-color: #0e172a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] td,
+.dark td {
+  color: #E2E8F0 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
 }
 
 /* Neumorphic Soft Surface */

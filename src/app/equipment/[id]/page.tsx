@@ -200,7 +200,7 @@ function EquipmentDetailsContent() {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-3">
         <Loader2 className="w-10 h-10 text-electric-500 animate-spin" />
-        <p className="text-sm font-bold text-navy-900">Loading equipment specifications...</p>
+        <p className="text-sm font-bold text-navy-900 dark:text-white">Loading equipment specifications...</p>
       </div>
     );
   }
@@ -208,7 +208,7 @@ function EquipmentDetailsContent() {
   if (!equipment) {
     return (
       <div className="max-w-3xl mx-auto py-20 px-4 text-center space-y-4">
-        <h2 className="text-2xl font-black text-navy-900">Equipment Listing Not Found</h2>
+        <h2 className="text-2xl font-black text-navy-900 dark:text-white">Equipment Listing Not Found</h2>
         <p className="text-sm text-base-content/60">This equipment may have been removed or is pending approval.</p>
         <button
           onClick={() => router.push('/equipment')}
@@ -276,7 +276,7 @@ function EquipmentDetailsContent() {
                 className="w-full h-full object-cover transition-all duration-300"
               />
               <div className="absolute top-4 left-4">
-                <span className="px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-white/90 backdrop-blur-md text-navy-900 shadow-sm">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-white/90 dark:bg-navy-950/90 backdrop-blur-md text-navy-900 dark:text-white shadow-sm border border-white/20">
                   {equipment.category}
                 </span>
               </div>
@@ -300,8 +300,8 @@ function EquipmentDetailsContent() {
             </div>
 
             {/* Equipment Overview & Description */}
-            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
-              <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+            <div className="glass-card p-8 rounded-3xl border border-white/60 dark:border-white/10 space-y-4">
+              <h3 className="text-lg font-black text-navy-900 dark:text-white flex items-center gap-2">
                 <FileText className="w-5 h-5 text-electric-500" />
                 Equipment Description & Capabilities
               </h3>
@@ -311,27 +311,27 @@ function EquipmentDetailsContent() {
             </div>
 
             {/* Technical Specifications Matrix */}
-            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
-              <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+            <div className="glass-card p-8 rounded-3xl border border-white/60 dark:border-white/10 space-y-4">
+              <h3 className="text-lg font-black text-navy-900 dark:text-white flex items-center gap-2">
                 <Tag className="w-5 h-5 text-orange-500" />
                 Technical Specifications
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
                 <div className="p-4 rounded-2xl bg-base-200/80">
                   <span className="text-[10px] font-black uppercase text-base-content/50 block">Brand</span>
-                  <span className="text-xs font-bold text-navy-900">{equipment.brand || 'Enterprise'}</span>
+                  <span className="text-xs font-bold text-navy-900 dark:text-white">{equipment.brand || 'Enterprise'}</span>
                 </div>
                 <div className="p-4 rounded-2xl bg-base-200/80">
                   <span className="text-[10px] font-black uppercase text-base-content/50 block">Model</span>
-                  <span className="text-xs font-bold text-navy-900">{equipment.model || 'Standard Tier'}</span>
+                  <span className="text-xs font-bold text-navy-900 dark:text-white">{equipment.model || 'Standard Tier'}</span>
                 </div>
                 <div className="p-4 rounded-2xl bg-base-200/80">
                   <span className="text-[10px] font-black uppercase text-base-content/50 block">Condition</span>
-                  <span className="text-xs font-bold text-navy-900">{equipment.condition || 'Inspected'}</span>
+                  <span className="text-xs font-bold text-navy-900 dark:text-white">{equipment.condition || 'Inspected'}</span>
                 </div>
                 <div className="p-4 rounded-2xl bg-base-200/80">
                   <span className="text-[10px] font-black uppercase text-base-content/50 block">Location</span>
-                  <span className="text-xs font-bold text-navy-900">{equipment.location}</span>
+                  <span className="text-xs font-bold text-navy-900 dark:text-white">{equipment.location}</span>
                 </div>
                 <div className="p-4 rounded-2xl bg-base-200/80">
                   <span className="text-[10px] font-black uppercase text-base-content/50 block">Available Units</span>
@@ -339,14 +339,14 @@ function EquipmentDetailsContent() {
                 </div>
                 <div className="p-4 rounded-2xl bg-base-200/80">
                   <span className="text-[10px] font-black uppercase text-base-content/50 block">Rental Frequency</span>
-                  <span className="text-xs font-bold text-navy-900">{equipment.rentalType}</span>
+                  <span className="text-xs font-bold text-navy-900 dark:text-white">{equipment.rentalType}</span>
                 </div>
               </div>
             </div>
 
             {/* Rental Terms and Conditions */}
-            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
-              <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+            <div className="glass-card p-8 rounded-3xl border border-white/60 dark:border-white/10 space-y-4">
+              <h3 className="text-lg font-black text-navy-900 dark:text-white flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-600" />
                 Rental Terms & Insurance Protection
               </h3>
@@ -356,9 +356,9 @@ function EquipmentDetailsContent() {
             </div>
 
             {/* Customer Reviews Section on Details */}
-            <div className="glass-card p-8 rounded-3xl border border-white/60 space-y-4">
+            <div className="glass-card p-8 rounded-3xl border border-white/60 dark:border-white/10 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-black text-navy-900 flex items-center gap-2">
+                <h3 className="text-lg font-black text-navy-900 dark:text-white flex items-center gap-2">
                   <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                   Renter Feedback & Ratings
                 </h3>
@@ -370,7 +370,7 @@ function EquipmentDetailsContent() {
               <div className="divide-y divide-base-200 pt-2 space-y-4">
                 <div className="pt-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-bold text-navy-900">Marcus Vance • General Contractor</p>
+                    <p className="text-xs font-bold text-navy-900 dark:text-white">Marcus Vance • General Contractor</p>
                     <span className="text-[10px] text-base-content/50">2 weeks ago</span>
                   </div>
                   <div className="flex items-center text-amber-400 my-1">
@@ -408,12 +408,12 @@ function EquipmentDetailsContent() {
                   )}
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-black text-navy-900 dark:text-white tracking-tight">
                   {equipment.name}
                 </h1>
 
                 <div className="mt-4 flex items-baseline space-x-2">
-                  <span className="text-3xl font-black text-navy-900">${equipment.rentalPrice}</span>
+                  <span className="text-3xl font-black text-navy-900 dark:text-white">${equipment.rentalPrice}</span>
                   <span className="text-xs text-base-content/60 font-bold">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
                 </div>
               </div>
@@ -425,7 +425,7 @@ function EquipmentDetailsContent() {
                 </div>
                 <div>
                   <p className="text-[10px] text-base-content/50 uppercase font-black tracking-wider">Verified Equipment Provider</p>
-                  <p className="text-xs font-black text-navy-900">{equipment.ownerName || 'Apex Equipment Pro'}</p>
+                  <p className="text-xs font-black text-navy-900 dark:text-white">{equipment.ownerName || 'Apex Equipment Pro'}</p>
                   <p className="text-[11px] text-base-content/60">{equipment.location} • 100% Response Rate</p>
                 </div>
               </div>
@@ -441,7 +441,7 @@ function EquipmentDetailsContent() {
               </button>
 
               <div className="p-3 rounded-2xl bg-electric-500/5 border border-electric-500/20 text-[11px] text-base-content/70 space-y-1">
-                <p className="font-bold text-navy-900 flex items-center gap-1.5">
+                <p className="font-bold text-navy-900 dark:text-white flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-electric-500" />
                   Stripe 100% Escrow Guarantee
                 </p>
@@ -459,11 +459,11 @@ function EquipmentDetailsContent() {
       {/* Booking Modal */}
       {isBookingModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 backdrop-blur-md p-4 overflow-y-auto animate-in fade-in duration-200">
-          <div className="glass-card rounded-3xl border border-white/80 shadow-glass-lg max-w-lg w-full p-6 sm:p-8 space-y-5 relative">
+          <div className="glass-card rounded-3xl border border-white/80 dark:border-white/10 shadow-glass-lg max-w-lg w-full p-6 sm:p-8 space-y-5 relative">
             
             <div className="flex items-center justify-between pb-3 border-b border-base-200">
               <div>
-                <h3 className="text-lg font-black text-navy-900">Book {equipment.name}</h3>
+                <h3 className="text-lg font-black text-navy-900 dark:text-white">Book {equipment.name}</h3>
                 <p className="text-xs text-base-content/60">Complete reservation parameters for Stripe Checkout</p>
               </div>
               <button
@@ -555,13 +555,13 @@ function EquipmentDetailsContent() {
               <div className="p-4 rounded-2xl bg-electric-500/10 border border-electric-500/20 space-y-1">
                 <div className="flex justify-between text-xs text-base-content/70">
                   <span>Duration:</span>
-                  <span className="font-bold text-navy-900">{calculateDays()} day(s)</span>
+                  <span className="font-bold text-navy-900 dark:text-white">{calculateDays()} day(s)</span>
                 </div>
                 <div className="flex justify-between text-xs text-base-content/70">
                   <span>Quantity:</span>
-                  <span className="font-bold text-navy-900">{quantity} unit(s)</span>
+                  <span className="font-bold text-navy-900 dark:text-white">{quantity} unit(s)</span>
                 </div>
-                <div className="flex justify-between text-sm font-black text-navy-900 pt-2 border-t border-electric-500/20">
+                <div className="flex justify-between text-sm font-black text-navy-900 dark:text-white pt-2 border-t border-electric-500/20">
                   <span>Estimated Total:</span>
                   <span className="text-electric-500 text-base">${calculateTotal()}</span>
                 </div>

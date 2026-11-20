@@ -40,7 +40,7 @@ export const FeaturedEquipment: React.FC = () => {
               <Sparkles className="w-3.5 h-3.5 text-orange-500" />
               <span>Verified Top Machinery</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-navy-900 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-black text-navy-900 dark:text-white tracking-tight">
               Featured Heavy Equipment
             </h2>
             <p className="text-sm text-base-content/70 max-w-xl">
@@ -66,7 +66,7 @@ export const FeaturedEquipment: React.FC = () => {
           </div>
         ) : equipmentList.length === 0 ? (
           <div className="py-16 text-center glass-card rounded-3xl p-8 max-w-md mx-auto">
-            <p className="text-base font-bold text-navy-900">No equipment currently listed.</p>
+            <p className="text-base font-bold text-navy-900 dark:text-white">No equipment currently listed.</p>
             <p className="text-xs text-base-content/60 mt-1">Check back shortly or browse all categories.</p>
           </div>
         ) : (

@@ -58,7 +58,7 @@ export const Banner: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-6xl lg:text-7xl font-black text-navy-900 tracking-tight leading-[1.1]"
+            className="text-4xl sm:text-6xl lg:text-7xl font-black text-navy-900 dark:text-white tracking-tight leading-[1.1]"
           >
             Rent Smarter.{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-500 via-blue-600 to-orange-500">
@@ -228,14 +228,14 @@ export const Banner: React.FC = () => {
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -top-6 -left-6 sm:top-8 sm:-left-8 glass-card p-4 rounded-3xl border border-white/80 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
+            className="absolute -top-6 -left-6 sm:top-8 sm:-left-8 glass-card p-4 rounded-3xl border border-white/80 dark:border-white/10 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
           >
             <div className="w-12 h-12 rounded-2xl bg-electric-500/15 text-electric-500 flex items-center justify-center font-bold">
               <Layers className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-lg font-black text-navy-900">1,450+ Units</p>
-              <p className="text-[11px] font-semibold text-base-content/60">Available for Rent</p>
+              <p className="text-lg font-black text-navy-900 dark:text-white">1,450+ Units</p>
+              <p className="text-[11px] font-semibold text-base-content/70">Available for Rent</p>
             </div>
           </motion.div>
 
@@ -243,14 +243,14 @@ export const Banner: React.FC = () => {
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/2 -right-6 sm:-right-8 glass-card p-4 rounded-3xl border border-white/80 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
+            className="absolute top-1/2 -right-6 sm:-right-8 glass-card p-4 rounded-3xl border border-white/80 dark:border-white/10 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
           >
             <div className="w-12 h-12 rounded-2xl bg-orange-500/15 text-orange-500 flex items-center justify-center font-bold">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-lg font-black text-navy-900">380+ Verified</p>
-              <p className="text-[11px] font-semibold text-base-content/60">Inspected Equipment Owners</p>
+              <p className="text-lg font-black text-navy-900 dark:text-white">380+ Verified</p>
+              <p className="text-[11px] font-semibold text-base-content/70">Inspected Equipment Owners</p>
             </div>
           </motion.div>
 
@@ -258,14 +258,14 @@ export const Banner: React.FC = () => {
           <motion.div
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -bottom-6 left-12 glass-card p-4 rounded-3xl border border-white/80 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
+            className="absolute -bottom-6 left-12 glass-card p-4 rounded-3xl border border-white/80 dark:border-white/10 shadow-glass-lg hidden md:flex items-center space-x-3.5 z-20"
           >
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center font-bold">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-lg font-black text-navy-900">12,800+</p>
-              <p className="text-[11px] font-semibold text-base-content/60">Successful Bookings</p>
+              <p className="text-lg font-black text-navy-900 dark:text-white">12,800+</p>
+              <p className="text-[11px] font-semibold text-base-content/70">Successful Bookings</p>
             </div>
           </motion.div>
 

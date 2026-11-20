@@ -133,7 +133,7 @@ export default function AllEquipmentPage() {
             <Sparkles className="w-4 h-4 text-orange-500" />
             <span>Heavy Machinery Fleet</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-navy-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-navy-900 dark:text-white tracking-tight">
             Browse All Equipment
           </h1>
           <p className="text-sm text-base-content/70">
@@ -201,7 +201,7 @@ export default function AllEquipmentPage() {
             <div className="glass-card p-6 rounded-3xl border border-white/60 space-y-6 sticky top-24">
               
               <div className="flex items-center justify-between pb-4 border-b border-base-200">
-                <h3 className="font-black text-sm text-navy-900 flex items-center gap-2">
+                <h3 className="font-black text-sm text-navy-900 dark:text-white flex items-center gap-2">
                   <Filter className="w-4 h-4 text-electric-500" />
                   Fleet Filters
                 </h3>
@@ -352,7 +352,7 @@ export default function AllEquipmentPage() {
             {/* Top Bar: Results Count, Sorting & Grid/List Toggle */}
             <div className="glass-card p-4 rounded-2xl border border-white/60 flex flex-col sm:flex-row items-center justify-between gap-4">
               <span className="text-xs font-bold text-base-content/70">
-                Displaying <strong className="text-navy-900">{equipmentList.length}</strong> of{' '}
+                Displaying <strong className="text-navy-900 dark:text-white">{equipmentList.length}</strong> of{' '}
                 <strong className="text-electric-500">{pagination.totalItems}</strong> certified units
               </span>
 
@@ -408,7 +408,7 @@ export default function AllEquipmentPage() {
               </div>
             ) : equipmentList.length === 0 ? (
               <div className="py-20 text-center glass-card rounded-3xl p-8 space-y-3">
-                <p className="text-lg font-black text-navy-900">No equipment matched your filters.</p>
+                <p className="text-lg font-black text-navy-900 dark:text-white">No equipment matched your filters.</p>
                 <p className="text-xs text-base-content/60 max-w-sm mx-auto">
                   Try clearing your search terms or expanding your price and category parameters.
                 </p>

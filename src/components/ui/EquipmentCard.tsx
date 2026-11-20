@@ -77,7 +77,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             loading="lazy"
           />
           <div className="absolute top-3 left-3">
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 backdrop-blur-md text-navy-900 shadow-sm">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-navy-950/90 backdrop-blur-md text-navy-900 dark:text-white shadow-sm border border-white/20">
               {equipment.category}
             </span>
           </div>
@@ -111,7 +111,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
               )}
             </div>
 
-            <h3 className="text-lg font-black text-navy-900 mt-2 group-hover:text-electric-500 transition-colors">
+            <h3 className="text-lg font-black text-navy-900 dark:text-white mt-2 group-hover:text-electric-500 transition-colors">
               {equipment.name}
             </h3>
 
@@ -137,7 +137,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             <div>
               <span className="text-[10px] text-base-content/50 uppercase font-bold block">Daily Rate</span>
               <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-black text-navy-900">${equipment.rentalPrice}</span>
+                <span className="text-2xl font-black text-navy-900 dark:text-white">${equipment.rentalPrice}</span>
                 <span className="text-xs text-base-content/60 font-semibold">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
               </div>
             </div>
@@ -182,7 +182,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
 
         {/* Category Badge */}
         <div className="absolute top-3 left-3 z-10">
-          <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 backdrop-blur-md text-navy-900 shadow-sm">
+          <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-navy-950/90 backdrop-blur-md text-navy-900 dark:text-white shadow-sm border border-white/20">
             {equipment.category}
           </span>
         </div>
@@ -221,7 +221,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
         </div>
 
         {/* Title */}
-        <h3 className="text-base font-black text-navy-900 mt-2.5 line-clamp-1 group-hover:text-electric-500 transition-colors">
+        <h3 className="text-base font-black text-navy-900 dark:text-white mt-2.5 line-clamp-1 group-hover:text-electric-500 transition-colors">
           {equipment.name}
         </h3>
 
@@ -250,7 +250,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             <div>
               <span className="text-[10px] text-base-content/50 uppercase font-black block">Rental Rate</span>
               <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-black text-navy-900">${equipment.rentalPrice}</span>
+                <span className="text-2xl font-black text-navy-900 dark:text-white">${equipment.rentalPrice}</span>
                 <span className="text-xs text-base-content/60 font-semibold">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
               </div>
             </div>

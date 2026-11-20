@@ -46,7 +46,7 @@ export const HowItWorks: React.FC = () => {
             <Sparkles className="w-3.5 h-3.5 text-orange-500" />
             <span>Frictionless Rental Process</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-navy-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-navy-900 dark:text-white tracking-tight">
             How Renting Works on GearUp
           </h2>
           <p className="text-sm text-base-content/70">
@@ -65,18 +65,18 @@ export const HowItWorks: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card relative flex flex-col p-7 rounded-3xl border border-white/60 shadow-soft hover:shadow-glass-lg hover:border-electric-500/40 transition-all hover:-translate-y-1.5"
+                className="glass-card relative flex flex-col p-7 rounded-3xl border border-white/60 dark:border-white/10 shadow-soft hover:shadow-glass-lg hover:border-electric-500/40 transition-all hover:-translate-y-1.5"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${s.color}`}>
                     <Icon className="w-6 h-6" />
                   </div>
-                  <span className="text-2xl font-black text-navy-900/15">
+                  <span className="text-2xl font-black text-navy-900/20 dark:text-white/30">
                     {s.step}
                   </span>
                 </div>
 
-                <h3 className="text-base font-black text-navy-900 mb-2">
+                <h3 className="text-base font-black text-navy-900 dark:text-white mb-2">
                   {s.title}
                 </h3>
                 <p className="text-xs text-base-content/70 leading-relaxed font-medium">
