@@ -416,7 +416,7 @@ function EquipmentDetailsContent() {
                 </h1>
 
                 <div className="mt-4 flex items-baseline space-x-2">
-                  <span className="text-3xl font-black text-navy-900 dark:text-white">${equipment.rentalPrice}</span>
+                  <span className="text-3xl font-black text-navy-900 dark:text-white">৳{Number(equipment.rentalPrice).toLocaleString('en-BD')}</span>
                   <span className="text-xs text-base-content/60 font-bold">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
                 </div>
               </div>
@@ -536,7 +536,7 @@ function EquipmentDetailsContent() {
                 <input
                   type="text"
                   required
-                  placeholder="Street, City, State, Zip"
+                  placeholder="e.g. Plot 45, Tejgaon Industrial Area, Dhaka or Port Road, Chattogram"
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
                   className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
@@ -547,7 +547,7 @@ function EquipmentDetailsContent() {
                 <label className="font-black text-base-content/70 block mb-1">Additional Notes</label>
                 <textarea
                   rows={2}
-                  placeholder="Gate code, unloading instructions..."
+                  placeholder="Site gate number, unloading guidance..."
                   value={additionalNotes}
                   onChange={(e) => setAdditionalNotes(e.target.value)}
                   className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
@@ -566,7 +566,7 @@ function EquipmentDetailsContent() {
                 </div>
                 <div className="flex justify-between text-sm font-black text-navy-900 dark:text-white pt-2 border-t border-electric-500/20">
                   <span>Estimated Total:</span>
-                  <span className="text-electric-500 text-base">${calculateTotal()}</span>
+                  <span className="text-electric-500 text-base">৳{calculateTotal().toLocaleString('en-BD')}</span>
                 </div>
               </div>
 

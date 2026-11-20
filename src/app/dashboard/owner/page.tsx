@@ -338,7 +338,7 @@ function OwnerDashboardContent() {
                 <div>
                   <span className="text-[11px] font-bold uppercase text-base-content/50">Total Earnings</span>
                   <p className="text-3xl font-black text-primary mt-1">
-                    ${analytics?.totalEarnings ?? 0}
+                    ৳{(analytics?.totalEarnings ?? 0).toLocaleString('en-BD')}
                   </p>
                   <span className="text-[10px] text-primary font-medium">Paid via Stripe Escrow</span>
                 </div>
@@ -368,7 +368,7 @@ function OwnerDashboardContent() {
                     <XAxis dataKey="label" fontSize={11} stroke="currentColor" opacity={0.6} />
                     <YAxis fontSize={11} stroke="currentColor" opacity={0.6} />
                     <Tooltip
-                      formatter={(val) => [`$${val}`, 'Earnings']}
+                      formatter={(val) => [`৳${Number(val).toLocaleString('en-BD')}`, 'Earnings (BDT ৳)']}
                       contentStyle={{
                         borderRadius: '1rem',
                         backgroundColor: '#1f2937',
@@ -449,7 +449,7 @@ function OwnerDashboardContent() {
                           </div>
                         </td>
                         <td className="text-base-content/80 font-medium">{eq.category}</td>
-                        <td className="font-black text-primary text-sm">${eq.rentalPrice}/{eq.rentalType?.toLowerCase() || 'day'}</td>
+                        <td className="font-black text-primary text-sm">৳{Number(eq.rentalPrice).toLocaleString('en-BD')}/{eq.rentalType?.toLowerCase() || 'day'}</td>
                         <td className="font-bold">{eq.availableQuantity} units</td>
                         <td>
                           <span
@@ -547,7 +547,7 @@ function OwnerDashboardContent() {
                           {r.startDate} to {r.endDate} ({r.durationDays}d)
                         </td>
                         <td className="font-bold">{r.quantity}</td>
-                        <td className="font-black text-primary text-sm">${r.totalAmount}</td>
+                        <td className="font-black text-primary text-sm">৳{Number(r.totalAmount).toLocaleString('en-BD')}</td>
                         <td>
                           <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold ${
                             r.paymentStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-500/10 text-amber-600'
@@ -618,7 +618,7 @@ function OwnerDashboardContent() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Chicago, IL"
+                    placeholder="e.g. Tejgaon, Dhaka or Agrabad, Chattogram"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
@@ -629,12 +629,12 @@ function OwnerDashboardContent() {
               {/* Price, Rental Type, Available Qty */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="font-bold text-base-content/70 block mb-1">Rental Price ($) *</label>
+                  <label className="font-bold text-base-content/70 block mb-1">Rental Price (BDT ৳) *</label>
                   <input
                     type="number"
                     required
                     min={1}
-                    placeholder="350"
+                    placeholder="35000"
                     value={formData.rentalPrice}
                     onChange={(e) => setFormData({ ...formData, rentalPrice: e.target.value })}
                     className="w-full p-3 rounded-xl bg-base-200 border border-base-300 text-xs font-medium text-base-content focus:outline-none focus:border-primary"
@@ -802,7 +802,7 @@ function OwnerDashboardContent() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-base-content/70 block mb-1">Rental Price ($)</label>
+                  <label className="font-bold text-base-content/70 block mb-1">Rental Price (BDT ৳)</label>
                   <input
                     type="number"
                     required

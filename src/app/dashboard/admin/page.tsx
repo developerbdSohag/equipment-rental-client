@@ -343,7 +343,7 @@ function AdminDashboardContent() {
                 <div>
                   <span className="text-[11px] font-bold uppercase text-base-content/50">Total Platform Revenue</span>
                   <p className="text-3xl font-black text-primary mt-1">
-                    ${analytics?.totalRevenue ?? 0}
+                    ৳{(analytics?.totalRevenue ?? 0).toLocaleString('en-BD')}
                   </p>
                   <span className="text-[10px] text-primary font-medium">100% Stripe Settled</span>
                 </div>
@@ -374,8 +374,8 @@ function AdminDashboardContent() {
                     <YAxis fontSize={11} stroke="currentColor" opacity={0.6} />
                     <Tooltip
                       formatter={(val, name) => [
-                        name === 'revenue' ? `$${val}` : val,
-                        name === 'revenue' ? 'Revenue ($)' : 'Bookings'
+                        name === 'revenue' ? `৳${Number(val).toLocaleString('en-BD')}` : val,
+                        name === 'revenue' ? 'Revenue (BDT ৳)' : 'Bookings'
                       ]}
                       contentStyle={{
                         borderRadius: '1rem',
@@ -502,7 +502,7 @@ function AdminDashboardContent() {
                         <p className="font-bold">{eq.ownerName || 'Owner'}</p>
                         <p className="text-[10px] text-base-content/50">{eq.ownerEmail}</p>
                       </td>
-                      <td className="font-black text-primary text-sm">${eq.rentalPrice}/{eq.rentalType?.toLowerCase() || 'day'}</td>
+                      <td className="font-black text-primary text-sm">৳{Number(eq.rentalPrice).toLocaleString('en-BD')}/{eq.rentalType?.toLowerCase() || 'day'}</td>
                       <td>
                         <span
                           className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold ${
@@ -599,7 +599,7 @@ function AdminDashboardContent() {
                       <td className="text-base-content/70">
                         {r.startDate} to {r.endDate} ({r.durationDays}d)
                       </td>
-                      <td className="font-black text-primary text-sm">${r.totalAmount}</td>
+                      <td className="font-black text-primary text-sm">৳{Number(r.totalAmount).toLocaleString('en-BD')}</td>
                       <td>
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold ${
                           r.paymentStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-500/10 text-amber-600'
@@ -657,7 +657,7 @@ function AdminDashboardContent() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-base-content/70 block mb-1">Rental Price ($)</label>
+                  <label className="font-bold text-base-content/70 block mb-1">Rental Price (BDT ৳)</label>
                   <input
                     type="number"
                     required

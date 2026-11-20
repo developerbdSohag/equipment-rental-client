@@ -145,7 +145,7 @@ export const Banner: React.FC = () => {
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="City, State"
+                    placeholder="Dhaka, Chattogram, Gazipur..."
                     className="w-full bg-transparent text-xs font-bold text-base-content placeholder-base-content/40 focus:outline-none"
                   />
                 </div>
@@ -211,7 +211,7 @@ export const Banner: React.FC = () => {
               <div className="flex items-center space-x-3 shrink-0">
                 <div className="text-right">
                   <span className="text-[10px] text-white/70 block uppercase font-bold">Daily Rate</span>
-                  <span className="text-2xl font-black text-white">$480/day</span>
+                  <span className="text-2xl font-black text-white">৳35,000/day</span>
                 </div>
                 <button
                   onClick={() => router.push('/equipment')}

@@ -140,7 +140,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             <div>
               <span className="text-[10px] text-base-content/50 uppercase font-bold block">Daily Rate</span>
               <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-black text-navy-900 dark:text-white">${equipment.rentalPrice}</span>
+                <span className="text-2xl font-black text-navy-900 dark:text-white">৳{Number(equipment.rentalPrice).toLocaleString('en-BD')}</span>
                 <span className="text-xs text-base-content/60 font-semibold">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
               </div>
             </div>
@@ -256,7 +256,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             <div>
               <span className="text-[10px] text-base-content/50 uppercase font-black block">Rental Rate</span>
               <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-black text-navy-900 dark:text-white">${equipment.rentalPrice}</span>
+                <span className="text-2xl font-black text-navy-900 dark:text-white">৳{Number(equipment.rentalPrice).toLocaleString('en-BD')}</span>
                 <span className="text-xs text-base-content/60 font-semibold">/{equipment.rentalType?.toLowerCase() || 'day'}</span>
               </div>
             </div>

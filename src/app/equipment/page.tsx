@@ -43,7 +43,7 @@ export default function AllEquipmentPage() {
   const [rentalType, setRentalType] = useState('All');
   const [availability, setAvailability] = useState('all');
   const [condition, setCondition] = useState('All');
-  const [maxPrice, setMaxPrice] = useState<number>(2500);
+  const [maxPrice, setMaxPrice] = useState<number>(200000);
   const [sortBy, setSortBy] = useState('recent');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,7 +83,7 @@ export default function AllEquipmentPage() {
       if (rentalType && rentalType !== 'All') params.append('rentalType', rentalType);
       if (availability && availability !== 'all') params.append('availability', availability);
       if (condition && condition !== 'All') params.append('condition', condition);
-      if (maxPrice < 2500) params.append('maxPrice', maxPrice.toString());
+      if (maxPrice < 200000) params.append('maxPrice', maxPrice.toString());
       if (sortBy) params.append('sort', sortBy);
       params.append('page', currentPage.toString());
       params.append('limit', '9');
@@ -118,7 +118,7 @@ export default function AllEquipmentPage() {
     setRentalType('All');
     setAvailability('all');
     setCondition('All');
-    setMaxPrice(2500);
+    setMaxPrice(200000);
     setSortBy('recent');
     setCurrentPage(1);
   };
@@ -150,7 +150,7 @@ export default function AllEquipmentPage() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search equipment by name, brand, or location (e.g. Caterpillar, Chicago, Liebherr)..."
+                placeholder="Search equipment by name, brand, or location (e.g. Caterpillar, Dhaka, Chattogram)..."
                 className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-base-100 border border-base-300/80 text-xs font-bold text-base-content placeholder-base-content/40 focus:outline-none focus:border-electric-500 focus:ring-2 focus:ring-electric-500/20 transition-all"
               />
             </div>
@@ -322,13 +322,13 @@ export default function AllEquipmentPage() {
                   <label className="text-[10px] font-black uppercase tracking-wider text-base-content/60">
                     Max Rate / Day
                   </label>
-                  <span className="text-xs font-black text-electric-500">${maxPrice}</span>
+                  <span className="text-xs font-black text-electric-500">৳{maxPrice.toLocaleString('en-BD')}</span>
                 </div>
                 <input
                   type="range"
-                  min="50"
-                  max="2500"
-                  step="50"
+                  min="5000"
+                  max="200000"
+                  step="5000"
                   value={maxPrice}
                   onChange={(e) => {
                     setMaxPrice(Number(e.target.value));
@@ -337,9 +337,9 @@ export default function AllEquipmentPage() {
                   className="range range-primary range-xs"
                 />
                 <div className="flex justify-between text-[10px] text-base-content/50 mt-1">
-                  <span>$50</span>
-                  <span>$1,250</span>
-                  <span>$2,500+</span>
+                  <span>৳5,000</span>
+                  <span>৳1,00,000</span>
+                  <span>৳2,00,000+</span>
                 </div>
               </div>
 

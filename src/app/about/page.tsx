@@ -31,12 +31,12 @@ export default function AboutPage() {
             <p className="text-xs text-base-content/70 font-semibold mt-1">On-Time Dispatches</p>
           </div>
           <div className="p-6 rounded-3xl bg-base-200/50 border border-base-300 text-center">
-            <p className="text-4xl font-black text-accent">$4.2M+</p>
+            <p className="text-4xl font-black text-accent">৳45 Cr+</p>
             <p className="text-xs text-base-content/70 font-semibold mt-1">Owner Earnings</p>
           </div>
           <div className="p-6 rounded-3xl bg-base-200/50 border border-base-300 text-center">
-            <p className="text-4xl font-black text-emerald-500">50 State</p>
-            <p className="text-xs text-base-content/70 font-semibold mt-1">Nationwide Coverage</p>
+            <p className="text-4xl font-black text-emerald-500">64 Dist.</p>
+            <p className="text-xs text-base-content/70 font-semibold mt-1">All Bangladesh Coverage</p>
           </div>
         </div>
 

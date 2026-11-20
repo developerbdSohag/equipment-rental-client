@@ -44,7 +44,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-bold text-base-content">Office Location</p>
-                    <p className="text-base-content/60">100 Equipment Blvd, Suite 400, Chicago, IL 60601</p>
+                    <p className="text-base-content/60">Plot 14-15, Road 3, Tejgaon Light Industrial Area, Dhaka-1208, Bangladesh</p>
                   </div>
                 </div>
 
@@ -54,7 +54,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-bold text-base-content">Direct Phone Support</p>
-                    <p className="text-base-content/60">+1 (800) 555-GEAR (Toll-Free 24/7)</p>
+                    <p className="text-base-content/60">+880 9612-443278 (Hotline 24/7) / +880 1711-000001</p>
                   </div>
                 </div>
 

@@ -121,7 +121,7 @@ function PaymentSuccessContent() {
             </div>
             <div className="flex justify-between border-b border-base-200 pb-2">
               <span className="text-base-content/60">Total Paid:</span>
-              <span className="font-black text-primary text-sm">${booking?.totalAmount}</span>
+              <span className="font-black text-primary text-sm">৳{Number(booking?.totalAmount || 0).toLocaleString('en-BD')}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-base-content/60">Payment Status:</span>

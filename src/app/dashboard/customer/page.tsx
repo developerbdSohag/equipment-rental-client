@@ -205,7 +205,7 @@ function CustomerDashboardContent() {
                         <td className="font-medium text-base-content/80">{r.startDate}</td>
                         <td className="font-medium text-base-content/80">{r.endDate}</td>
                         <td className="text-base-content/60">{r.createdAt ? new Date(r.createdAt).toLocaleDateString() : 'N/A'}</td>
-                        <td className="font-black text-primary text-sm">${r.totalAmount}</td>
+                        <td className="font-black text-primary text-sm">৳{Number(r.totalAmount).toLocaleString('en-BD')}</td>
                         <td>
                           {r.paymentStatus === 'Paid' ? (
                             <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600">
@@ -294,7 +294,7 @@ function CustomerDashboardContent() {
                           </td>
                           <td className="text-base-content/80 font-medium">{eq.category}</td>
                           <td className="font-black text-primary text-sm">
-                            ${eq.rentalPrice}/{eq.rentalType?.toLowerCase() || 'day'}
+                            ৳{Number(eq.rentalPrice).toLocaleString('en-BD')}/{eq.rentalType?.toLowerCase() || 'day'}
                           </td>
                           <td className="text-base-content/70">{eq.location}</td>
                           <td className="text-right px-6 space-x-2">
