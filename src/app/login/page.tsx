@@ -119,11 +119,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#070d19] text-white flex flex-col justify-between select-none">
+    <div className="relative min-h-screen w-full overflow-x-hidden overflow-y-auto lg:overflow-hidden bg-[#070d19] text-white flex flex-col justify-between select-none">
       
-      {/* 1. CINEMATIC VIDEO BACKGROUND (NO STATIC IMAGE) */}
-      <div className="absolute inset-0 z-0 overflow-hidden bg-[#070d19]">
-        {/* Seamless looping animated video */}
+      {/* 1. CINEMATIC FULLY RESPONSIVE VIDEO BACKGROUND */}
+      <div className="fixed inset-0 z-0 overflow-hidden bg-[#070d19] pointer-events-none">
+        {/* Seamless looping animated video with adaptive responsive focal framing */}
         <video
           ref={bgVideoRef}
           autoPlay
@@ -131,84 +131,85 @@ export default function LoginPage() {
           muted
           playsInline
           preload="auto"
-          className="w-full h-full object-cover object-center filter brightness-[0.85] contrast-[1.08]"
+          className="w-full h-full object-cover object-[70%_center] sm:object-[65%_center] md:object-center filter brightness-[0.82] contrast-[1.08] transition-all duration-500"
         >
           <source src="/videos/login-bg.mp4" type="video/mp4" />
         </video>
 
-        {/* Ambient Neon Curved Glow Lines & Soft Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070d19]/80 via-[#070d19]/40 to-[#070d19]/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070d19] via-transparent to-[#070d19]/60" />
+        {/* Adaptive Overlays: mobile/tablet vs laptop/desktop */}
+        {/* Mobile & Tablet: slightly deeper ambient overlay for maximum readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#070d19]/85 via-[#070d19]/65 to-[#070d19]/95 lg:hidden" />
+        {/* Desktop / Laptop: directional cinematic horizontal fade */}
+        <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-[#070d19]/80 via-[#070d19]/35 to-[#070d19]/85" />
+        <div className="hidden lg:block absolute inset-0 bg-gradient-to-t from-[#070d19] via-transparent to-[#070d19]/60" />
 
-        {/* Radiant Neon Orange Arc behind the Excavator */}
-        <div className="absolute top-1/4 left-1/3 w-[550px] h-[550px] rounded-full border-2 border-[#FF7A1A]/40 blur-sm pointer-events-none -rotate-12 opacity-80" />
-        <div className="absolute top-1/4 left-1/3 w-[520px] h-[520px] rounded-full bg-gradient-to-tr from-[#FF7A1A]/20 to-transparent blur-3xl pointer-events-none" />
+        {/* Responsive Neon Curved Glow Orbs */}
+        <div className="absolute top-1/4 left-1/4 lg:left-1/3 w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] lg:w-[550px] lg:h-[550px] rounded-full border-2 border-[#FF7A1A]/30 blur-sm pointer-events-none -rotate-12 opacity-70" />
+        <div className="absolute top-1/4 left-1/4 lg:left-1/3 w-[260px] h-[260px] sm:w-[380px] sm:h-[380px] lg:w-[520px] lg:h-[520px] rounded-full bg-gradient-to-tr from-[#FF7A1A]/20 to-transparent blur-3xl pointer-events-none" />
 
-        {/* Radiant Cyan / Electric Blue Curved Wave on the right */}
-        <div className="absolute top-10 right-0 w-[600px] h-[600px] rounded-full bg-cyan-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-10 w-[500px] h-[500px] rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-6 sm:top-10 right-0 w-[280px] h-[280px] sm:w-[450px] sm:h-[450px] lg:w-[600px] lg:h-[600px] rounded-full bg-cyan-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-4 sm:right-10 w-[240px] h-[240px] sm:w-[380px] sm:h-[380px] lg:w-[500px] lg:h-[500px] rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
       </div>
 
       {/* 2. TOP NAVIGATION BAR */}
-      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 pt-8 flex items-center justify-between">
+      <header className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 flex items-center justify-between">
         
         {/* Left: RentMach Logo with Cogwheel Icon */}
-        <NextLink href="/" className="flex items-center space-x-3 group">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#E65C00] to-[#FF8A35] flex items-center justify-center text-white shadow-[0_0_20px_rgba(255,122,26,0.5)] group-hover:rotate-45 transition-transform duration-500">
-            {/* Custom Cogwheel / Gear SVG matching reference */}
-            <svg className="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
+        <NextLink href="/" className="flex items-center space-x-2.5 sm:space-x-3 group">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-[#E65C00] to-[#FF8A35] flex items-center justify-center text-white shadow-[0_0_20px_rgba(255,122,26,0.5)] group-hover:rotate-45 transition-transform duration-500">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-current text-white" viewBox="0 0 24 24">
               <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.92c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65A.488.488 0 0 0 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/>
             </svg>
           </div>
           <div className="flex flex-col">
-            <span className="text-2xl font-black tracking-tight text-white flex items-center">
+            <span className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center">
               RentMach
             </span>
-            <span className="text-[10px] font-semibold text-slate-400 tracking-widest uppercase -mt-1">
+            <span className="text-[9px] sm:text-[10px] font-semibold text-slate-400 tracking-widest uppercase -mt-0.5 sm:-mt-1">
               Rent • Work • Grow
             </span>
           </div>
         </NextLink>
 
         {/* Right: Create Account pill button */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2.5 sm:space-x-3">
           {/* Audio toggle button for background video */}
           <button
             onClick={toggleSound}
             aria-label="Toggle Sound"
-            className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/80 transition-all backdrop-blur-md"
+            className="p-2 sm:p-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/80 transition-all backdrop-blur-md"
             title={isMuted ? 'Unmute Video' : 'Mute Video'}
           >
-            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[#FF7A1A]" />}
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF7A1A]" />}
           </button>
 
-          <span className="text-xs text-slate-300 hidden sm:inline-block font-medium">
+          <span className="text-xs text-slate-300 hidden md:inline-block font-medium">
             Don't have an account?
           </span>
 
           <NextLink
             href="/register"
-            className="px-5 py-2.5 rounded-full text-xs font-bold text-[#FF8A35] bg-black/40 hover:bg-[#FF8A35]/15 border border-[#FF8A35]/50 transition-all duration-300 shadow-[0_0_15px_rgba(255,138,53,0.15)] flex items-center space-x-1.5"
+            className="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold text-[#FF8A35] bg-black/40 hover:bg-[#FF8A35]/15 border border-[#FF8A35]/50 transition-all duration-300 shadow-[0_0_15px_rgba(255,138,53,0.15)] flex items-center space-x-1 sm:space-x-1.5"
           >
             <span>Create Account</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </NextLink>
         </div>
 
       </header>
 
       {/* 3. MAIN CENTER CONTAINER: Left Hero Info + Right Glass Card */}
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 py-10 my-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         
         {/* LEFT COLUMN (7 cols): Hero Content & Floating Stats Card */}
-        <div className="lg:col-span-7 space-y-7 text-left">
+        <div className="lg:col-span-7 space-y-5 sm:space-y-6 lg:space-y-7 text-left">
           
           {/* Badge: #1 Equipment Rental Platform */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-white shadow-sm"
+            className="inline-flex items-center space-x-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] sm:text-xs font-bold text-white shadow-sm"
           >
             <Trophy className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
             <span className="tracking-wide text-slate-200">#1 Equipment Rental Platform</span>
@@ -219,12 +220,12 @@ export default function LoginPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-3"
+            className="space-y-2 sm:space-y-3"
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.08] text-white">
               Welcome <span className="text-[#FF7A1A]">Back!</span>
             </h1>
-            <p className="text-lg sm:text-xl text-slate-200 font-medium max-w-xl leading-relaxed">
+            <p className="text-base sm:text-lg lg:text-xl text-slate-200 font-medium max-w-xl leading-relaxed">
               Your next project starts with the right equipment.
             </p>
           </motion.div>
@@ -234,7 +235,7 @@ export default function LoginPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-3 text-sm font-semibold text-slate-200"
+            className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm font-semibold text-slate-200"
           >
             <div className="flex items-center space-x-3">
               <div className="w-5 h-5 rounded-full bg-[#FF7A1A] flex items-center justify-center text-white shrink-0 shadow-[0_0_10px_rgba(255,122,26,0.5)]">
@@ -258,63 +259,63 @@ export default function LoginPage() {
             </div>
           </motion.div>
 
-          {/* Interactive "Watch Video" Button in the middle */}
+          {/* Interactive "Watch Video" Button */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="pt-2"
+            className="pt-1 sm:pt-2"
           >
             <button
               onClick={() => setVideoModalOpen(true)}
-              className="group inline-flex items-center space-x-4 pr-5 py-2 pl-2 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-xl border border-white/20 transition-all duration-300 shadow-lg hover:scale-105 active:scale-95"
+              className="group inline-flex items-center space-x-3 sm:space-x-4 pr-4 sm:pr-5 py-1.5 sm:py-2 pl-1.5 sm:pl-2 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-xl border border-white/20 transition-all duration-300 shadow-lg hover:scale-105 active:scale-95"
             >
-              <div className="w-12 h-12 rounded-full bg-white/20 group-hover:bg-[#FF7A1A] text-white flex items-center justify-center shadow-md transition-colors duration-300">
-                <Play className="w-5 h-5 fill-white text-white ml-0.5" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 group-hover:bg-[#FF7A1A] text-white flex items-center justify-center shadow-md transition-colors duration-300">
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-white text-white ml-0.5" />
               </div>
-              <span className="text-sm font-bold text-white tracking-wide">Watch Video</span>
+              <span className="text-xs sm:text-sm font-bold text-white tracking-wide">Watch Video</span>
             </button>
           </motion.div>
 
-          {/* Floating Glass Stats Card (Bottom-Left) */}
+          {/* Floating Glass Stats Card (Responsive: 3 columns on all screens) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="pt-4"
+            className="pt-2 sm:pt-4"
           >
-            <div className="inline-flex flex-wrap sm:flex-nowrap items-center divide-y sm:divide-y-0 sm:divide-x divide-white/15 px-6 py-4 rounded-3xl bg-white/[0.08] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
+            <div className="grid grid-cols-3 sm:inline-flex items-center divide-x divide-white/15 px-3 sm:px-6 py-3 sm:py-4 rounded-2xl sm:rounded-3xl bg-white/[0.08] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.4)] max-w-full">
               
               {/* Stat 1: 50K+ Equipment */}
-              <div className="flex items-center space-x-3 pr-6 py-1">
-                <div className="w-10 h-10 rounded-xl bg-[#FF7A1A]/20 text-[#FF7A1A] flex items-center justify-center">
-                  <Building2 className="w-5 h-5" />
+              <div className="flex flex-col sm:flex-row items-center sm:space-x-3 px-2 sm:px-0 sm:pr-6 py-1 text-center sm:text-left">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#FF7A1A]/20 text-[#FF7A1A] flex items-center justify-center mb-1 sm:mb-0">
+                  <Building2 className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div>
-                  <p className="text-lg font-black text-white">50K+</p>
-                  <p className="text-[11px] text-slate-300 font-medium">Equipment</p>
+                  <p className="text-base sm:text-lg font-black text-white">50K+</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-300 font-medium">Equipment</p>
                 </div>
               </div>
 
               {/* Stat 2: 25K+ Happy Users */}
-              <div className="flex items-center space-x-3 px-0 sm:px-6 py-1">
-                <div className="w-10 h-10 rounded-xl bg-[#FF7A1A]/20 text-[#FF7A1A] flex items-center justify-center">
-                  <Users className="w-5 h-5" />
+              <div className="flex flex-col sm:flex-row items-center sm:space-x-3 px-2 sm:px-6 py-1 text-center sm:text-left">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#FF7A1A]/20 text-[#FF7A1A] flex items-center justify-center mb-1 sm:mb-0">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div>
-                  <p className="text-lg font-black text-white">25K+</p>
-                  <p className="text-[11px] text-slate-300 font-medium">Happy Users</p>
+                  <p className="text-base sm:text-lg font-black text-white">25K+</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-300 font-medium">Happy Users</p>
                 </div>
               </div>
 
               {/* Stat 3: 99% Satisfaction */}
-              <div className="flex items-center space-x-3 pl-0 sm:pl-6 py-1">
-                <div className="w-10 h-10 rounded-xl bg-[#FF7A1A]/20 text-[#FF7A1A] flex items-center justify-center">
-                  <ShieldCheck className="w-5 h-5" />
+              <div className="flex flex-col sm:flex-row items-center sm:space-x-3 px-2 sm:px-0 sm:pl-6 py-1 text-center sm:text-left">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#FF7A1A]/20 text-[#FF7A1A] flex items-center justify-center mb-1 sm:mb-0">
+                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div>
-                  <p className="text-lg font-black text-white">99%</p>
-                  <p className="text-[11px] text-slate-300 font-medium">Satisfaction</p>
+                  <p className="text-base sm:text-lg font-black text-white">99%</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-300 font-medium">Satisfaction</p>
                 </div>
               </div>
 
@@ -328,10 +329,10 @@ export default function LoginPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="lg:col-span-5 relative"
+          className="lg:col-span-5 relative w-full max-w-md sm:max-w-lg lg:max-w-none mx-auto"
         >
           {/* High-End Glassmorphism Card */}
-          <div className="relative rounded-[2.5rem] bg-[#0c162c]/55 backdrop-blur-2xl border border-cyan-400/35 p-8 sm:p-10 shadow-[0_0_50px_rgba(56,120,255,0.25)] space-y-6">
+          <div className="relative rounded-3xl sm:rounded-[2.5rem] bg-[#0c162c]/65 backdrop-blur-2xl border border-cyan-400/35 p-6 sm:p-8 lg:p-10 shadow-[0_0_50px_rgba(56,120,255,0.25)] space-y-5 sm:space-y-6">
             
             {/* Header: Cyan Glowing Lock Icon */}
             <div className="space-y-3">
@@ -522,33 +523,34 @@ export default function LoginPage() {
         </button>
       </div>
 
-      {/* 5. INTERACTIVE VIDEO LIGHTBOX MODAL */}
+      {/* 5. INTERACTIVE RESPONSIVE VIDEO LIGHTBOX MODAL */}
       <AnimatePresence>
         {videoModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-3 sm:p-6 animate-in fade-in duration-200">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative max-w-4xl w-full rounded-3xl overflow-hidden bg-black border border-white/20 shadow-2xl"
+              className="relative max-w-4xl w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-black border border-white/20 shadow-2xl"
             >
-              <div className="flex items-center justify-between p-4 bg-navy-950/80 border-b border-white/10">
-                <span className="text-sm font-black text-white flex items-center gap-2">
-                  <Play className="w-4 h-4 fill-[#FF7A1A] text-[#FF7A1A]" />
+              <div className="flex items-center justify-between p-3.5 sm:p-4 bg-[#0a1222] border-b border-white/10">
+                <span className="text-xs sm:text-sm font-black text-white flex items-center gap-2">
+                  <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#FF7A1A] text-[#FF7A1A]" />
                   RentMach Equipment Showcase
                 </span>
                 <button
                   onClick={() => setVideoModalOpen(false)}
                   className="p-1.5 rounded-xl hover:bg-white/10 text-white/70 hover:text-white"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
 
-              <div className="aspect-video w-full bg-black">
+              <div className="aspect-video w-full bg-black flex items-center justify-center">
                 <video
                   controls
                   autoPlay
+                  playsInline
                   className="w-full h-full object-contain"
                   src="/videos/login-bg.mp4"
                 />
