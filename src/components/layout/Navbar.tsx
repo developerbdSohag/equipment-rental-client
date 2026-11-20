@@ -226,6 +226,9 @@ export const Navbar: React.FC = () => {
                     src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`}
                     alt={user.name}
                     className="w-8 h-8 rounded-xl object-cover ring-2 ring-electric-500/40"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`;
+                    }}
                   />
                   <div className="flex flex-col text-left">
                     <span className="text-xs font-bold text-base-content truncate max-w-[100px]">
@@ -372,9 +375,12 @@ export const Navbar: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex items-center space-x-3 px-3 py-2 bg-base-200 rounded-2xl">
                   <img
-                    src={user.photoURL}
+                    src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`}
                     alt={user.name}
                     className="w-9 h-9 rounded-xl object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`;
+                    }}
                   />
                   <div>
                     <p className="text-xs font-bold text-base-content">{user.name}</p>

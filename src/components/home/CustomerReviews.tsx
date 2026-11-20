@@ -86,6 +86,9 @@ export const CustomerReviews: React.FC = () => {
                   src={rev.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(rev.customerName)}`}
                   alt={rev.customerName}
                   className="w-10 h-10 rounded-2xl object-cover ring-2 ring-electric-500/30"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(rev.customerName)}`;
+                  }}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-1">

@@ -96,6 +96,9 @@ function CustomerDashboardContent() {
               src={user?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.name || 'User')}`}
               alt={user?.name || 'User'}
               className="w-16 h-16 rounded-2xl object-cover ring-2 ring-primary/40 shadow-sm"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.name || 'User')}`;
+              }}
             />
             <div>
               <span className="text-xs font-bold text-primary uppercase tracking-wider">Customer Portal</span>
@@ -210,9 +213,12 @@ function CustomerDashboardContent() {
                           <div className="flex items-center space-x-3">
                             {r.equipmentImage && (
                               <img
-                                src={r.equipmentImage}
+                                src={r.equipmentImage || 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=600&q=80'}
                                 alt={r.equipmentName}
-                                className="w-10 h-10 rounded-xl object-cover shrink-0"
+                                className="w-10 h-10 rounded-xl object-cover shrink-0 bg-base-200"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=600&q=80';
+                                }}
                               />
                             )}
                             <div>
@@ -301,9 +307,12 @@ function CustomerDashboardContent() {
                           <td className="py-4 px-6 font-bold text-base-content">
                             <div className="flex items-center space-x-3">
                               <img
-                                src={eq.image}
+                                src={eq.image || 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=600&q=80'}
                                 alt={eq.name}
-                                className="w-12 h-12 rounded-xl object-cover shrink-0"
+                                className="w-12 h-12 rounded-xl object-cover shrink-0 bg-base-200"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=600&q=80';
+                                }}
                               />
                               <div>
                                 <p className="font-bold line-clamp-1">{eq.name}</p>

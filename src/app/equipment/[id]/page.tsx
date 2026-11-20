@@ -227,7 +227,7 @@ function EquipmentDetailsContent() {
   // Gallery images mockup
   const galleryImages = [
     equipment.image,
-    'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
   ];
@@ -297,7 +297,14 @@ function EquipmentDetailsContent() {
                       : 'border-base-300/80 opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                  <img
+                    src={img}
+                    alt="Thumbnail"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=400&q=80';
+                    }}
+                  />
                 </button>
               ))}
             </div>

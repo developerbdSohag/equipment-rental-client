@@ -35,6 +35,9 @@ export const ProfileTab: React.FC = () => {
           src={photoURL || user?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.name || 'User')}`}
           alt={user?.name || 'User'}
           className="w-20 h-20 rounded-full object-cover ring-4 ring-primary/20 shadow-md"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.name || 'User')}`;
+          }}
         />
         <div>
           <h2 className="text-xl font-black text-base-content">{user?.name}</h2>

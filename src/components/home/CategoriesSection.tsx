@@ -65,7 +65,7 @@ const categories = [
   {
     id: 'lifting-equipment',
     name: 'Lifting Equipment',
-    image: 'https://images.unsplash.com/photo-1756402664856-91a90f90b70b?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=800&q=80',
     count: '160+ Units',
     description: 'Telescopic boom lifts, scissor lifts, and spider personnel baskets.'
   },
