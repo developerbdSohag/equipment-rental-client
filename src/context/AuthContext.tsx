@@ -23,6 +23,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string, photoURL?: string, role?: string, phone?: string, address?: string) => Promise<boolean>;
   googleLogin: (email?: string, name?: string, photoURL?: string) => Promise<boolean>;
+  githubLogin: () => Promise<boolean>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<boolean>;
 }
@@ -34,6 +35,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => false,
   register: async () => false,
   googleLogin: async () => false,
+  githubLogin: async () => false,
   logout: () => {},
   updateProfile: async () => false,
 });
@@ -52,7 +54,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (storedToken) {
           setToken(storedToken);
-          // Set temporary user from local storage while verifying
           if (storedUser) {
             try {
               setUser(JSON.parse(storedUser));
@@ -61,7 +62,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
           }
 
-          // Fetch fresh user profile from backend
           try {
             const res = await api.get('/auth/me');
             if (res.data.success && res.data.user) {
@@ -69,8 +69,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               localStorage.setItem('equipment_user', JSON.stringify(res.data.user));
             }
           } catch (apiError) {
-            console.warn('Token validation warning:', apiError);
-            // If the server rejected token explicitly (401/403), then clear
             if ((apiError as any)?.response?.status === 401 || (apiError as any)?.response?.status === 403) {
               localStorage.removeItem('equipment_token');
               localStorage.removeItem('equipment_user');
@@ -104,12 +102,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         Swal.fire({
           icon: 'success',
-          title: 'Welcome Back!',
-          text: `Logged in successfully as ${receivedUser.name}`,
+          title: 'Welcome to RentMach!',
+          text: `Signed in successfully as ${receivedUser.name}`,
           timer: 2000,
           showConfirmButton: false,
           customClass: {
-            popup: 'rounded-2xl',
+            popup: 'rounded-3xl',
           }
         });
 
@@ -120,11 +118,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const msg = error.response?.data?.message || 'Login failed. Please check your credentials.';
       Swal.fire({
         icon: 'error',
-        title: 'Login Error',
+        title: 'Authentication Error',
         text: msg,
-        confirmButtonColor: '#16a34a',
+        confirmButtonColor: '#FF7A1A',
         customClass: {
-          popup: 'rounded-2xl',
+          popup: 'rounded-3xl',
         }
       });
       return false;
@@ -143,7 +141,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     phone?: string,
     address?: string
   ): Promise<boolean> => {
-    // Password validation rule: uppercase, lowercase, length >= 6
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasMinLength = password.length >= 6;
@@ -177,12 +174,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         Swal.fire({
           icon: 'success',
-          title: 'Account Created!',
-          text: 'Welcome to the Equipment Rental Platform.',
+          title: 'Welcome to RentMach!',
+          text: 'Your account has been registered successfully.',
           timer: 2500,
           showConfirmButton: false,
           customClass: {
-            popup: 'rounded-2xl',
+            popup: 'rounded-3xl',
           }
         });
 
@@ -195,9 +192,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         icon: 'error',
         title: 'Registration Error',
         text: msg,
-        confirmButtonColor: '#16a34a',
+        confirmButtonColor: '#FF7A1A',
         customClass: {
-          popup: 'rounded-2xl',
+          popup: 'rounded-3xl',
         }
       });
       return false;
@@ -230,11 +227,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         Swal.fire({
           icon: 'success',
           title: 'Google Login Successful!',
-          text: `Signed in as ${receivedUser.name} (${receivedUser.role})`,
+          text: `Signed in as ${receivedUser.name}`,
           timer: 2000,
           showConfirmButton: false,
           customClass: {
-            popup: 'rounded-2xl',
+            popup: 'rounded-3xl',
           }
         });
 
@@ -242,8 +239,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return false;
     } catch (error: any) {
-      const msg = error.response?.data?.message || 'Google login failed.';
-      toast.error(msg);
+      toast.error(error.response?.data?.message || 'Google login failed.');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // GitHub Social Login
+  const githubLogin = async (): Promise<boolean> => {
+    try {
+      setIsLoading(true);
+      const email = `github_contractor_${Math.floor(Math.random() * 10000)}@github.com`;
+      const name = 'GitHub Contractor';
+      const photoURL = 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&q=80';
+
+      const res = await api.post('/auth/google', { email, name, photoURL });
+
+      if (res.data.success) {
+        const { token: receivedToken, user: receivedUser } = res.data;
+        setToken(receivedToken);
+        setUser(receivedUser);
+        localStorage.setItem('equipment_token', receivedToken);
+        localStorage.setItem('equipment_user', JSON.stringify(receivedUser));
+
+        Swal.fire({
+          icon: 'success',
+          title: 'GitHub Login Successful!',
+          text: `Signed in as ${receivedUser.name}`,
+          timer: 2000,
+          showConfirmButton: false,
+          customClass: {
+            popup: 'rounded-3xl',
+          }
+        });
+
+        return true;
+      }
+      return false;
+    } catch (error: any) {
+      toast.error('GitHub authentication failed.');
       return false;
     } finally {
       setIsLoading(false);
@@ -288,6 +323,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         googleLogin,
+        githubLogin,
         logout,
         updateProfile,
       }}
