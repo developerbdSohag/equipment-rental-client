@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
+import { motion } from 'framer-motion';
 import {
   Wrench,
   Sun,
@@ -29,7 +30,9 @@ export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [activeHash, setActiveHash] = useState('');
 
+  // 1. Scroll shadow detector
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -38,9 +41,49 @@ export const Navbar: React.FC = () => {
         setScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // 2. Hash tracking & section observer on the Home Page
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setActiveHash(window.location.hash);
+    }
+
+    const handleHashChange = () => {
+      setActiveHash(window.location.hash);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // 3. Scroll tracking across homepage sections (Home, Categories, How It Works)
+  useEffect(() => {
+    if (pathname !== '/') {
+      setActiveHash('');
+      return;
+    }
+
+    const handleScrollSections = () => {
+      const scrollPos = window.scrollY + 250;
+      const howElem = document.getElementById('how-it-works');
+      const catElem = document.getElementById('categories');
+
+      if (howElem && scrollPos >= howElem.offsetTop) {
+        setActiveHash('#how-it-works');
+      } else if (catElem && scrollPos >= catElem.offsetTop) {
+        setActiveHash('#categories');
+      } else {
+        setActiveHash('');
+      }
+    };
+
+    window.addEventListener('scroll', handleScrollSections, { passive: true });
+    handleScrollSections();
+    return () => window.removeEventListener('scroll', handleScrollSections);
+  }, [pathname]);
 
   // Do not show global navbar on custom full-screen login page
   if (pathname === '/login') return null;
@@ -61,9 +104,40 @@ export const Navbar: React.FC = () => {
     { name: 'Contact', href: '/contact' },
   ];
 
+  // Precision active-state detector across routes and homepage anchors
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
+    if (pathname === '/') {
+      if (href === '/#categories') return activeHash === '#categories';
+      if (href === '/#how-it-works') return activeHash === '#how-it-works';
+      if (href === '/') return !activeHash || activeHash === '#' || activeHash === '#home';
+      return false;
+    }
+    if (href === '/') return false;
+    if (href.startsWith('/#')) return false;
     return pathname.startsWith(href);
+  };
+
+  // Immediate smooth-scroll and state trigger when clicking anchor navigation items
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('/#')) {
+      const hash = href.replace('/', '');
+      setActiveHash(hash);
+      if (pathname === '/') {
+        e.preventDefault();
+        const target = document.querySelector(hash);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          window.history.pushState(null, '', hash);
+        }
+      }
+    } else if (href === '/') {
+      setActiveHash('');
+      if (pathname === '/') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.history.pushState(null, '', '/');
+      }
+    }
   };
 
   return (
@@ -78,7 +152,7 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           
           {/* Logo & Brand Identity */}
-          <NextLink href="/" className="flex items-center space-x-3 group">
+          <NextLink href="/" onClick={(e) => handleNavClick(e, '/')} className="flex items-center space-x-3 group nav-link-foam">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-navy-900 via-electric-500 to-cyan-400 flex items-center justify-center text-white shadow-glow-blue group-hover:scale-105 transition-transform duration-300">
               <Truck className="w-6 h-6 text-white" />
             </div>
@@ -95,30 +169,48 @@ export const Navbar: React.FC = () => {
             </div>
           </NextLink>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            {navLinks.map((link) => (
-              <NextLink
-                key={link.name}
-                href={link.href}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  isActive(link.href)
-                    ? 'text-electric-500 bg-electric-500/10 shadow-sm'
-                    : 'text-base-content/75 hover:text-electric-500 hover:bg-base-200/80'
-                }`}
-              >
-                {link.name}
-              </NextLink>
-            ))}
+          {/* Desktop Navigation: Magnetic Spring + Soft Foam Cushioned Pill */}
+          <nav className="hidden md:flex items-center p-1 rounded-2xl bg-base-100/70 dark:bg-navy-950/40 border border-base-300/60 dark:border-white/10 backdrop-blur-xl shadow-inner space-x-1">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <NextLink
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`nav-link-foam relative px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 select-none group flex items-center justify-center ${
+                    active
+                      ? 'text-white font-black'
+                      : 'text-base-content/75 hover:text-electric-500 dark:hover:text-cyan-400'
+                  }`}
+                >
+                  {/* Magnetic Gliding Active Pill with Elastic Spring Physics */}
+                  {active && (
+                    <motion.span
+                      layoutId="activeNavMagneticPill"
+                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-electric-500 via-blue-600 to-electric-500 shadow-[0_4px_16px_rgba(56,120,255,0.45)] dark:shadow-[0_0_22px_rgba(56,120,255,0.65)] border border-white/20 -z-10"
+                    />
+                  )}
+
+                  {/* Soft Foam Hover Cushion Pill for Inactive Links */}
+                  {!active && (
+                    <span className="absolute inset-0 rounded-xl bg-electric-500/10 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-300 scale-95 group-hover:scale-100 shadow-sm -z-10" />
+                  )}
+
+                  <span className="relative z-10">{link.name}</span>
+                </NextLink>
+              );
+            })}
           </nav>
 
-          {/* Actions & Profile */}
+          {/* Actions & Profile with Soft Foam Hover Physics */}
           <div className="hidden md:flex items-center space-x-3">
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="p-2.5 rounded-2xl border border-base-300/80 text-base-content/70 hover:text-electric-500 hover:bg-base-200/80 transition-all hover:scale-105 active:scale-95"
+              className="nav-link-foam p-2.5 rounded-2xl border border-base-300/80 text-base-content/70 hover:text-electric-500 hover:bg-base-200/80 transition-all"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-400" />
@@ -128,11 +220,11 @@ export const Navbar: React.FC = () => {
             </button>
 
             {user ? (
-              // Logged In User Dropdown
+              // Logged In User Dropdown with Soft Foam Elevation
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center space-x-3 pl-2 pr-3 py-1.5 rounded-2xl border border-base-300/80 hover:border-electric-500/50 transition-all bg-base-100/80 backdrop-blur-md shadow-sm"
+                  className="nav-link-foam flex items-center space-x-3 pl-2 pr-3 py-1.5 rounded-2xl border border-base-300/80 hover:border-electric-500/50 transition-all bg-base-100/80 backdrop-blur-md shadow-sm"
                 >
                   <img
                     src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`}
@@ -212,17 +304,17 @@ export const Navbar: React.FC = () => {
                 )}
               </div>
             ) : (
-              // Unauthenticated Actions
+              // Unauthenticated Actions with Eye-Catching Foam Physics
               <div className="flex items-center space-x-2">
                 <NextLink
                   href="/login"
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-base-content hover:text-electric-500 hover:bg-base-200/80 transition-colors"
+                  className="nav-link-foam px-4 py-2 rounded-xl text-xs font-extrabold text-base-content hover:text-electric-500 hover:bg-electric-500/10 border border-transparent hover:border-electric-500/30"
                 >
                   Login
                 </NextLink>
                 <NextLink
                   href="/register"
-                  className="btn-premium-primary px-5 py-2.5 text-xs tracking-wide"
+                  className="btn-premium-primary px-5 py-2.5 text-xs font-black shadow-glow-blue tracking-wide"
                 >
                   Register
                 </NextLink>
@@ -235,14 +327,15 @@ export const Navbar: React.FC = () => {
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="p-2 rounded-xl border border-base-300 text-base-content/80"
+              className="nav-link-foam p-2 rounded-xl border border-base-300 text-base-content/80"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
             </button>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-base-content hover:bg-base-200"
-              aria-label="Toggle Menu"
+              aria-label="Toggle Mobile Menu"
+              className="nav-link-foam p-2 rounded-xl border border-base-300 text-base-content hover:text-electric-500"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -251,23 +344,29 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden glass-surface border-t border-base-300 px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top-4 duration-200">
-          {navLinks.map((link) => (
-            <NextLink
-              key={link.name}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`block px-3.5 py-2.5 rounded-xl text-sm font-bold ${
-                isActive(link.href)
-                  ? 'text-electric-500 bg-electric-500/10'
-                  : 'text-base-content/80 hover:bg-base-200'
-              }`}
-            >
-              {link.name}
-            </NextLink>
-          ))}
+        <div className="md:hidden glass-surface border-b border-base-300/80 px-4 pt-3 pb-6 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+          {navLinks.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <NextLink
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  handleNavClick(e, link.href);
+                }}
+                className={`nav-link-foam block px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                  active
+                    ? 'text-white font-black bg-gradient-to-r from-electric-500 to-blue-600 shadow-[0_4px_14px_rgba(56,120,255,0.35)]'
+                    : 'text-base-content/80 hover:bg-base-200/80 hover:text-electric-500'
+                }`}
+              >
+                {link.name}
+              </NextLink>
+            );
+          })}
 
           <div className="pt-4 border-t border-base-300">
             {user ? (
@@ -296,7 +395,7 @@ export const Navbar: React.FC = () => {
                     setMobileMenuOpen(false);
                     logout();
                   }}
-                  className="w-full flex items-center justify-center py-2.5 rounded-xl text-xs font-bold text-error bg-error/10"
+                  className="w-full flex items-center justify-center py-2.5 rounded-xl text-xs font-bold text-error bg-error/10 hover:bg-error/20"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
