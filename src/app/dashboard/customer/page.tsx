@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { useAuth } from '@/context/AuthContext';
 import ProfileTab from '@/components/dashboard/ProfileTab';
+import CustomerAnalyticsSuite from '@/components/dashboard/CustomerAnalyticsSuite';
 import api from '@/lib/api';
 import {
   Calendar,
@@ -17,7 +18,8 @@ import {
   Loader2,
   CheckCircle2,
   Clock,
-  AlertCircle
+  AlertCircle,
+  BarChart3
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -33,7 +35,7 @@ function CustomerDashboardContent() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') || 'rentals';
 
-  const [activeTab, setActiveTab] = useState<'rentals' | 'favorites' | 'profile'>(
+  const [activeTab, setActiveTab] = useState<'rentals' | 'favorites' | 'analytics' | 'profile'>(
     initialTab as any
   );
   const { user } = useAuth();
@@ -41,14 +43,16 @@ function CustomerDashboardContent() {
   // Data states
   const [rentals, setRentals] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<any[]>([]);
+  const [analytics, setAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchCustomerData = async () => {
     setLoading(true);
     try {
-      const [rentalsRes, favoritesRes] = await Promise.all([
+      const [rentalsRes, favoritesRes, analyticsRes] = await Promise.all([
         api.get('/bookings/my-rentals'),
         api.get('/favorites'),
+        api.get('/analytics/customer').catch(() => ({ data: { success: false } })),
       ]);
 
       if (rentalsRes.data.success) {
@@ -56,6 +60,9 @@ function CustomerDashboardContent() {
       }
       if (favoritesRes.data.success) {
         setFavorites(favoritesRes.data.favorites || []);
+      }
+      if (analyticsRes?.data?.success) {
+        setAnalytics(analyticsRes.data.analytics);
       }
     } catch (err) {
       console.error('Error fetching customer data:', err);
@@ -131,6 +138,18 @@ function CustomerDashboardContent() {
           >
             <Heart className="w-4 h-4" />
             <span>Saved Favorites ({favorites.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('analytics')}
+            className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+              activeTab === 'analytics'
+                ? 'bg-primary text-white shadow-sm'
+                : 'bg-base-200 text-base-content/70 hover:bg-base-300'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>Spend & Savings Analytics</span>
           </button>
 
           <button
@@ -324,7 +343,15 @@ function CustomerDashboardContent() {
           </div>
         )}
 
-        {/* Tab 3: Profile */}
+        {/* Tab 3: Spend & Savings Analytics */}
+        {activeTab === 'analytics' && (
+          <CustomerAnalyticsSuite
+            analytics={analytics}
+            rentalsList={rentals}
+          />
+        )}
+
+        {/* Tab 4: Profile */}
         {activeTab === 'profile' && (
           <ProfileTab />
         )}

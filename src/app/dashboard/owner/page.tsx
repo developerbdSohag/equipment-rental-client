@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { useAuth } from '@/context/AuthContext';
 import ProfileTab from '@/components/dashboard/ProfileTab';
+import OwnerAnalyticsSuite from '@/components/dashboard/OwnerAnalyticsSuite';
 import api from '@/lib/api';
 import {
   BarChart3,
@@ -288,102 +289,13 @@ function OwnerDashboardContent() {
           </button>
         </div>
 
-        {/* Tab 1: Owner Analytics (Challenge 3) */}
+        {/* Tab 1: Owner Analytics */}
         {activeTab === 'analytics' && (
-          <div className="space-y-8">
-            
-            {/* Stat Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm flex items-center justify-between">
-                <div>
-                  <span className="text-[11px] font-bold uppercase text-base-content/50">Total Listed</span>
-                  <p className="text-3xl font-black text-base-content mt-1">
-                    {analytics?.totalListedEquipment ?? equipmentList.length}
-                  </p>
-                  <span className="text-[10px] text-emerald-600 font-medium">Approved & Pending units</span>
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
-                  <Package className="w-6 h-6" />
-                </div>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm flex items-center justify-between">
-                <div>
-                  <span className="text-[11px] font-bold uppercase text-base-content/50">Completed Rentals</span>
-                  <p className="text-3xl font-black text-emerald-600 mt-1">
-                    {analytics?.completedRentals ?? 0}
-                  </p>
-                  <span className="text-[10px] text-base-content/60 font-medium">Successfully completed</span>
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-                  <CheckCircle2 className="w-6 h-6" />
-                </div>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm flex items-center justify-between">
-                <div>
-                  <span className="text-[11px] font-bold uppercase text-base-content/50">Active Bookings</span>
-                  <p className="text-3xl font-black text-secondary mt-1">
-                    {analytics?.activeRentals ?? 0}
-                  </p>
-                  <span className="text-[10px] text-base-content/60 font-medium">Dispatched on site</span>
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center">
-                  <Clock className="w-6 h-6" />
-                </div>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm flex items-center justify-between">
-                <div>
-                  <span className="text-[11px] font-bold uppercase text-base-content/50">Total Earnings</span>
-                  <p className="text-3xl font-black text-primary mt-1">
-                    ৳{(analytics?.totalEarnings ?? 0).toLocaleString('en-BD')}
-                  </p>
-                  <span className="text-[10px] text-primary font-medium">Paid via Stripe Escrow</span>
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-                  <DollarSign className="w-6 h-6" />
-                </div>
-              </div>
-
-            </div>
-
-            {/* Monthly Earnings Chart */}
-            <div className="bg-base-100 p-8 rounded-3xl border border-base-300 shadow-sm space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-base-content flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-primary" />
-                    Monthly Rental Earnings Overview
-                  </h3>
-                  <p className="text-xs text-base-content/60">Calculated dynamically from completed Stripe payouts</p>
-                </div>
-              </div>
-
-              <div className="h-72 w-full pt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={analytics?.monthlyStats || []}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                    <XAxis dataKey="label" fontSize={11} stroke="currentColor" opacity={0.6} />
-                    <YAxis fontSize={11} stroke="currentColor" opacity={0.6} />
-                    <Tooltip
-                      formatter={(val) => [`৳${Number(val).toLocaleString('en-BD')}`, 'Earnings (BDT ৳)']}
-                      contentStyle={{
-                        borderRadius: '1rem',
-                        backgroundColor: '#1f2937',
-                        border: 'none',
-                        color: '#fff',
-                        fontSize: '12px'
-                      }}
-                    />
-                    <Bar dataKey="revenue" fill="#16a34a" radius={[8, 8, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-          </div>
+          <OwnerAnalyticsSuite
+            analytics={analytics}
+            equipmentList={equipmentList}
+            rentalsList={rentals}
+          />
         )}
 
         {/* Tab 2: My Equipment Table */}
