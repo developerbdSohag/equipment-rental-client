@@ -208,58 +208,61 @@
 }
 
 /* ==========================================================================
-   SOFT FOAM & MAGNETIC TACTILE BUTTON SYSTEM
-   Plush cushioned expansion with elastic spring physics & ambient magnetic aura
+   ENTERPRISE PRECISION BUTTON & NAVIGATION SYSTEM
+   Sleek, refined micro-interactions inspired by Linear, Stripe & Vercel.
    ========================================================================== */
 
-.nav-link-foam {
+/* Navigation Links */
+.nav-link-item {
   position: relative;
-  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform, box-shadow;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, color, background-color;
 }
 
-.nav-link-foam:hover {
-  transform: translateY(-2px) scale(1.05);
+.nav-link-item:hover {
+  transform: translateY(-1px);
 }
 
-.nav-link-foam:active {
-  transform: translateY(1px) scale(0.95);
+.nav-link-item:active {
+  transform: translateY(0.5px);
 }
 
+/* Primary Action Buttons */
 .btn-premium-primary {
   @apply relative inline-flex items-center justify-center font-bold rounded-2xl text-white select-none;
-  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background: linear-gradient(135deg, #3878FF 0%, #1e40af 100%);
-  box-shadow: 0 4px 14px -2px rgba(56, 120, 255, 0.35), 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(135deg, #3878FF 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 14px -2px rgba(56, 120, 255, 0.35), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .btn-premium-primary:hover {
-  transform: translateY(-3px) scale(1.035);
-  box-shadow: 0 10px 25px -4px rgba(56, 120, 255, 0.55), 0 0 20px rgba(56, 120, 255, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -2px rgba(56, 120, 255, 0.45), 0 0 15px rgba(56, 120, 255, 0.25);
   background: linear-gradient(135deg, #4f8aff 0%, #2563eb 100%);
 }
 
 .btn-premium-primary:active {
-  transform: translateY(1.5px) scale(0.965);
-  box-shadow: 0 2px 8px rgba(56, 120, 255, 0.3);
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(56, 120, 255, 0.25);
 }
 
+/* Orange Accent Action Buttons */
 .btn-premium-orange {
   @apply relative inline-flex items-center justify-center font-bold rounded-2xl text-white select-none;
-  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background: linear-gradient(135deg, #FF8A35 0%, #ea580c 100%);
-  box-shadow: 0 4px 14px -2px rgba(255, 138, 53, 0.35), 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(135deg, #FF7A1A 0%, #ea580c 100%);
+  box-shadow: 0 4px 14px -2px rgba(255, 122, 26, 0.35), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .btn-premium-orange:hover {
-  transform: translateY(-3px) scale(1.035);
-  box-shadow: 0 10px 25px -4px rgba(255, 138, 53, 0.55), 0 0 20px rgba(255, 122, 26, 0.35);
-  background: linear-gradient(135deg, #ff9b52 0%, #f97316 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -2px rgba(255, 122, 26, 0.45), 0 0 15px rgba(255, 122, 26, 0.25);
+  background: linear-gradient(135deg, #ff8f3d 0%, #f97316 100%);
 }
 
 .btn-premium-orange:active {
-  transform: translateY(1.5px) scale(0.965);
-  box-shadow: 0 2px 8px rgba(255, 138, 53, 0.3);
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(255, 122, 26, 0.25);
 }
 
 /* Custom modern scrollbar */

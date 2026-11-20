@@ -67,16 +67,23 @@ export const Navbar: React.FC = () => {
     }
 
     const handleScrollSections = () => {
-      const scrollPos = window.scrollY + 250;
-      const howElem = document.getElementById('how-it-works');
+      const scrollPos = window.scrollY + 200;
       const catElem = document.getElementById('categories');
+      const howElem = document.getElementById('how-it-works');
 
-      if (howElem && scrollPos >= howElem.offsetTop) {
-        setActiveHash('#how-it-works');
-      } else if (catElem && scrollPos >= catElem.offsetTop) {
-        setActiveHash('#categories');
-      } else {
-        setActiveHash('');
+      if (catElem && howElem) {
+        const catTop = catElem.offsetTop;
+        const catBottom = catTop + catElem.offsetHeight;
+        const howTop = howElem.offsetTop;
+        const howBottom = howTop + howElem.offsetHeight;
+
+        if (scrollPos >= howTop && scrollPos <= howBottom + 150) {
+          setActiveHash('#how-it-works');
+        } else if (scrollPos >= catTop && scrollPos <= catBottom + 150) {
+          setActiveHash('#categories');
+        } else if (window.scrollY < 250) {
+          setActiveHash('');
+        }
       }
     };
 
@@ -152,7 +159,7 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           
           {/* Logo & Brand Identity */}
-          <NextLink href="/" onClick={(e) => handleNavClick(e, '/')} className="flex items-center space-x-3 group nav-link-foam">
+          <NextLink href="/" onClick={(e) => handleNavClick(e, '/')} className="flex items-center space-x-3 group nav-link-item">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-navy-900 via-electric-500 to-cyan-400 flex items-center justify-center text-white shadow-glow-blue group-hover:scale-105 transition-transform duration-300">
               <Truck className="w-6 h-6 text-white" />
             </div>
@@ -169,8 +176,8 @@ export const Navbar: React.FC = () => {
             </div>
           </NextLink>
 
-          {/* Desktop Navigation: Magnetic Spring + Soft Foam Cushioned Pill */}
-          <nav className="hidden md:flex items-center p-1 rounded-2xl bg-base-100/70 dark:bg-navy-950/40 border border-base-300/60 dark:border-white/10 backdrop-blur-xl shadow-inner space-x-1">
+          {/* Desktop Navigation: Executive, Clean & Professional Active States */}
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-1.5">
             {navLinks.map((link) => {
               const active = isActive(link.href);
               return (
@@ -178,39 +185,28 @@ export const Navbar: React.FC = () => {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`nav-link-foam relative px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 select-none group flex items-center justify-center ${
+                  className={`nav-link-item relative px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 select-none ${
                     active
-                      ? 'text-white font-black'
-                      : 'text-base-content/75 hover:text-electric-500 dark:hover:text-cyan-400'
+                      ? 'text-electric-600 dark:text-cyan-300 bg-electric-50/80 dark:bg-white/[0.08] font-bold shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/[0.05]'
                   }`}
                 >
-                  {/* Magnetic Gliding Active Pill with Elastic Spring Physics */}
+                  <span>{link.name}</span>
                   {active && (
-                    <motion.span
-                      layoutId="activeNavMagneticPill"
-                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-electric-500 via-blue-600 to-electric-500 shadow-[0_4px_16px_rgba(56,120,255,0.45)] dark:shadow-[0_0_22px_rgba(56,120,255,0.65)] border border-white/20 -z-10"
-                    />
+                    <span className="absolute bottom-0.5 left-3 right-3 h-[2px] bg-electric-500 dark:bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(56,120,255,0.4)]" />
                   )}
-
-                  {/* Soft Foam Hover Cushion Pill for Inactive Links */}
-                  {!active && (
-                    <span className="absolute inset-0 rounded-xl bg-electric-500/10 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-300 scale-95 group-hover:scale-100 shadow-sm -z-10" />
-                  )}
-
-                  <span className="relative z-10">{link.name}</span>
                 </NextLink>
               );
             })}
           </nav>
 
-          {/* Actions & Profile with Soft Foam Hover Physics */}
+          {/* Actions & Profile */}
           <div className="hidden md:flex items-center space-x-3">
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="nav-link-foam p-2.5 rounded-2xl border border-base-300/80 text-base-content/70 hover:text-electric-500 hover:bg-base-200/80 transition-all"
+              className="nav-link-item p-2.5 rounded-2xl border border-base-300/80 text-base-content/70 hover:text-electric-500 hover:bg-base-200/80 transition-all"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-400" />
@@ -220,11 +216,11 @@ export const Navbar: React.FC = () => {
             </button>
 
             {user ? (
-              // Logged In User Dropdown with Soft Foam Elevation
+              // Logged In User Dropdown
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="nav-link-foam flex items-center space-x-3 pl-2 pr-3 py-1.5 rounded-2xl border border-base-300/80 hover:border-electric-500/50 transition-all bg-base-100/80 backdrop-blur-md shadow-sm"
+                  className="nav-link-item flex items-center space-x-3 pl-2 pr-3 py-1.5 rounded-2xl border border-base-300/80 hover:border-electric-500/50 transition-all bg-base-100/80 backdrop-blur-md shadow-sm"
                 >
                   <img
                     src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`}
@@ -304,17 +300,17 @@ export const Navbar: React.FC = () => {
                 )}
               </div>
             ) : (
-              // Unauthenticated Actions with Eye-Catching Foam Physics
+              // Unauthenticated Actions: Crisp & Professional
               <div className="flex items-center space-x-2">
                 <NextLink
                   href="/login"
-                  className="nav-link-foam px-4 py-2 rounded-xl text-xs font-extrabold text-base-content hover:text-electric-500 hover:bg-electric-500/10 border border-transparent hover:border-electric-500/30"
+                  className="nav-link-item px-4 py-2 rounded-xl text-xs font-bold text-base-content/80 hover:text-electric-500 dark:hover:text-cyan-400 hover:bg-base-200/80 transition-colors"
                 >
                   Login
                 </NextLink>
                 <NextLink
                   href="/register"
-                  className="btn-premium-primary px-5 py-2.5 text-xs font-black shadow-glow-blue tracking-wide"
+                  className="btn-premium-primary px-5 py-2 text-xs font-extrabold shadow-sm tracking-wide"
                 >
                   Register
                 </NextLink>
@@ -327,7 +323,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="nav-link-foam p-2 rounded-xl border border-base-300 text-base-content/80"
+              className="nav-link-item p-2 rounded-xl border border-base-300 text-base-content/80"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
             </button>
@@ -335,7 +331,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Mobile Menu"
-              className="nav-link-foam p-2 rounded-xl border border-base-300 text-base-content hover:text-electric-500"
+              className="nav-link-item p-2 rounded-xl border border-base-300 text-base-content hover:text-electric-500"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -346,7 +342,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden glass-surface border-b border-base-300/80 px-4 pt-3 pb-6 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden glass-surface border-b border-base-300/80 px-4 pt-3 pb-6 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
           {navLinks.map((link) => {
             const active = isActive(link.href);
             return (
@@ -357,13 +353,16 @@ export const Navbar: React.FC = () => {
                   setMobileMenuOpen(false);
                   handleNavClick(e, link.href);
                 }}
-                className={`nav-link-foam block px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`nav-link-item flex items-center justify-between px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                   active
-                    ? 'text-white font-black bg-gradient-to-r from-electric-500 to-blue-600 shadow-[0_4px_14px_rgba(56,120,255,0.35)]'
-                    : 'text-base-content/80 hover:bg-base-200/80 hover:text-electric-500'
+                    ? 'text-electric-500 dark:text-cyan-400 bg-electric-500/10 dark:bg-cyan-400/10 font-bold border-l-4 border-electric-500 dark:border-cyan-400'
+                    : 'text-base-content/75 hover:bg-base-200/80 hover:text-base-content'
                 }`}
               >
-                {link.name}
+                <span>{link.name}</span>
+                {active && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-electric-500 dark:bg-cyan-400" />
+                )}
               </NextLink>
             );
           })}
