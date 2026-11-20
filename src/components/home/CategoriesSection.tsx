@@ -3,150 +3,162 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { motion } from 'framer-motion';
-import {
-  Hammer,
-  Camera,
-  Truck,
-  Tractor,
-  Cpu,
-  Speaker,
-  ArrowRight
-} from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 const categories = [
   {
-    id: 'construction',
-    name: 'Construction Equipment',
-    query: 'Construction',
-    icon: Hammer,
-    description: 'Excavators, loaders, boom lifts, and heavy compaction machinery.',
-    color: 'from-amber-500/20 to-orange-500/10',
-    iconColor: 'text-amber-500',
-    count: '240+ Units'
+    id: 'excavators',
+    name: 'Excavators',
+    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=80',
+    count: '340+ Units',
+    description: 'Tracked, wheeled, and mini excavators for earthmoving and trenching.'
   },
   {
-    id: 'photography',
-    name: 'Photography Equipment',
-    query: 'Photography',
-    icon: Camera,
-    description: 'Cinema cameras, prime lenses, drone kits, and studio lighting.',
-    color: 'from-blue-500/20 to-indigo-500/10',
-    iconColor: 'text-blue-500',
-    count: '310+ Units'
+    id: 'cranes',
+    name: 'Cranes',
+    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=700&q=80',
+    count: '115+ Units',
+    description: 'Mobile, all-terrain, crawler, and tower cranes for heavy lifts.'
   },
   {
-    id: 'vehicles',
-    name: 'Vehicles & Transportation',
-    query: 'Vehicles',
-    icon: Truck,
-    description: 'Flatbed trucks, heavy equipment trailers, and cargo vans.',
-    color: 'from-emerald-500/20 to-teal-500/10',
-    iconColor: 'text-emerald-500',
-    count: '150+ Units'
+    id: 'generators',
+    name: 'Generators',
+    image: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=700&q=80',
+    count: '280+ Units',
+    description: 'Diesel, silent trailer-mounted, and industrial power generators.'
   },
   {
-    id: 'agriculture',
-    name: 'Agriculture Equipment',
-    query: 'Agriculture',
-    icon: Tractor,
-    description: 'Utility tractors, balers, seeders, and harvesting implements.',
-    color: 'from-green-500/20 to-lime-500/10',
-    iconColor: 'text-green-500',
-    count: '95+ Units'
+    id: 'forklifts',
+    name: 'Forklifts',
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80',
+    count: '190+ Units',
+    description: 'Pneumatic rough-terrain, electric warehouse, and telehandlers.'
   },
   {
-    id: 'electronics',
-    name: 'Electronics & Sensors',
-    query: 'Electronics',
-    icon: Cpu,
-    description: 'Thermal cameras, RTK enterprise drones, and calibration kits.',
-    color: 'from-purple-500/20 to-pink-500/10',
-    iconColor: 'text-purple-500',
-    count: '180+ Units'
+    id: 'bulldozers',
+    name: 'Bulldozers',
+    image: 'https://images.unsplash.com/photo-1579273166152-d725a4e2b755?auto=format&fit=crop&w=700&q=80',
+    count: '95+ Units',
+    description: 'Heavy crawler dozers with multi-shank rippers and 3D grade control.'
   },
   {
-    id: 'event',
-    name: 'Event Equipment',
-    query: 'Event',
-    icon: Speaker,
-    description: 'Concert line arrays, moving head stage beams, and power generators.',
-    color: 'from-rose-500/20 to-red-500/10',
-    iconColor: 'text-rose-500',
-    count: '120+ Units'
+    id: 'loaders',
+    name: 'Loaders',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=700&q=80',
+    count: '210+ Units',
+    description: 'Wheel loaders, compact track loaders, and skid steers.'
+  },
+  {
+    id: 'concrete-mixers',
+    name: 'Concrete Mixers',
+    image: 'https://images.unsplash.com/photo-1590069261209-f8e9b8642343?auto=format&fit=crop&w=700&q=80',
+    count: '140+ Units',
+    description: 'Towable batch mixers, volumetric trucks, and mortar machinery.'
+  },
+  {
+    id: 'trucks',
+    name: 'Trucks',
+    image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=700&q=80',
+    count: '175+ Units',
+    description: 'Dump trucks, flatbeds, heavy equipment haulers, and water trucks.'
+  },
+  {
+    id: 'lifting-equipment',
+    name: 'Lifting Equipment',
+    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=700&q=80',
+    count: '160+ Units',
+    description: 'Telescopic boom lifts, scissor lifts, and spider personnel baskets.'
+  },
+  {
+    id: 'other-machinery',
+    name: 'Other Machinery',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=700&q=80',
+    count: '250+ Units',
+    description: 'Plate compactors, trench rollers, air compressors, and light towers.'
   }
 ];
 
 export const CategoriesSection: React.FC = () => {
   return (
-    <section className="py-20 bg-base-100 transition-colors">
+    <section id="categories" className="py-24 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
+        {/* Section Heading */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">
-              Industry Domains
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-base-content tracking-tight">
-              Popular Equipment Categories
+            <div className="inline-flex items-center space-x-2 text-xs font-black uppercase tracking-wider text-electric-500">
+              <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+              <span>Heavy Fleet Taxonomy</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-navy-900 tracking-tight">
+              Explore Equipment by Category
             </h2>
-            <p className="text-sm sm:text-base text-base-content/70 max-w-xl">
-              Browse thousands of certified machinery and production gear curated for high-stakes projects.
+            <p className="text-sm text-base-content/70 max-w-xl">
+              From high-tonnage excavators and all-terrain cranes to silent generators and heavy haul trucks.
             </p>
           </div>
 
           <NextLink
             href="/equipment"
-            className="mt-4 md:mt-0 inline-flex items-center text-sm font-bold text-primary hover:text-primary/80 transition-colors"
+            className="mt-4 md:mt-0 inline-flex items-center text-xs font-black uppercase tracking-wider text-electric-500 hover:text-electric-600 transition-colors"
           >
-            <span>View All Categories</span>
+            <span>View All Fleet Categories</span>
             <ArrowRight className="w-4 h-4 ml-1.5" />
           </NextLink>
         </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((cat, index) => {
-            const IconComponent = cat.icon;
-            return (
-              <motion.div
-                key={cat.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
+        {/* 10 Image-Based Category Cards Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+          {categories.map((cat, index) => (
+            <motion.div
+              key={cat.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+            >
+              <NextLink
+                href={`/equipment?category=${encodeURIComponent(cat.name)}`}
+                className="group relative block aspect-[4/5] rounded-3xl overflow-hidden border border-white/60 bg-navy-950 shadow-soft hover:shadow-glow-blue transition-all duration-500 hover:-translate-y-1.5"
               >
-                <NextLink
-                  href={`/equipment?category=${encodeURIComponent(cat.query)}`}
-                  className="group block p-6 rounded-3xl border border-base-300 bg-base-100 hover:border-primary/50 hover:shadow-xl transition-all duration-300 h-full relative overflow-hidden"
-                >
-                  {/* Subtle corner gradient */}
-                  <div className={`absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-gradient-to-br ${cat.color} blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none`} />
+                {/* Background Image with Zoom Effect */}
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-85 group-hover:opacity-100"
+                  loading="lazy"
+                />
 
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-base-200 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                      <IconComponent className={`w-6 h-6 ${cat.iconColor} group-hover:text-white transition-colors`} />
-                    </div>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/70">
+                {/* Animated Dark Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent transition-opacity duration-300" />
+
+                {/* Glowing Border effect on hover */}
+                <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-electric-500/80 transition-colors duration-300 pointer-events-none" />
+
+                {/* Content Overlay */}
+                <div className="absolute inset-0 p-5 flex flex-col justify-between text-white z-10">
+                  <div className="flex justify-end">
+                    <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-black uppercase tracking-wider">
                       {cat.count}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-base-content group-hover:text-primary transition-colors">
-                    {cat.name}
-                  </h3>
-                  <p className="text-xs text-base-content/70 mt-2 leading-relaxed">
-                    {cat.description}
-                  </p>
-
-                  <div className="mt-4 flex items-center text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span>Explore gear</span>
-                    <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  <div className="space-y-1">
+                    <h3 className="text-base font-black tracking-tight group-hover:text-electric-400 transition-colors">
+                      {cat.name}
+                    </h3>
+                    <p className="text-[11px] text-white/70 line-clamp-2 leading-relaxed font-medium">
+                      {cat.description}
+                    </p>
+                    <div className="pt-2 flex items-center text-[10px] font-black uppercase tracking-wider text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <span>Browse Units</span>
+                      <ArrowRight className="w-3 h-3 ml-1" />
+                    </div>
                   </div>
-                </NextLink>
-              </motion.div>
-            );
-          })}
+                </div>
+              </NextLink>
+            </motion.div>
+          ))}
         </div>
 
       </div>
