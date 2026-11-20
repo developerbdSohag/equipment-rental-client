@@ -9,14 +9,99 @@
   }
 
   body {
-    @apply bg-base-100 text-base-content antialiased transition-colors duration-200 min-h-screen flex flex-col;
+    @apply bg-base-200 text-base-content antialiased transition-colors duration-200 min-h-screen flex flex-col;
   }
+}
+
+/* Glassmorphism Classes */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 10px 30px 0 rgba(16, 28, 53, 0.05);
+}
+
+[data-theme="dark"] .glass-surface {
+  background: rgba(16, 28, 53, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 12px 36px 0 rgba(16, 28, 53, 0.06);
+}
+
+[data-theme="dark"] .glass-card {
+  background: rgba(16, 28, 53, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Neumorphic Soft Surface */
+.neumorph-card {
+  background: #ffffff;
+  box-shadow: 8px 8px 24px #e2e8f0, -8px -8px 24px #ffffff;
+  border-radius: 1.5rem;
+}
+
+[data-theme="dark"] .neumorph-card {
+  background: #101C35;
+  box-shadow: 8px 8px 24px #080d19, -8px -8px 24px #182b51;
+  border-radius: 1.5rem;
+}
+
+/* Button Interaction Requirements:
+   - Normal: Elegant background, rounded corners, soft shadow
+   - Hover: Slight scale-up, gradient transition, glowing shadow, animated background movement
+   - Active: Subtle press-down effect
+*/
+.btn-premium-primary {
+  @apply relative inline-flex items-center justify-center font-bold rounded-2xl text-white transition-all duration-300;
+  background: linear-gradient(135deg, #3878FF 0%, #1e40af 100%);
+  box-shadow: 0 4px 15px rgba(56, 120, 255, 0.25);
+}
+
+.btn-premium-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(56, 120, 255, 0.45);
+  background: linear-gradient(135deg, #4f8aff 0%, #2563eb 100%);
+}
+
+.btn-premium-primary:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 10px rgba(56, 120, 255, 0.2);
+}
+
+.btn-premium-orange {
+  @apply relative inline-flex items-center justify-center font-bold rounded-2xl text-white transition-all duration-300;
+  background: linear-gradient(135deg, #FF8A35 0%, #ea580c 100%);
+  box-shadow: 0 4px 15px rgba(255, 138, 53, 0.25);
+}
+
+.btn-premium-orange:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(255, 138, 53, 0.45);
+  background: linear-gradient(135deg, #ff9b52 0%, #f97316 100%);
+}
+
+.btn-premium-orange:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 10px rgba(255, 138, 53, 0.2);
 }
 
 /* Custom modern scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -24,23 +109,20 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.4);
+  background: rgba(56, 120, 255, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(156, 163, 175, 0.7);
+  background: rgba(56, 120, 255, 0.5);
 }
 
-/* Glassmorphism helpers */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] .glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Smooth motion for users who don't prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
