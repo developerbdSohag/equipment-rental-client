@@ -2,9 +2,14 @@
 
 import React from 'react';
 import NextLink from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Truck, Mail, Phone, MapPin, Heart, Sparkles } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const pathname = usePathname();
+
+  // Do not show global footer on custom full-screen login page
+  if (pathname === '/login') return null;
   return (
     <footer className="bg-navy-950 text-white border-t border-white/10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">

@@ -42,6 +42,9 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Do not show global navbar on custom full-screen login page
+  if (pathname === '/login') return null;
+
   const getDashboardLink = () => {
     if (!user) return '/login';
     if (user.role === 'Admin') return '/dashboard/admin';

@@ -43,6 +43,20 @@ export default function LoginPage() {
 
   const bgVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Guarantee seamless video autoplay on page load
+  React.useEffect(() => {
+    if (bgVideoRef.current) {
+      bgVideoRef.current.defaultMuted = true;
+      bgVideoRef.current.muted = true;
+      const playPromise = bgVideoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Video autoplay prevented by browser:', err);
+        });
+      }
+    }
+  }, []);
+
   // If already logged in, redirect
   React.useEffect(() => {
     if (user) {
@@ -107,17 +121,17 @@ export default function LoginPage() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-[#070d19] text-white flex flex-col justify-between select-none">
       
-      {/* 1. CINEMATIC VIDEO / IMAGE BACKGROUND */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      {/* 1. CINEMATIC VIDEO BACKGROUND (NO STATIC IMAGE) */}
+      <div className="absolute inset-0 z-0 overflow-hidden bg-[#070d19]">
         {/* Seamless looping animated video */}
         <video
           ref={bgVideoRef}
           autoPlay
           loop
-          muted={isMuted}
+          muted
           playsInline
-          poster="/images/login-hero.jpg"
-          className="w-full h-full object-cover object-center scale-105 filter brightness-[0.82] contrast-[1.08]"
+          preload="auto"
+          className="w-full h-full object-cover object-center filter brightness-[0.85] contrast-[1.08]"
         >
           <source src="/videos/login-bg.mp4" type="video/mp4" />
         </video>
