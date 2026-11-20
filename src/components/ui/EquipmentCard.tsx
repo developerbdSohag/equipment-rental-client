@@ -75,6 +75,9 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             alt={equipment.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80';
+            }}
           />
           <div className="absolute top-3 left-3">
             <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-navy-950/90 backdrop-blur-md text-navy-900 dark:text-white shadow-sm border border-white/20">
@@ -175,6 +178,9 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
           alt={equipment.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
           loading="lazy"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80';
+          }}
         />
 
         {/* Gradient dark shadow overlay for text contrast */}

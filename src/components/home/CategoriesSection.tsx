@@ -9,70 +9,70 @@ const categories = [
   {
     id: 'excavators',
     name: 'Excavators',
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80',
     count: '340+ Units',
     description: 'Tracked, wheeled, and mini excavators for earthmoving and trenching.'
   },
   {
     id: 'cranes',
     name: 'Cranes',
-    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1575538633395-c773c6ea252d?auto=format&fit=crop&w=800&q=80',
     count: '115+ Units',
     description: 'Mobile, all-terrain, crawler, and tower cranes for heavy lifts.'
   },
   {
     id: 'generators',
     name: 'Generators',
-    image: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=700&q=80',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Dieselgenerator.jpg',
     count: '280+ Units',
     description: 'Diesel, silent trailer-mounted, and industrial power generators.'
   },
   {
     id: 'forklifts',
     name: 'Forklifts',
-    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1645736315000-6f788915923b?auto=format&fit=crop&w=800&q=80',
     count: '190+ Units',
     description: 'Pneumatic rough-terrain, electric warehouse, and telehandlers.'
   },
   {
     id: 'bulldozers',
     name: 'Bulldozers',
-    image: 'https://images.unsplash.com/photo-1579273166152-d725a4e2b755?auto=format&fit=crop&w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1651260282644-6b3763d2acbc?auto=format&fit=crop&w=800&q=80',
     count: '95+ Units',
     description: 'Heavy crawler dozers with multi-shank rippers and 3D grade control.'
   },
   {
     id: 'loaders',
     name: 'Loaders',
-    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=700&q=80',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Caterpillar_950k_Wheel_Loader.jpg',
     count: '210+ Units',
     description: 'Wheel loaders, compact track loaders, and skid steers.'
   },
   {
     id: 'concrete-mixers',
     name: 'Concrete Mixers',
-    image: 'https://images.unsplash.com/photo-1590069261209-f8e9b8642343?auto=format&fit=crop&w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1527410651988-c2f385ccd3f7?auto=format&fit=crop&w=800&q=80',
     count: '140+ Units',
     description: 'Towable batch mixers, volumetric trucks, and mortar machinery.'
   },
   {
     id: 'trucks',
     name: 'Trucks',
-    image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80',
     count: '175+ Units',
     description: 'Dump trucks, flatbeds, heavy equipment haulers, and water trucks.'
   },
   {
     id: 'lifting-equipment',
     name: 'Lifting Equipment',
-    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1756402664856-91a90f90b70b?auto=format&fit=crop&w=800&q=80',
     count: '160+ Units',
     description: 'Telescopic boom lifts, scissor lifts, and spider personnel baskets.'
   },
   {
     id: 'other-machinery',
     name: 'Other Machinery',
-    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=700&q=80',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/Roadroller.jpg',
     count: '250+ Units',
     description: 'Plate compactors, trench rollers, air compressors, and light towers.'
   }
@@ -127,6 +127,9 @@ export const CategoriesSection: React.FC = () => {
                   alt={cat.name}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-85 group-hover:opacity-100"
                   loading="lazy"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80';
+                  }}
                 />
 
                 {/* Animated Dark Gradient Overlay */}

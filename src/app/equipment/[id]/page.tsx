@@ -274,6 +274,9 @@ function EquipmentDetailsContent() {
                 src={selectedImage || equipment.image}
                 alt={equipment.name}
                 className="w-full h-full object-cover transition-all duration-300"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=1200&q=80';
+                }}
               />
               <div className="absolute top-4 left-4">
                 <span className="px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-white/90 dark:bg-navy-950/90 backdrop-blur-md text-navy-900 dark:text-white shadow-sm border border-white/20">
