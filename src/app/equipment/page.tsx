@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import EquipmentCard, { EquipmentItem } from '@/components/ui/EquipmentCard';
@@ -16,10 +16,11 @@ import {
   List,
   Sparkles,
   CheckCircle2,
-  Star
+  Star,
+  X
 } from 'lucide-react';
 
-const CATEGORIES_LIST = [
+const DEFAULT_CATEGORIES = [
   'All',
   'Excavators',
   'Cranes',
@@ -30,12 +31,21 @@ const CATEGORIES_LIST = [
   'Concrete Mixers',
   'Trucks',
   'Lifting Equipment',
-  'Other Machinery'
+  'Other Machinery',
+  'Agriculture Equipment',
+  'Construction Equipment',
+  'Electronics',
+  'Event Equipment',
+  'Photography Equipment',
+  'Vehicles & Transportation'
 ];
 
 export default function AllEquipmentPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // Categories list (defaults to all known categories, updated dynamically from API)
+  const [categoriesList, setCategoriesList] = useState<string[]>(DEFAULT_CATEGORIES);
 
   // Search & Filter State
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
@@ -61,7 +71,18 @@ export default function AllEquipmentPage() {
   const [loading, setLoading] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Sync category param from URL
+  // Load dynamic category taxonomy from backend on mount
+  useEffect(() => {
+    api.get('/equipment/categories')
+      .then((res) => {
+        if (res.data.success && Array.isArray(res.data.allCategoryNames)) {
+          setCategoriesList(res.data.allCategoryNames);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Sync category & search params from URL
   useEffect(() => {
     const cat = searchParams.get('category');
     if (cat) {
@@ -121,7 +142,20 @@ export default function AllEquipmentPage() {
     setMaxPrice(200000);
     setSortBy('recent');
     setCurrentPage(1);
+    router.replace('/equipment', { scroll: false });
   };
+
+  // Compute number of active filters
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (category !== 'All') count++;
+    if (searchTerm.trim()) count++;
+    if (rentalType !== 'All') count++;
+    if (availability !== 'all') count++;
+    if (condition !== 'All') count++;
+    if (maxPrice < 200000) count++;
+    return count;
+  }, [category, searchTerm, rentalType, availability, condition, maxPrice]);
 
   return (
     <div className="min-h-screen py-10 transition-colors">
@@ -201,20 +235,29 @@ export default function AllEquipmentPage() {
             <div className="glass-card p-6 rounded-3xl border border-white/60 space-y-6 sticky top-24">
               
               <div className="flex items-center justify-between pb-4 border-b border-base-200">
-                <h3 className="font-black text-sm text-navy-900 dark:text-white flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4 text-electric-500" />
-                  Fleet Filters
-                </h3>
-                <button
-                  onClick={handleResetFilters}
-                  className="text-[11px] font-bold text-electric-500 hover:underline flex items-center gap-1"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  Clear All
-                </button>
+                  <h3 className="font-black text-sm text-navy-900 dark:text-white">
+                    Fleet Filters
+                  </h3>
+                  {activeFiltersCount > 0 && (
+                    <span className="px-2 py-0.5 rounded-full bg-electric-500/15 text-electric-500 text-[10px] font-black">
+                      {activeFiltersCount} Active
+                    </span>
+                  )}
+                </div>
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={handleResetFilters}
+                    className="text-[11px] font-bold text-electric-500 hover:underline flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Clear All
+                  </button>
+                )}
               </div>
 
-              {/* 1. Category Filter (10 categories) */}
+              {/* 1. Category Filter */}
               <div>
                 <label className="text-[10px] font-black uppercase tracking-wider text-base-content/60 block mb-2">
                   Equipment Category
@@ -227,9 +270,9 @@ export default function AllEquipmentPage() {
                   }}
                   className="w-full p-2.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
                 >
-                  {CATEGORIES_LIST.map((c) => (
+                  {categoriesList.map((c) => (
                     <option key={c} value={c}>
-                      {c === 'All' ? 'All 10 Categories' : c}
+                      {c === 'All' ? 'All Fleet Categories' : c}
                     </option>
                   ))}
                 </select>
@@ -347,7 +390,7 @@ export default function AllEquipmentPage() {
           </aside>
 
           {/* Equipment Showcase Area */}
-          <main className="lg:col-span-3 space-y-6">
+          <main className="lg:col-span-3 space-y-5">
             
             {/* Top Bar: Results Count, Sorting & Grid/List Toggle */}
             <div className="glass-card p-4 rounded-2xl border border-white/60 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -366,7 +409,7 @@ export default function AllEquipmentPage() {
                       setSortBy(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="p-2 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
+                    className="p-2 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500 cursor-pointer"
                   >
                     <option value="recent">Newest Listings</option>
                     <option value="price_asc">Price: Low to High</option>
@@ -399,6 +442,109 @@ export default function AllEquipmentPage() {
               </div>
             </div>
 
+            {/* Active Filters Interactive Chips Bar */}
+            {activeFiltersCount > 0 && (
+              <div className="p-3 sm:p-4 rounded-2xl bg-base-100 border border-base-300 shadow-sm flex flex-wrap items-center gap-2 text-xs animate-fade-in">
+                <span className="font-black text-base-content/60 flex items-center gap-1.5 mr-1 text-[11px] uppercase tracking-wider">
+                  <Filter className="w-3.5 h-3.5 text-primary" />
+                  Active Filters:
+                </span>
+
+                {category !== 'All' && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
+                    <span>Category: <strong>{category}</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => { setCategory('All'); setCurrentPage(1); }}
+                      className="hover:text-primary-focus ml-1 p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                      title="Remove category filter"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {searchTerm.trim() && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
+                    <span>Search: <strong>"{searchTerm}"</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => { setSearchTerm(''); setCurrentPage(1); }}
+                      className="hover:text-primary-focus ml-1 p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                      title="Clear search"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {rentalType !== 'All' && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
+                    <span>Duration: <strong>{rentalType}</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => { setRentalType('All'); setCurrentPage(1); }}
+                      className="hover:text-primary-focus ml-1 p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                      title="Remove duration filter"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {availability === 'available' && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 font-bold border border-emerald-500/20">
+                    <span>In Stock Only</span>
+                    <button
+                      type="button"
+                      onClick={() => { setAvailability('all'); setCurrentPage(1); }}
+                      className="hover:text-emerald-700 ml-1 p-0.5 rounded-full hover:bg-emerald-500/20 transition-colors"
+                      title="Remove availability filter"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {condition !== 'All' && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
+                    <span>Condition: <strong>{condition}</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => { setCondition('All'); setCurrentPage(1); }}
+                      className="hover:text-primary-focus ml-1 p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                      title="Remove condition filter"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {maxPrice < 200000 && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
+                    <span>Max: <strong>৳{maxPrice.toLocaleString('en-BD')}/day</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => { setMaxPrice(200000); setCurrentPage(1); }}
+                      className="hover:text-primary-focus ml-1 p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                      title="Reset price filter"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="text-xs font-bold text-rose-500 hover:text-rose-600 hover:underline ml-auto flex items-center gap-1 transition-colors"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  Reset All Filters
+                </button>
+              </div>
+            )}
+
             {/* Equipment Items */}
             {loading ? (
               <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
@@ -407,17 +553,35 @@ export default function AllEquipmentPage() {
                 ))}
               </div>
             ) : equipmentList.length === 0 ? (
-              <div className="py-20 text-center glass-card rounded-3xl p-8 space-y-3">
-                <p className="text-lg font-black text-navy-900 dark:text-white">No equipment matched your filters.</p>
-                <p className="text-xs text-base-content/60 max-w-sm mx-auto">
-                  Try clearing your search terms or expanding your price and category parameters.
-                </p>
-                <button
-                  onClick={handleResetFilters}
-                  className="mt-2 btn-premium-primary px-6 py-2.5 text-xs font-bold"
-                >
-                  Reset All Filters
-                </button>
+              <div className="py-16 text-center glass-card rounded-3xl p-8 space-y-4 border border-base-300">
+                <div className="w-16 h-16 mx-auto rounded-3xl bg-primary/10 text-primary flex items-center justify-center">
+                  <Filter className="w-8 h-8 opacity-60" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-xl font-black text-navy-900 dark:text-white">
+                    No Matching Fleet Units Found
+                  </h3>
+                  <p className="text-xs text-base-content/60 max-w-md mx-auto">
+                    We couldn't find any heavy machinery matching your active filter criteria. Try broadening your price ceiling, changing the selected category, or clearing search keywords.
+                  </p>
+                </div>
+                <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                  <button
+                    onClick={handleResetFilters}
+                    className="btn-premium-primary px-6 py-2.5 text-xs font-bold flex items-center gap-2"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Reset All Filters</span>
+                  </button>
+                  {category !== 'All' && (
+                    <button
+                      onClick={() => { setCategory('All'); setCurrentPage(1); }}
+                      className="px-4 py-2.5 rounded-2xl bg-base-200 hover:bg-base-300 text-xs font-bold text-base-content/80 transition-colors"
+                    >
+                      View All Categories
+                    </button>
+                  )}
+                </div>
               </div>
             ) : (
               <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
