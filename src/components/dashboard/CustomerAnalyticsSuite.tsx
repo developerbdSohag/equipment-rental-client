@@ -151,11 +151,14 @@ export default function CustomerAnalyticsSuite({
                 tickFormatter={(val) => `৳${(val / 1000).toFixed(0)}k`}
               />
               <Tooltip
+                wrapperStyle={{ zIndex: 99999, pointerEvents: 'none' }}
+                itemStyle={{ color: '#ffffff', fontWeight: 700 }}
+                labelStyle={{ color: '#93c5fd', fontWeight: 800 }}
                 formatter={(val) => [`৳${Number(val).toLocaleString('en-BD')}`, 'Rental Spend']}
                 contentStyle={{
                   borderRadius: '1rem',
-                  backgroundColor: '#111827',
-                  borderColor: '#374151',
+                  backgroundColor: '#0b1329',
+                  borderColor: 'rgba(255, 255, 255, 0.25)',
                   color: '#fff',
                   fontSize: '12px'
                 }}

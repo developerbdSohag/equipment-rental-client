@@ -298,3 +298,52 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   RECHARTS DATA VISUALIZATION & TOOLTIP VISIBILITY (LIGHT & DARK THEMES)
+   Guarantees tooltips sit in the absolute foreground (z-index: 99999), have
+   crystal-clear high contrast typography, and never bleed through inner labels.
+   ========================================================================== */
+.recharts-tooltip-wrapper {
+  z-index: 99999 !important;
+  pointer-events: none !important;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.45)) !important;
+}
+
+.recharts-default-tooltip {
+  background-color: #0b1329 !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 1rem !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(56, 120, 255, 0.2) !important;
+  backdrop-filter: blur(16px) !important;
+  opacity: 1 !important;
+}
+
+.recharts-tooltip-item,
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-unit,
+.recharts-tooltip-item-value,
+.recharts-tooltip-label {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.recharts-tooltip-item-name {
+  color: #93c5fd !important;
+}
+
+.recharts-tooltip-item-value {
+  color: #34d399 !important;
+  font-weight: 800 !important;
+}
+
+.recharts-tooltip-label {
+  color: #f8fafc !important;
+  font-weight: 800 !important;
+  margin-bottom: 4px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  padding-bottom: 4px !important;
+}

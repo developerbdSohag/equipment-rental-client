@@ -13,6 +13,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  Sector,
   ScatterChart,
   Scatter,
   XAxis,
@@ -67,6 +68,32 @@ export default function AdminAnalyticsSuite({
 
   // Timeframe selector for trend series
   const [timeframe, setTimeframe] = useState<'monthly' | 'quarterly' | 'forecast'>('monthly');
+
+  // Interactive active sector index for Composition Donut Chart
+  const [activeCompositionIndex, setActiveCompositionIndex] = useState<number | undefined>(undefined);
+
+  // Active shape expansion handler for Donut hover
+  const renderCompositionActiveShape = (props: any) => {
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+    return (
+      <g>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius - 3}
+          outerRadius={outerRadius + 8}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+          style={{
+            filter: 'drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.45))',
+            cursor: 'pointer',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
+        />
+      </g>
+    );
+  };
 
   // Selected Bangladesh Division for Geographic deep-dive
   const [selectedDivision, setSelectedDivision] = useState<string>('dhaka');
@@ -536,14 +563,17 @@ export default function AdminAnalyticsSuite({
                     tickFormatter={(val) => `৳${(val / 1000).toFixed(0)}k`}
                   />
                   <Tooltip
+                    wrapperStyle={{ zIndex: 99999, pointerEvents: 'none' }}
+                    itemStyle={{ color: '#ffffff', fontWeight: 700 }}
+                    labelStyle={{ color: '#93c5fd', fontWeight: 800 }}
                     formatter={(val, name) => [
                       `৳${Number(val).toLocaleString('en-BD')}`,
                       name === 'revenue' ? 'Actual Revenue (৳)' : 'Target Revenue (৳)'
                     ]}
                     contentStyle={{
                       borderRadius: '1rem',
-                      backgroundColor: '#111827',
-                      borderColor: '#374151',
+                      backgroundColor: '#0b1329',
+                      borderColor: 'rgba(255, 255, 255, 0.25)',
                       color: '#fff',
                       fontSize: '12px'
                     }}
@@ -654,6 +684,9 @@ export default function AdminAnalyticsSuite({
                   tickFormatter={(val) => `${val}%`}
                 />
                 <Tooltip
+                  wrapperStyle={{ zIndex: 99999, pointerEvents: 'none' }}
+                  itemStyle={{ color: '#ffffff', fontWeight: 700 }}
+                  labelStyle={{ color: '#93c5fd', fontWeight: 800 }}
                   formatter={(val, name) => [
                     name === 'revenue'
                       ? `৳${Number(val).toLocaleString('en-BD')}`
@@ -668,8 +701,8 @@ export default function AdminAnalyticsSuite({
                   ]}
                   contentStyle={{
                     borderRadius: '1rem',
-                    backgroundColor: '#111827',
-                    borderColor: '#374151',
+                    backgroundColor: '#0b1329',
+                    borderColor: 'rgba(255, 255, 255, 0.25)',
                     color: '#fff',
                     fontSize: '12px'
                   }}
@@ -763,14 +796,17 @@ export default function AdminAnalyticsSuite({
                     <XAxis dataKey="range" fontSize={10} stroke="currentColor" opacity={0.6} />
                     <YAxis fontSize={10} stroke="currentColor" opacity={0.6} />
                     <Tooltip
+                      wrapperStyle={{ zIndex: 99999, pointerEvents: 'none' }}
+                      itemStyle={{ color: '#ffffff', fontWeight: 700 }}
+                      labelStyle={{ color: '#93c5fd', fontWeight: 800 }}
                       formatter={(val, name, item: any) => [
                         `${val} Bookings (Avg: ৳${Number(item?.payload?.avgTicket || 0).toLocaleString('en-BD')})`,
                         'Rental Volume'
                       ]}
                       contentStyle={{
                         borderRadius: '1rem',
-                        backgroundColor: '#111827',
-                        borderColor: '#374151',
+                        backgroundColor: '#0b1329',
+                        borderColor: 'rgba(255, 255, 255, 0.25)',
                         color: '#fff',
                         fontSize: '12px'
                       }}
@@ -801,14 +837,17 @@ export default function AdminAnalyticsSuite({
                     <XAxis dataKey="tier" fontSize={10} stroke="currentColor" opacity={0.6} />
                     <YAxis fontSize={10} stroke="currentColor" opacity={0.6} />
                     <Tooltip
+                      wrapperStyle={{ zIndex: 99999, pointerEvents: 'none' }}
+                      itemStyle={{ color: '#ffffff', fontWeight: 700 }}
+                      labelStyle={{ color: '#93c5fd', fontWeight: 800 }}
                       formatter={(val, name, item: any) => [
                         `${val} Machines listed (Avg Rate: ৳${Number(item?.payload?.avgRate || 0).toLocaleString('en-BD')}/day, Util: ${item?.payload?.utilization}%)`,
                         'Fleet Units'
                       ]}
                       contentStyle={{
                         borderRadius: '1rem',
-                        backgroundColor: '#111827',
-                        borderColor: '#374151',
+                        backgroundColor: '#0b1329',
+                        borderColor: 'rgba(255, 255, 255, 0.25)',
                         color: '#fff',
                         fontSize: '12px'
                       }}
@@ -878,13 +917,14 @@ export default function AdminAnalyticsSuite({
                 <ZAxis type="number" dataKey="bookingsCount" range={[60, 300]} name="Rental Volume" />
                 <Tooltip
                   cursor={{ strokeDasharray: '3 3' }}
+                  wrapperStyle={{ zIndex: 99999, pointerEvents: 'none' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="bg-gray-900 text-white p-3.5 rounded-2xl border border-gray-700 shadow-xl text-xs space-y-1">
+                        <div className="bg-slate-900/95 dark:bg-slate-950/95 text-white p-3.5 rounded-2xl border border-slate-700/80 shadow-2xl backdrop-blur-md text-xs space-y-1 min-w-[210px] pointer-events-none">
                           <p className="font-black text-sm text-primary">{data.name}</p>
-                          <p className="text-gray-300">Category: <span className="font-semibold text-white">{data.category}</span></p>
+                          <p className="text-slate-300">Category: <span className="font-semibold text-white">{data.category}</span></p>
                           <p className="text-emerald-400 font-bold">Daily Rate: ৳{Number(data.dailyRate).toLocaleString('en-BD')} / day</p>
                           <p className="text-amber-400 font-bold">Utilization: {data.utilizationPct}%</p>
                           <p className="text-blue-300">Booking Frequency: {data.bookingsCount} completed contracts</p>
@@ -939,24 +979,35 @@ export default function AdminAnalyticsSuite({
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Donut Chart */}
+            {/* Donut Chart with Active Foreground Elevation */}
             <div className="lg:col-span-5 h-72 w-full relative flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Tooltip
-                    formatter={(val, name, item: any) => [
-                      `${val} Units (${item?.payload?.pct}%) - ৳${Number(item?.payload?.revenue || 0).toLocaleString('en-BD')} GMV`,
-                      name
-                    ]}
-                    contentStyle={{
-                      borderRadius: '1rem',
-                      backgroundColor: '#111827',
-                      borderColor: '#374151',
-                      color: '#fff',
-                      fontSize: '12px'
+                    wrapperStyle={{ zIndex: 99999, pointerEvents: 'none' }}
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0];
+                        return (
+                          <div className="bg-slate-900/95 dark:bg-slate-950/95 text-white p-3.5 rounded-2xl shadow-2xl border border-slate-700/80 backdrop-blur-md text-xs min-w-[210px] pointer-events-none">
+                            <p className="font-extrabold text-white text-sm mb-1">{data.name}</p>
+                            <div className="space-y-1">
+                              <p className="text-emerald-400 font-black text-sm">
+                                ৳{Number(data.payload?.revenue || 0).toLocaleString('en-BD')} GMV
+                              </p>
+                              <p className="text-slate-300 font-semibold text-xs">
+                                {data.value} Units · <span className="text-primary font-bold">{data.payload?.pct}%</span> of Total Fleet
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
                     }}
                   />
                   <Pie
+                    activeIndex={activeCompositionIndex}
+                    activeShape={renderCompositionActiveShape}
                     data={categoryComposition}
                     dataKey="count"
                     nameKey="name"
@@ -965,15 +1016,21 @@ export default function AdminAnalyticsSuite({
                     innerRadius={65}
                     outerRadius={95}
                     paddingAngle={4}
+                    onMouseEnter={(_, index) => setActiveCompositionIndex(index)}
+                    onMouseLeave={() => setActiveCompositionIndex(undefined)}
                   >
                     {categoryComposition.map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                        className="cursor-pointer transition-all duration-300"
+                      />
                     ))}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-              {/* Inner Center Metric */}
-              <div className="absolute text-center pointer-events-none">
+              {/* Inner Center Metric (Lower z-index so tooltips always sit in front) */}
+              <div className="absolute text-center pointer-events-none z-0">
                 <p className="text-2xl font-black text-base-content">
                   {categoryComposition.reduce((sum: number, c: any) => sum + (c.count || 0), 0)}
                 </p>
@@ -987,8 +1044,16 @@ export default function AdminAnalyticsSuite({
               <div className="space-y-2.5">
                 {categoryComposition.map((cat: any, idx: number) => {
                   const color = COLORS[idx % COLORS.length];
+                  const isHovered = activeCompositionIndex === idx;
                   return (
-                    <div key={idx} className="space-y-1">
+                    <div
+                      key={idx}
+                      onMouseEnter={() => setActiveCompositionIndex(idx)}
+                      onMouseLeave={() => setActiveCompositionIndex(undefined)}
+                      className={`space-y-1 p-2 rounded-xl transition-all cursor-pointer ${
+                        isHovered ? 'bg-base-200 shadow-sm scale-[1.01]' : 'hover:bg-base-200/50'
+                      }`}
+                    >
                       <div className="flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2">
                           <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }}></span>
