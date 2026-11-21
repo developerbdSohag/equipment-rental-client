@@ -144,7 +144,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             }`}
             title={isFav ? 'Remove from favorites' : 'Add to favorites'}
           >
-            <Heart className={`w-3.5 h-3.5 ${isFav ? 'fill-white' : ''}`} />
+            <Heart className={`w-3.5 h-3.5 ${isFav ? 'fill-white text-white' : ''}`} />
           </button>
         </div>
 
@@ -266,7 +266,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
           }`}
           title={isFav ? 'Remove from favorites' : 'Save to favorites'}
         >
-          <Heart className={`w-4 h-4 ${isFav ? 'fill-white' : ''}`} />
+          <Heart className={`w-4 h-4 ${isFav ? 'fill-white text-white' : ''}`} />
         </button>
 
         {/* Availability Badge */}

@@ -272,16 +272,22 @@ function EquipmentDetailsContent() {
 
           <div className="flex items-center space-x-2">
             <button
+              type="button"
               onClick={handleToggleFavorite}
               disabled={favLoading}
-              className={`p-2.5 rounded-2xl glass-card border transition-all ${
+              className={`p-2.5 rounded-2xl border transition-all shadow-sm flex items-center justify-center ${
                 isFavorite
-                  ? 'bg-rose-500 text-white border-rose-500'
-                  : 'text-base-content/70 hover:text-rose-500'
+                  ? 'bg-rose-500 text-white border-rose-500 hover:bg-rose-600 shadow-md shadow-rose-500/30 ring-2 ring-rose-400/40'
+                  : 'bg-base-100 hover:bg-rose-50 border-base-300 text-base-content/70 hover:text-rose-500 hover:border-rose-300 dark:hover:bg-rose-950/30'
               }`}
-              title="Save to favorites"
+              title={isFavorite ? 'Saved in favorites (click to remove)' : 'Add to favorites'}
+              aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-white' : ''}`} />
+              <Heart
+                className={`w-5 h-5 transition-transform active:scale-90 ${
+                  isFavorite ? 'fill-white text-white' : 'text-base-content/70'
+                }`}
+              />
             </button>
           </div>
         </div>
