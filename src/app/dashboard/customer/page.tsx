@@ -25,7 +25,7 @@ import toast from 'react-hot-toast';
 
 export default function CustomerDashboardPage() {
   return (
-    <ProtectedRoute allowedRoles={['Customer', 'Admin']}>
+    <ProtectedRoute allowedRoles={['Customer', 'Admin', 'Owner']}>
       <CustomerDashboardContent />
     </ProtectedRoute>
   );
@@ -39,6 +39,14 @@ function CustomerDashboardContent() {
     initialTab as any
   );
   const { user } = useAuth();
+
+  // Sync activeTab when searchParams changes (e.g. clicking "My Favorites" in navigation)
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && ['rentals', 'favorites', 'analytics', 'profile'].includes(tab)) {
+      setActiveTab(tab as any);
+    }
+  }, [searchParams]);
 
   // Data states
   const [rentals, setRentals] = useState<any[]>([]);

@@ -265,8 +265,18 @@ export default function AllEquipmentPage() {
                 <select
                   value={category}
                   onChange={(e) => {
-                    setCategory(e.target.value);
+                    const newCat = e.target.value;
+                    setCategory(newCat);
                     setCurrentPage(1);
+                    if (typeof window !== 'undefined') {
+                      const params = new URLSearchParams(window.location.search);
+                      if (newCat && newCat !== 'All') {
+                        params.set('category', newCat);
+                      } else {
+                        params.delete('category');
+                      }
+                      router.replace(`/equipment?${params.toString()}`, { scroll: false });
+                    }
                   }}
                   className="w-full p-2.5 rounded-xl bg-base-100 border border-base-300 text-xs font-bold text-base-content focus:outline-none focus:border-electric-500"
                 >

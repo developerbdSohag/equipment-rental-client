@@ -275,16 +275,14 @@ export const Navbar: React.FC = () => {
                         </NextLink>
                       )}
 
-                      {user.role === 'Customer' && (
-                        <NextLink
-                          href="/dashboard/customer?tab=favorites"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center px-4 py-2 text-xs font-bold text-base-content/80 hover:bg-rose-500/10 hover:text-rose-500 transition-colors"
-                        >
-                          <Heart className="w-4 h-4 mr-3 text-rose-500" />
-                          My Favorites
-                        </NextLink>
-                      )}
+                      <NextLink
+                        href="/dashboard/customer?tab=favorites"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center px-4 py-2 text-xs font-bold text-base-content/80 hover:bg-rose-500/10 hover:text-rose-500 transition-colors"
+                      >
+                        <Heart className="w-4 h-4 mr-3 text-rose-500" />
+                        My Favorites
+                      </NextLink>
                     </div>
 
                     <div className="border-t border-base-200 pt-1">
@@ -394,6 +392,14 @@ export const Navbar: React.FC = () => {
                 >
                   <LayoutDashboard className="w-4 h-4 mr-2" />
                   Dashboard
+                </NextLink>
+                <NextLink
+                  href="/dashboard/customer?tab=favorites"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center py-2.5 rounded-xl text-xs font-bold border border-rose-500/30 text-rose-600 dark:text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 transition-colors"
+                >
+                  <Heart className="w-4 h-4 mr-2 text-rose-500" />
+                  My Favorites
                 </NextLink>
                 <button
                   onClick={() => {

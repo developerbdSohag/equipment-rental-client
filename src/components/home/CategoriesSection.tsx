@@ -16,7 +16,7 @@ const categories = [
   {
     id: 'cranes',
     name: 'Cranes',
-    image: 'https://images.unsplash.com/photo-1575538633395-c773c6ea252d?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=800&q=80',
     count: '115+ Units',
     description: 'Mobile, all-terrain, crawler, and tower cranes for heavy lifts.'
   },
@@ -65,7 +65,7 @@ const categories = [
   {
     id: 'lifting-equipment',
     name: 'Lifting Equipment',
-    image: 'https://images.unsplash.com/photo-1579487785973-74d2ca7abdd5?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=800&q=80',
     count: '160+ Units',
     description: 'Telescopic boom lifts, scissor lifts, and spider personnel baskets.'
   },

@@ -474,6 +474,21 @@ function EquipmentDetailsContent() {
                 <span>{isAvailable ? 'Reserve & Book via Stripe' : 'Currently Rented Out'}</span>
               </button>
 
+              {/* Add / Remove Favorites Action */}
+              <button
+                type="button"
+                onClick={handleToggleFavorite}
+                disabled={favLoading}
+                className={`w-full py-3.5 rounded-2xl border text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+                  isFavorite
+                    ? 'bg-rose-500/10 border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 shadow-sm'
+                    : 'bg-base-200/80 border-base-300 text-base-content hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/30'
+                }`}
+              >
+                <Heart className={`w-4 h-4 ${isFavorite ? 'fill-rose-500 text-rose-500' : ''}`} />
+                <span>{favLoading ? 'Updating...' : isFavorite ? 'Saved in Favorites (Click to Remove)' : 'Add to Favorites'}</span>
+              </button>
+
               <div className="p-3 rounded-2xl bg-electric-500/5 border border-electric-500/20 text-[11px] text-base-content/70 space-y-1">
                 <p className="font-bold text-navy-900 dark:text-white flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-electric-500" />

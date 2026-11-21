@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import api from '@/lib/api';
 import {
   MapPin,
   Tag,
@@ -12,7 +13,8 @@ import {
   Star,
   ShieldCheck,
   ArrowRight,
-  CalendarCheck
+  CalendarCheck,
+  Heart
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -52,6 +54,56 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
   const ratingValue = equipment.rating || 4.9;
   const reviewCountValue = equipment.reviewCount || 28;
 
+  const [isFav, setIsFav] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedFavs = JSON.parse(localStorage.getItem('gearup_favorites') || '[]');
+      if (storedFavs.some((f: any) => f.equipmentId === equipment._id || f._id === equipment._id || f.equipment?._id === equipment._id)) {
+        setIsFav(true);
+      }
+    } catch {}
+  }, [equipment._id]);
+
+  const toggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      toast('Please login to bookmark favorites', { icon: '🔒' });
+      router.push(`/login?redirect=${encodeURIComponent(`/equipment/${equipment._id}`)}`);
+      return;
+    }
+
+    try {
+      const storedFavs = JSON.parse(localStorage.getItem('gearup_favorites') || '[]');
+      if (isFav) {
+        const updated = storedFavs.filter(
+          (f: any) => f.equipmentId !== equipment._id && f._id !== equipment._id && f.equipment?._id !== equipment._id
+        );
+        localStorage.setItem('gearup_favorites', JSON.stringify(updated));
+        setIsFav(false);
+        api.delete(`/favorites/${equipment._id}`).catch(() => {});
+        toast.success(`Removed ${equipment.name} from favorites`);
+      } else {
+        const updated = storedFavs.filter(
+          (f: any) => f.equipmentId !== equipment._id && f._id !== equipment._id && f.equipment?._id !== equipment._id
+        );
+        updated.push({
+          _id: equipment._id,
+          equipmentId: equipment._id,
+          equipment,
+          addedAt: new Date().toISOString()
+        });
+        localStorage.setItem('gearup_favorites', JSON.stringify(updated));
+        setIsFav(true);
+        api.post(`/favorites/${equipment._id}`, { equipment }).catch(() => {});
+        toast.success(`Added ${equipment.name} to favorites!`);
+      }
+    } catch {
+      toast.error('Could not update favorites.');
+    }
+  };
+
   const handleAction = (e: React.MouseEvent, targetPath: string) => {
     e.preventDefault();
     if (!user) {
@@ -84,6 +136,16 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
               {equipment.category}
             </span>
           </div>
+          <button
+            type="button"
+            onClick={toggleFavorite}
+            className={`absolute top-3 right-3 z-20 p-2 rounded-xl backdrop-blur-md transition-all shadow-sm ${
+              isFav ? 'bg-rose-500 text-white shadow-rose-500/30' : 'bg-black/50 text-white hover:text-rose-400 hover:bg-black/70'
+            }`}
+            title={isFav ? 'Remove from favorites' : 'Add to favorites'}
+          >
+            <Heart className={`w-3.5 h-3.5 ${isFav ? 'fill-white' : ''}`} />
+          </button>
         </div>
 
         <div className="flex-1 p-6 flex flex-col justify-between space-y-4">
@@ -192,6 +254,20 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
             {equipment.category}
           </span>
         </div>
+
+        {/* Favorite Heart Button */}
+        <button
+          type="button"
+          onClick={toggleFavorite}
+          className={`absolute bottom-3 right-3 z-20 p-2 rounded-xl backdrop-blur-md transition-all shadow-md ${
+            isFav
+              ? 'bg-rose-500 text-white shadow-rose-500/30'
+              : 'bg-black/50 hover:bg-black/70 text-white hover:text-rose-400'
+          }`}
+          title={isFav ? 'Remove from favorites' : 'Save to favorites'}
+        >
+          <Heart className={`w-4 h-4 ${isFav ? 'fill-white' : ''}`} />
+        </button>
 
         {/* Availability Badge */}
         <div className="absolute top-3 right-3 z-10">
