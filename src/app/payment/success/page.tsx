@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import api from '@/lib/api';
@@ -10,7 +10,16 @@ import NextLink from 'next/link';
 export default function PaymentSuccessPageWrapper() {
   return (
     <ProtectedRoute>
-      <PaymentSuccessContent />
+      <Suspense
+        fallback={
+          <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4">
+            <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            <h2 className="text-xl font-bold text-base-content">Verifying Stripe Payment...</h2>
+          </div>
+        }
+      >
+        <PaymentSuccessContent />
+      </Suspense>
     </ProtectedRoute>
   );
 }

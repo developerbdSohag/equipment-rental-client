@@ -1,11 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import NextLink from 'next/link';
-import { XCircle, ArrowLeft, RefreshCw } from 'lucide-react';
+import { XCircle, ArrowLeft, Loader2 } from 'lucide-react';
 
-export default function PaymentCancelPage() {
+export default function PaymentCancelPageWrapper() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-3">
+          <Loader2 className="w-10 h-10 text-primary animate-spin" />
+        </div>
+      }
+    >
+      <PaymentCancelPageContent />
+    </Suspense>
+  );
+}
+
+function PaymentCancelPageContent() {
   const searchParams = useSearchParams();
   const bookingId = searchParams.get('bookingId');
 

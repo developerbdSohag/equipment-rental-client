@@ -204,17 +204,9 @@ function EquipmentDetailsContent() {
         localStorage.setItem('gearup_latest_booking', JSON.stringify(createdBooking));
       } catch {}
 
-      const checkoutRes = await api.post('/payments/create-checkout-session', {
-        bookingId: createdBooking._id,
-        bookingData: createdBooking
-      });
-
-      if (checkoutRes.data.success && checkoutRes.data.url) {
-        toast.loading('Redirecting to secure Stripe Checkout...', { duration: 2500 });
-        window.location.href = checkoutRes.data.url;
-      } else {
-        throw new Error('Failed to generate checkout session.');
-      }
+      toast.success('Reservation parameters confirmed! Redirecting to payment page...');
+      setIsBookingModalOpen(false);
+      router.push(`/payment?bookingId=${createdBooking._id}`);
     } catch (error: any) {
       console.error('Booking checkout error:', error);
       Swal.fire({
@@ -630,7 +622,7 @@ function EquipmentDetailsContent() {
                   ) : (
                     <>
                       <CreditCard className="w-4 h-4" />
-                      <span>Proceed to Stripe (৳{calculateTotal().toLocaleString('en-BD')})</span>
+                      <span>Proceed to Payment (৳{calculateTotal().toLocaleString('en-BD')})</span>
                     </>
                   )}
                 </button>
