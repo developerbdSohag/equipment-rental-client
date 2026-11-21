@@ -1,10 +1,24 @@
 import type { Metadata } from 'next';
+import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Toaster } from 'react-hot-toast';
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'GearUp | Equipment Rental Platform',
@@ -18,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen bg-base-100 text-base-content">
+    <html lang="en" data-theme="light" className={`${jakarta.variable} ${inter.variable}`} suppressHydrationWarning>
+      <body className={`${jakarta.className} flex flex-col min-h-screen bg-base-100 text-base-content antialiased font-sans`}>
         <ThemeProvider>
           <AuthProvider>
             <Toaster

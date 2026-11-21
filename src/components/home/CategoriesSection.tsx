@@ -9,7 +9,7 @@ const categories = [
   {
     id: 'excavators',
     name: 'Excavators',
-    image: 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80',
     count: '340+ Units',
     description: 'Tracked, wheeled, and mini excavators for earthmoving and trenching.'
   },
@@ -37,7 +37,7 @@ const categories = [
   {
     id: 'bulldozers',
     name: 'Bulldozers',
-    image: 'https://images.unsplash.com/photo-1651260282644-6b3763d2acbc?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=800&q=80',
     count: '95+ Units',
     description: 'Heavy crawler dozers with multi-shank rippers and 3D grade control.'
   },
@@ -51,7 +51,7 @@ const categories = [
   {
     id: 'concrete-mixers',
     name: 'Concrete Mixers',
-    image: 'https://images.unsplash.com/photo-1527410651988-c2f385ccd3f7?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
     count: '140+ Units',
     description: 'Towable batch mixers, volumetric trucks, and mortar machinery.'
   },
@@ -65,7 +65,7 @@ const categories = [
   {
     id: 'lifting-equipment',
     name: 'Lifting Equipment',
-    image: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1579487785973-74d2ca7abdd5?auto=format&fit=crop&w=800&q=80',
     count: '160+ Units',
     description: 'Telescopic boom lifts, scissor lifts, and spider personnel baskets.'
   },
@@ -108,7 +108,7 @@ export const CategoriesSection: React.FC = () => {
         </div>
 
         {/* 10 Image-Based Category Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-5">
           {categories.map((cat, index) => (
             <motion.div
               key={cat.id}
@@ -119,7 +119,7 @@ export const CategoriesSection: React.FC = () => {
             >
               <NextLink
                 href={`/equipment?category=${encodeURIComponent(cat.name)}`}
-                className="group relative block aspect-[4/5] rounded-3xl overflow-hidden border border-white/60 bg-navy-950 shadow-soft hover:shadow-glow-blue transition-all duration-500 hover:-translate-y-1.5"
+                className="group relative block aspect-[4/5] rounded-3xl overflow-hidden border border-white/60 dark:border-white/10 bg-navy-950 shadow-soft hover:shadow-glow-blue transition-all duration-500 hover:-translate-y-1.5"
               >
                 {/* Background Image with Zoom Effect */}
                 <img
@@ -128,7 +128,7 @@ export const CategoriesSection: React.FC = () => {
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-85 group-hover:opacity-100"
                   loading="lazy"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80';
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80';
                   }}
                 />
 
@@ -139,18 +139,18 @@ export const CategoriesSection: React.FC = () => {
                 <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-electric-500/80 transition-colors duration-300 pointer-events-none" />
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 p-5 flex flex-col justify-between text-white z-10">
+                <div className="absolute inset-0 p-3.5 sm:p-5 flex flex-col justify-between text-white z-10">
                   <div className="flex justify-end">
-                    <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-black uppercase tracking-wider">
+                    <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-white/20 backdrop-blur-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider">
                       {cat.count}
                     </span>
                   </div>
 
                   <div className="space-y-1">
-                    <h3 className="text-base font-black tracking-tight group-hover:text-electric-400 transition-colors">
+                    <h3 className="text-sm sm:text-base font-black tracking-tight group-hover:text-electric-400 transition-colors">
                       {cat.name}
                     </h3>
-                    <p className="text-[11px] text-white/70 line-clamp-2 leading-relaxed font-medium">
+                    <p className="text-[10px] sm:text-[11px] text-white/70 line-clamp-2 leading-relaxed font-medium">
                       {cat.description}
                     </p>
                     <div className="pt-2 flex items-center text-[10px] font-black uppercase tracking-wider text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

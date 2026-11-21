@@ -402,15 +402,15 @@ export default function AdminAnalyticsSuite({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
           {/* Card 1: Total Revenue */}
-          <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider">Gross Platform GMV</span>
-                <p className="text-3xl font-black text-base-content mt-1">
+          <div className="p-5 sm:p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider truncate block">Gross Platform GMV</span>
+                <p className="text-2xl sm:text-3xl font-black text-base-content mt-1 truncate">
                   ৳{(comparisonData.monthlyRevenue.actual || 340000).toLocaleString('en-BD')}
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
                 <DollarSign className="w-6 h-6" />
               </div>
             </div>
@@ -426,15 +426,15 @@ export default function AdminAnalyticsSuite({
           </div>
 
           {/* Card 2: Fleet Utilization */}
-          <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider">Fleet Utilization Rate</span>
-                <p className="text-3xl font-black text-blue-600 mt-1">
+          <div className="p-5 sm:p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider truncate block">Fleet Utilization Rate</span>
+                <p className="text-2xl sm:text-3xl font-black text-blue-600 mt-1 truncate">
                   {comparisonData.utilizationRate.actual}%
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
                 <Activity className="w-6 h-6" />
               </div>
             </div>
@@ -448,15 +448,15 @@ export default function AdminAnalyticsSuite({
           </div>
 
           {/* Card 3: Total Bookings */}
-          <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider">Executed Rentals</span>
-                <p className="text-3xl font-black text-amber-500 mt-1">
+          <div className="p-5 sm:p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider truncate block">Executed Rentals</span>
+                <p className="text-2xl sm:text-3xl font-black text-amber-500 mt-1 truncate">
                   {comparisonData.bookings.actual} Bookings
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
                 <Calendar className="w-6 h-6" />
               </div>
             </div>
@@ -470,15 +470,15 @@ export default function AdminAnalyticsSuite({
           </div>
 
           {/* Card 4: Customer Satisfaction & NPS */}
-          <div className="p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider">Client Trust & NPS</span>
-                <p className="text-3xl font-black text-emerald-600 mt-1">
+          <div className="p-5 sm:p-6 rounded-3xl bg-base-100 border border-base-300 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-all">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <span className="text-[11px] font-bold uppercase text-base-content/50 tracking-wider truncate block">Client Trust & NPS</span>
+                <p className="text-2xl sm:text-3xl font-black text-emerald-600 mt-1 truncate">
                   {comparisonData.customerSatisfaction.actual}%
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-6 h-6" />
               </div>
             </div>
@@ -1363,46 +1363,54 @@ export default function AdminAnalyticsSuite({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300">
-                    <span className="text-[10px] uppercase font-bold text-base-content/50">Monthly Gross Volume</span>
-                    <p className="text-2xl font-black text-emerald-600 mt-1">
-                      ৳{simulatedResults.monthlyGrossRevenue.toLocaleString('en-BD')}
-                    </p>
-                    <span className="text-[10px] text-base-content/60">Per 30-Day Operational Cycle</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-base-content/50 tracking-wider block">Monthly Gross Volume</span>
+                      <p className="text-xl sm:text-2xl font-black text-emerald-600 mt-1 truncate break-words">
+                        ৳{simulatedResults.monthlyGrossRevenue.toLocaleString('en-BD')}
+                      </p>
+                    </div>
+                    <span className="text-[10px] text-base-content/60 mt-1">Per 30-Day Operational Cycle</span>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300">
-                    <span className="text-[10px] uppercase font-bold text-base-content/50">Annualized Run-Rate (ARR)</span>
-                    <p className="text-2xl font-black text-primary mt-1">
-                      ৳{(simulatedResults.annualizedRunRate / 10000000).toFixed(2)} Cr
-                    </p>
-                    <span className="text-[10px] text-base-content/60">৳{simulatedResults.annualizedRunRate.toLocaleString('en-BD')}</span>
+                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-base-content/50 tracking-wider block">Annualized Run-Rate (ARR)</span>
+                      <p className="text-xl sm:text-2xl font-black text-primary mt-1 truncate">
+                        ৳{(simulatedResults.annualizedRunRate / 10000000).toFixed(2)} Cr
+                      </p>
+                    </div>
+                    <span className="text-[10px] text-base-content/60 mt-1 truncate block">৳{simulatedResults.annualizedRunRate.toLocaleString('en-BD')}</span>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300">
-                    <span className="text-[10px] uppercase font-bold text-base-content/50">Platform Take Revenue</span>
-                    <p className="text-2xl font-black text-amber-500 mt-1">
-                      ৳{simulatedResults.platformCommission.toLocaleString('en-BD')}
-                    </p>
-                    <span className="text-[10px] text-base-content/60">Net Platform Commission</span>
+                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-base-content/50 tracking-wider block">Platform Take Revenue</span>
+                      <p className="text-xl sm:text-2xl font-black text-amber-500 mt-1 truncate break-words">
+                        ৳{simulatedResults.platformCommission.toLocaleString('en-BD')}
+                      </p>
+                    </div>
+                    <span className="text-[10px] text-base-content/60 mt-1">Net Platform Commission</span>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300">
-                    <span className="text-[10px] uppercase font-bold text-base-content/50">Owner Net Payouts</span>
-                    <p className="text-2xl font-black text-blue-600 mt-1">
-                      ৳{simulatedResults.ownerPayout.toLocaleString('en-BD')}
-                    </p>
-                    <span className="text-[10px] text-base-content/60">Equipment Owner Earnings</span>
+                  <div className="p-4 rounded-2xl bg-base-100 border border-base-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-base-content/50 tracking-wider block">Owner Net Payouts</span>
+                      <p className="text-xl sm:text-2xl font-black text-blue-600 mt-1 truncate break-words">
+                        ৳{simulatedResults.ownerPayout.toLocaleString('en-BD')}
+                      </p>
+                    </div>
+                    <span className="text-[10px] text-base-content/60 mt-1">Equipment Owner Earnings</span>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-base-100/80 border border-base-300 flex items-center justify-between text-xs">
+                <div className="p-4 rounded-2xl bg-base-100/90 border border-base-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                   <div>
                     <p className="font-bold text-base-content">Estimated Asset Payback Period:</p>
                     <p className="text-base-content/60">Based on standard Bangladeshi equipment replacement CAPEX.</p>
                   </div>
-                  <div className="text-right">
+                  <div className="sm:text-right flex items-baseline sm:flex-col justify-between sm:justify-start gap-1">
                     <span className="text-xl font-black text-emerald-600">{simulatedResults.estimatedPaybackMonths} Months</span>
                     <p className="text-[10px] font-bold text-base-content/50">ROI: {simulatedResults.annualizedROI}% Annualized</p>
                   </div>

@@ -58,7 +58,7 @@ export const Banner: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-6xl lg:text-7xl font-black text-navy-900 dark:text-white tracking-tight leading-[1.1]"
+            className="text-3xl sm:text-5xl lg:text-7xl font-black text-navy-900 dark:text-white tracking-tight leading-[1.15]"
           >
             Rent Smarter.{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-500 via-blue-600 to-orange-500">
@@ -70,7 +70,7 @@ export const Banner: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base sm:text-lg text-base-content/75 font-medium max-w-2xl mx-auto leading-relaxed"
+            className="text-sm sm:text-lg text-base-content/75 font-medium max-w-2xl mx-auto leading-relaxed"
           >
             Find the right equipment, at the right price, exactly when you need it.
             Direct from verified contractors, industrial owners, and equipment dealers nationwide.
@@ -184,41 +184,47 @@ export const Banner: React.FC = () => {
         </motion.div>
 
         {/* Hero Machinery Showcase & Floating Glass Cards */}
-        <div className="mt-14 relative max-w-5xl mx-auto">
+        <div className="mt-10 sm:mt-14 relative max-w-5xl mx-auto">
           
           {/* Main Hero Machinery Image Card */}
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/60 bg-base-100 aspect-[16/9]">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-white/60 dark:border-white/10 bg-navy-950 min-h-[380px] sm:min-h-[420px] lg:min-h-[460px] flex flex-col justify-end p-5 sm:p-8">
             <img
-              src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1600&q=80"
-              alt="Heavy Machinery Fleet"
-              className="w-full h-full object-cover"
+              src="https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1600&q=80"
+              alt="CAT 320 Next Gen Hydraulic Excavator"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1600&q=80';
+              }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent" />
+            {/* Multi-stop contrast gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/80 to-navy-950/25 pointer-events-none" />
             
-            <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-4">
-              <div>
-                <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[11px] font-bold uppercase tracking-wider">
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-4 sm:gap-6">
+              <div className="space-y-1.5 sm:space-y-2">
+                <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-electric-300">
                   Featured Fleet
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black mt-2">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-tight">
                   CAT 320 Next Gen Hydraulic Excavator
                 </h3>
-                <p className="text-xs text-white/80 max-w-md mt-1">
+                <p className="text-xs sm:text-sm text-white/80 max-w-lg leading-relaxed">
                   Available for immediate jobsite dispatch with Grade Assist and 1.2 cu yd bucket.
                 </p>
               </div>
 
-              <div className="flex items-center space-x-3 shrink-0">
-                <div className="text-right">
-                  <span className="text-[10px] text-white/70 block uppercase font-bold">Daily Rate</span>
-                  <span className="text-2xl font-black text-white">৳35,000/day</span>
+              <div className="pt-3 sm:pt-0 border-t border-white/15 sm:border-none flex items-center justify-between sm:justify-end gap-4 shrink-0">
+                <div className="text-left sm:text-right">
+                  <span className="text-[10px] text-white/70 block uppercase font-bold tracking-wider">Daily Rate</span>
+                  <span className="text-xl sm:text-2xl font-black text-white whitespace-nowrap">
+                    ৳35,000<span className="text-xs font-medium text-white/70">/day</span>
+                  </span>
                 </div>
                 <button
                   onClick={() => router.push('/equipment')}
-                  className="btn-premium-primary px-5 py-3 text-xs"
+                  className="btn-premium-primary px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 whitespace-nowrap shadow-lg"
                 >
                   <span>Rent Now</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                  <ArrowRight className="w-4 h-4 ml-1.5" />
                 </button>
               </div>
             </div>
