@@ -50,17 +50,46 @@ function CustomerDashboardContent() {
     setLoading(true);
     try {
       const [rentalsRes, favoritesRes, analyticsRes] = await Promise.all([
-        api.get('/bookings/my-rentals'),
-        api.get('/favorites'),
+        api.get('/bookings/my-rentals').catch(() => ({ data: { success: false, rentals: [] } })),
+        api.get('/favorites').catch(() => ({ data: { success: false, favorites: [] } })),
         api.get('/analytics/customer').catch(() => ({ data: { success: false } })),
       ]);
 
-      if (rentalsRes.data.success) {
-        setRentals(rentalsRes.data.rentals || []);
-      }
-      if (favoritesRes.data.success) {
-        setFavorites(favoritesRes.data.favorites || []);
-      }
+      // Rentals: merge API with client-side confirmed rentals
+      let combinedRentals = rentalsRes.data?.success ? [...(rentalsRes.data.rentals || [])] : [];
+      try {
+        const rawLocalRentals = localStorage.getItem('gearup_customer_rentals');
+        if (rawLocalRentals) {
+          const localRentals = JSON.parse(rawLocalRentals);
+          for (const lr of localRentals) {
+            if (!combinedRentals.some((cr: any) => cr._id === lr._id || (cr.transactionId && cr.transactionId === lr.transactionId))) {
+              combinedRentals.unshift(lr);
+            }
+          }
+        }
+      } catch {}
+      setRentals(combinedRentals);
+
+      // Favorites: merge API with client-side saved favorites
+      let combinedFavorites = favoritesRes.data?.success ? [...(favoritesRes.data.favorites || [])] : [];
+      try {
+        const rawLocalFavs = localStorage.getItem('gearup_favorites');
+        if (rawLocalFavs) {
+          const localFavs = JSON.parse(rawLocalFavs);
+          for (const lf of localFavs) {
+            const lfId = lf.equipmentId || lf._id || lf.equipment?._id;
+            const exists = combinedFavorites.some((cf: any) => {
+              const cfId = cf.equipmentId || cf._id || cf.equipment?._id;
+              return cfId === lfId;
+            });
+            if (!exists) {
+              combinedFavorites.unshift(lf);
+            }
+          }
+        }
+      } catch {}
+      setFavorites(combinedFavorites);
+
       if (analyticsRes?.data?.success) {
         setAnalytics(analyticsRes.data.analytics);
       }
@@ -77,8 +106,25 @@ function CustomerDashboardContent() {
 
   const handleRemoveFavorite = async (equipmentId: string) => {
     try {
-      await api.delete(`/favorites/${equipmentId}`);
-      setFavorites((prev) => prev.filter((f) => f.equipmentId !== equipmentId && f.equipment?._id !== equipmentId));
+      // Remove locally
+      try {
+        const rawLocalFavs = localStorage.getItem('gearup_favorites');
+        if (rawLocalFavs) {
+          const localFavs = JSON.parse(rawLocalFavs);
+          const updated = localFavs.filter(
+            (f: any) => f.equipmentId !== equipmentId && f._id !== equipmentId && f.equipment?._id !== equipmentId
+          );
+          localStorage.setItem('gearup_favorites', JSON.stringify(updated));
+        }
+      } catch {}
+
+      // Update state
+      setFavorites((prev) =>
+        prev.filter((f) => f.equipmentId !== equipmentId && f.equipment?._id !== equipmentId && f._id !== equipmentId)
+      );
+
+      // Call API
+      await api.delete(`/favorites/${equipmentId}`).catch(() => {});
       toast.success('Removed from favorites.');
     } catch (err) {
       toast.error('Failed to remove favorite.');

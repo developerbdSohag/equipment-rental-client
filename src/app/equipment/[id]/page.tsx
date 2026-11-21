@@ -58,13 +58,21 @@ function EquipmentDetailsContent() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [contactNumber, setContactNumber] = useState(user?.phone || '');
-  const [deliveryAddress, setDeliveryAddress] = useState(user?.address || '');
+  const [contactNumber, setContactNumber] = useState(user?.phone || '+880 1711-234567');
+  const [deliveryAddress, setDeliveryAddress] = useState(user?.address || 'Plot 14-15, Tejgaon Industrial Area, Dhaka-1208');
   const [additionalNotes, setAdditionalNotes] = useState('');
 
   // Fetch Equipment & Favorite Status
   useEffect(() => {
     if (!id) return;
+
+    // Check localStorage cache first for instant responsiveness
+    try {
+      const storedFavs = JSON.parse(localStorage.getItem('gearup_favorites') || '[]');
+      if (storedFavs.some((f: any) => f.equipmentId === id || f._id === id || f.equipment?._id === id)) {
+        setIsFavorite(true);
+      }
+    } catch {}
 
     const fetchData = async () => {
       try {
@@ -115,13 +123,32 @@ function EquipmentDetailsContent() {
     if (!equipment) return;
     setFavLoading(true);
     try {
+      const storedFavs = JSON.parse(localStorage.getItem('gearup_favorites') || '[]');
       if (isFavorite) {
-        await api.delete(`/favorites/${equipment._id}`);
+        // Remove locally
+        const updated = storedFavs.filter(
+          (f: any) => f.equipmentId !== equipment._id && f._id !== equipment._id && f.equipment?._id !== equipment._id
+        );
+        localStorage.setItem('gearup_favorites', JSON.stringify(updated));
         setIsFavorite(false);
+        // Call API
+        await api.delete(`/favorites/${equipment._id}`).catch(() => {});
         toast.success('Removed from favorites');
       } else {
-        await api.post(`/favorites/${equipment._id}`);
+        // Save locally
+        const updated = storedFavs.filter(
+          (f: any) => f.equipmentId !== equipment._id && f._id !== equipment._id && f.equipment?._id !== equipment._id
+        );
+        updated.push({
+          _id: equipment._id,
+          equipmentId: equipment._id,
+          equipment,
+          addedAt: new Date().toISOString()
+        });
+        localStorage.setItem('gearup_favorites', JSON.stringify(updated));
         setIsFavorite(true);
+        // Call API
+        await api.post(`/favorites/${equipment._id}`, { equipment }).catch(() => {});
         toast.success('Saved to your favorites!');
       }
     } catch (err) {
@@ -173,8 +200,13 @@ function EquipmentDetailsContent() {
 
       const createdBooking = bookingRes.data.booking;
 
+      try {
+        localStorage.setItem('gearup_latest_booking', JSON.stringify(createdBooking));
+      } catch {}
+
       const checkoutRes = await api.post('/payments/create-checkout-session', {
-        bookingId: createdBooking._id
+        bookingId: createdBooking._id,
+        bookingData: createdBooking
       });
 
       if (checkoutRes.data.success && checkoutRes.data.url) {
@@ -531,7 +563,7 @@ function EquipmentDetailsContent() {
                 <input
                   type="tel"
                   required
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="+880 1711-234567"
                   value={contactNumber}
                   onChange={(e) => setContactNumber(e.target.value)}
                   className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
@@ -543,7 +575,7 @@ function EquipmentDetailsContent() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Plot 45, Tejgaon Industrial Area, Dhaka or Port Road, Chattogram"
+                  placeholder="e.g. Plot 14-15, Tejgaon Industrial Area, Dhaka-1208"
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
                   className="w-full p-3 rounded-xl bg-base-100 border border-base-300 text-xs font-bold"
@@ -598,7 +630,7 @@ function EquipmentDetailsContent() {
                   ) : (
                     <>
                       <CreditCard className="w-4 h-4" />
-                      <span>Proceed to Stripe (${calculateTotal()})</span>
+                      <span>Proceed to Stripe (৳{calculateTotal().toLocaleString('en-BD')})</span>
                     </>
                   )}
                 </button>

@@ -36,14 +36,39 @@ function PaymentSuccessContent() {
 
     const verifyAndConfirm = async () => {
       try {
+        let localBooking: any = null;
+        try {
+          const raw = localStorage.getItem('gearup_latest_booking');
+          if (raw) localBooking = JSON.parse(raw);
+        } catch {}
+
         const res = await api.post('/payments/verify', {
           bookingId,
-          sessionId
+          sessionId,
+          bookingData: localBooking
         });
 
         if (res.data.success) {
-          setBooking(res.data.booking);
-          setTransactionId(res.data.transactionId || sessionId || 'TXN_SUCCESS');
+          const confirmed = res.data.booking || localBooking;
+          setBooking(confirmed);
+          const txn = res.data.transactionId || sessionId || 'TXN_SUCCESS';
+          setTransactionId(txn);
+
+          // Save confirmed rental to local persistence for Customer Dashboard
+          if (confirmed) {
+            try {
+              const rawRentals = localStorage.getItem('gearup_customer_rentals');
+              const localRentals = rawRentals ? JSON.parse(rawRentals) : [];
+              const filtered = localRentals.filter((r: any) => r._id !== confirmed._id);
+              filtered.unshift({
+                ...confirmed,
+                paymentStatus: 'Paid',
+                bookingStatus: 'Confirmed',
+                transactionId: txn
+              });
+              localStorage.setItem('gearup_customer_rentals', JSON.stringify(filtered));
+            } catch {}
+          }
         } else {
           setError(res.data.message || 'Payment verification failed.');
         }
