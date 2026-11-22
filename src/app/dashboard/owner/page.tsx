@@ -23,7 +23,9 @@ import {
   ExternalLink,
   Loader2,
   TrendingUp,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Eye,
+  X
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -81,6 +83,46 @@ function OwnerDashboardContent() {
   // Edit Modal State
   const [editingItem, setEditingItem] = useState<any>(null);
   const [savingEdit, setSavingEdit] = useState(false);
+  const [viewingRental, setViewingRental] = useState<any>(null);
+
+  // Owner Update Booking Status
+  const handleChangeBookingStatus = async (bookingId: string, newStatus: string) => {
+    try {
+      const res = await api.put(`/bookings/${bookingId}/status`, { status: newStatus });
+      if (res.data?.success) {
+        toast.success(`Booking status marked as ${newStatus}`);
+        setRentals((prev) =>
+          prev.map((r) => (r._id === bookingId ? { ...r, bookingStatus: newStatus } : r))
+        );
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update booking status.');
+    }
+  };
+
+  // Owner Update Payment Status
+  const handleChangePaymentStatus = async (bookingId: string, newPaymentStatus: string) => {
+    try {
+      const res = await api.put(`/bookings/${bookingId}/payment-status`, { paymentStatus: newPaymentStatus });
+      if (res.data?.success) {
+        toast.success(`Payment marked as ${newPaymentStatus}!`);
+        setRentals((prev) =>
+          prev.map((r) =>
+            r._id === bookingId
+              ? {
+                  ...r,
+                  paymentStatus: newPaymentStatus,
+                  bookingStatus:
+                    newPaymentStatus === 'Paid' && r.bookingStatus === 'Pending' ? 'Confirmed' : r.bookingStatus
+                }
+              : r
+          )
+        );
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update payment status.');
+    }
+  };
 
   const fetchOwnerData = async () => {
     setLoading(true);
@@ -445,8 +487,9 @@ function OwnerDashboardContent() {
                       <th>Rental Duration</th>
                       <th>Required Qty</th>
                       <th>Booking Amount</th>
-                      <th>Payment Status</th>
-                      <th>Booking Status</th>
+                      <th>Payment Status Control</th>
+                      <th>Booking Status Control</th>
+                      <th className="text-right px-6">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-base-200">
@@ -467,18 +510,62 @@ function OwnerDashboardContent() {
                         <td className="font-bold">{r.quantity}</td>
                         <td className="font-black text-primary text-sm">৳{Number(r.totalAmount).toLocaleString('en-BD')}</td>
                         <td>
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                            r.paymentStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-500/10 text-amber-600'
-                          }`}>
-                            {r.paymentStatus}
-                          </span>
+                          <div className="space-y-1">
+                            <select
+                              value={r.paymentStatus || 'Unpaid'}
+                              onChange={(e) => handleChangePaymentStatus(r._id, e.target.value)}
+                              className={`p-1.5 rounded-lg text-xs font-bold border focus:outline-none ${
+                                r.paymentStatus === 'Paid'
+                                  ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                                  : r.paymentStatus === 'Refunded'
+                                  ? 'bg-rose-500/10 text-rose-600 border-rose-500/20'
+                                  : 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                              }`}
+                            >
+                              <option value="Paid">✓ Paid</option>
+                              <option value="Unpaid">⏳ Unpaid</option>
+                              <option value="Refunded">↺ Refunded</option>
+                            </select>
+                            {r.paymentStatus !== 'Paid' && (
+                              <button
+                                onClick={() => handleChangePaymentStatus(r._id, 'Paid')}
+                                className="block text-[10px] font-black text-emerald-600 hover:underline"
+                              >
+                                Confirm Payment
+                              </button>
+                            )}
+                          </div>
                         </td>
                         <td>
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                            r.bookingStatus === 'Completed' ? 'bg-blue-500/10 text-blue-600' : 'bg-emerald-500/10 text-emerald-600'
-                          }`}>
-                            {r.bookingStatus}
-                          </span>
+                          <select
+                            value={r.bookingStatus || 'Pending'}
+                            onChange={(e) => handleChangeBookingStatus(r._id, e.target.value)}
+                            className={`p-1.5 rounded-lg text-xs font-bold border focus:outline-none ${
+                              r.bookingStatus === 'Completed'
+                                ? 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+                                : r.bookingStatus === 'Confirmed' || r.bookingStatus === 'Active'
+                                ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                                : r.bookingStatus === 'Cancelled'
+                                ? 'bg-rose-500/10 text-rose-600 border-rose-500/20'
+                                : 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                            }`}
+                          >
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Active">Active (Dispatched)</option>
+                            <option value="Completed">Completed (Returned)</option>
+                            <option value="Cancelled">Cancelled</option>
+                          </select>
+                        </td>
+                        <td className="text-right px-6">
+                          <button
+                            onClick={() => setViewingRental(r)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-white font-bold text-xs transition-colors"
+                            title="View Full Booking Dossier"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Dossier</span>
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -790,6 +877,92 @@ function OwnerDashboardContent() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Dossier Modal */}
+      {viewingRental && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-base-100 rounded-3xl border border-base-300 shadow-2xl max-w-lg w-full p-6 sm:p-8 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-base-200">
+              <div>
+                <h3 className="text-base font-black text-navy-900 dark:text-white">Rental Booking Dossier</h3>
+                <p className="text-[11px] font-mono text-base-content/50">ID: {viewingRental._id}</p>
+              </div>
+              <button
+                onClick={() => setViewingRental(null)}
+                className="p-1 rounded-lg hover:bg-base-200 text-base-content/60"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3.5 rounded-2xl bg-base-200/60 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Customer:</span>
+                  <span className="font-bold text-base-content">{viewingRental.customerName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Email:</span>
+                  <span className="font-bold text-base-content">{viewingRental.customerEmail}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Phone:</span>
+                  <span className="font-bold text-base-content">{viewingRental.contactNumber}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Delivery Site:</span>
+                  <span className="font-bold text-base-content max-w-[200px] text-right truncate">
+                    {viewingRental.deliveryAddress}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-base-200/60 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Machine:</span>
+                  <span className="font-bold text-base-content">{viewingRental.equipmentName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Period:</span>
+                  <span className="font-bold text-base-content">
+                    {viewingRental.startDate} → {viewingRental.endDate} ({viewingRental.durationDays || 1}d)
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Units:</span>
+                  <span className="font-bold text-base-content">{viewingRental.quantity || 1} unit(s)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Total Amount:</span>
+                  <span className="font-black text-primary text-sm">
+                    ৳{Number(viewingRental.totalAmount || 0).toLocaleString('en-BD')}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-base-content/60 font-medium">Payment Status:</span>
+                  <span className="font-bold text-emerald-600">{viewingRental.paymentStatus || 'Unpaid'}</span>
+                </div>
+              </div>
+
+              {viewingRental.additionalNotes && (
+                <div className="p-3.5 rounded-2xl bg-base-200/60 space-y-1">
+                  <span className="text-base-content/60 font-medium block">Jobsite Notes:</span>
+                  <p className="font-medium text-base-content/80 italic">{viewingRental.additionalNotes}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={() => setViewingRental(null)}
+                className="px-5 py-2 rounded-xl bg-primary text-white text-xs font-bold"
+              >
+                Close Dossier
+              </button>
+            </div>
           </div>
         </div>
       )}
