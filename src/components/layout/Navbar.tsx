@@ -283,6 +283,15 @@ export const Navbar: React.FC = () => {
                         <Heart className="w-4 h-4 mr-3 text-rose-500" />
                         My Favorites
                       </NextLink>
+
+                      <NextLink
+                        href="/profile"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center px-4 py-2 text-xs font-bold text-base-content/80 hover:bg-primary/10 hover:text-primary transition-colors"
+                      >
+                        <User className="w-4 h-4 mr-3 text-primary" />
+                        My Profile & Security
+                      </NextLink>
                     </div>
 
                     <div className="border-t border-base-200 pt-1">
@@ -400,6 +409,14 @@ export const Navbar: React.FC = () => {
                 >
                   <Heart className="w-4 h-4 mr-2 text-rose-500" />
                   My Favorites
+                </NextLink>
+                <NextLink
+                  href="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center py-2.5 rounded-xl text-xs font-bold border border-base-300 hover:bg-base-200 transition-colors"
+                >
+                  <User className="w-4 h-4 mr-2 text-primary" />
+                  My Profile & Security
                 </NextLink>
                 <button
                   onClick={() => {
