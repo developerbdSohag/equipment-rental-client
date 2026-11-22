@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -26,6 +26,8 @@ import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialRoleParam = searchParams.get('role');
   const { register } = useAuth();
 
   // Current Step: 1, 2, 3, 4, or 5 (Success)
@@ -37,7 +39,9 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState<'Customer' | 'Owner'>('Customer');
+  const [role, setRole] = useState<'Customer' | 'Owner'>(
+    initialRoleParam?.toLowerCase() === 'owner' ? 'Owner' : 'Customer'
+  );
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -134,6 +138,12 @@ export default function RegisterPage() {
           </p>
 
           {/* Progress Indicator */}
+          {initialRoleParam?.toLowerCase() === 'owner' && (
+            <div className="p-3 rounded-2xl bg-orange-500/10 border border-orange-500/30 text-xs font-bold text-orange-600 flex items-center justify-center gap-2">
+              <Truck className="w-4 h-4 text-orange-600" />
+              <span>Registering as Verified Machinery Owner (ভেন্ডর রেজিস্ট্রেশন)</span>
+            </div>
+          )}
           {step <= 4 && (
             <div className="w-full bg-base-200 rounded-full h-2 mt-4 overflow-hidden">
               <div

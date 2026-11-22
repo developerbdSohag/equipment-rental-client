@@ -313,14 +313,21 @@ export const Navbar: React.FC = () => {
               // Unauthenticated Actions: Crisp & Professional
               <div className="flex items-center space-x-2">
                 <NextLink
+                  href="/login?role=Owner"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-orange-600 dark:text-orange-400 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 transition-all flex items-center gap-1.5"
+                >
+                  <Truck className="w-3.5 h-3.5" />
+                  <span>Owner Sign In</span>
+                </NextLink>
+                <NextLink
                   href="/login"
-                  className="nav-link-item px-4 py-2 rounded-xl text-xs font-bold text-base-content/80 hover:text-electric-500 dark:hover:text-cyan-400 hover:bg-base-200/80 transition-colors"
+                  className="nav-link-item px-3.5 py-1.5 rounded-xl text-xs font-bold text-base-content/80 hover:text-electric-500 dark:hover:text-cyan-400 hover:bg-base-200/80 transition-colors"
                 >
                   Login
                 </NextLink>
                 <NextLink
                   href="/register"
-                  className="btn-premium-primary px-5 py-2 text-xs font-extrabold shadow-sm tracking-wide"
+                  className="btn-premium-primary px-4 py-1.5 text-xs font-extrabold shadow-sm tracking-wide"
                 >
                   Register
                 </NextLink>
@@ -431,6 +438,14 @@ export const Navbar: React.FC = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2">
+                <NextLink
+                  href="/login?role=Owner"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="col-span-2 flex items-center justify-center py-2.5 rounded-xl text-xs font-bold bg-orange-500/10 border border-orange-500/30 text-orange-600 dark:text-orange-400"
+                >
+                  <Truck className="w-4 h-4 mr-1.5" />
+                  <span>Machinery Owner Sign In (ভেন্ডর সাইন ইন)</span>
+                </NextLink>
                 <NextLink
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}

@@ -22,14 +22,21 @@ import {
   ShieldCheck,
   MessageCircle,
   Sparkles,
-  Trophy
+  Trophy,
+  ArrowLeft,
+  Truck
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import OwnerLoginPortal from '@/components/auth/OwnerLoginPortal';
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/';
+  const roleParam = searchParams.get('role');
+  const [loginMode, setLoginMode] = useState<'standard' | 'owner'>(
+    roleParam?.toLowerCase() === 'owner' ? 'owner' : 'standard'
+  );
 
   const { login, googleLogin, githubLogin, user } = useAuth();
 
@@ -118,6 +125,31 @@ export default function LoginPage() {
     }
   };
 
+  if (loginMode === 'owner') {
+    return (
+      <div className="min-h-screen bg-[#F7F5F0] dark:bg-[#070d19] py-8 sm:py-14 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-5 transition-colors">
+        <div className="w-full max-w-6xl flex justify-between items-center px-2">
+          <NextLink
+            href="/"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-orange-600 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Marketplace Home · হোমপেজ</span>
+          </NextLink>
+
+          <button
+            onClick={() => setLoginMode('standard')}
+            className="text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white underline"
+          >
+            Switch to Customer / Admin Sign In →
+          </button>
+        </div>
+
+        <OwnerLoginPortal redirectPath={redirectPath} />
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden overflow-y-auto lg:overflow-hidden bg-[#070d19] text-white flex flex-col justify-between select-none">
       
@@ -171,8 +203,17 @@ export default function LoginPage() {
           </div>
         </NextLink>
 
-        {/* Right: Create Account pill button */}
-        <div className="flex items-center space-x-2.5 sm:space-x-3">
+        {/* Right: Create Account pill button & Owner Portal switch */}
+        <div className="flex items-center space-x-2 sm:space-x-2.5">
+          {/* Owner Portal switch button */}
+          <button
+            onClick={() => setLoginMode('owner')}
+            className="px-3 sm:px-4 py-2 rounded-full text-[11px] sm:text-xs font-black text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-md transition-all flex items-center gap-1.5"
+          >
+            <Truck className="w-3.5 h-3.5" />
+            <span>Owner Portal · ভেন্ডর</span>
+          </button>
+
           {/* Audio toggle button for background video */}
           <button
             onClick={toggleSound}
@@ -365,10 +406,10 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickDemoLogin('owner@rentalequip.com', 'OwnerPassword123!')}
+                  onClick={() => setLoginMode('owner')}
                   className="py-1 px-1.5 text-[10px] font-extrabold rounded-xl bg-white/10 hover:bg-[#FF7A1A]/20 hover:border-[#FF7A1A] border border-white/10 text-white transition-all text-center"
                 >
-                  🚜 Owner
+                  🚜 Owner Portal
                 </button>
                 <button
                   type="button"
@@ -378,6 +419,21 @@ export default function LoginPage() {
                   👤 Customer
                 </button>
               </div>
+            </div>
+
+            {/* Direct Owner Portal Card Banner */}
+            <div className="p-3 rounded-2xl bg-gradient-to-r from-[#EA580C]/25 via-amber-500/20 to-transparent border border-[#EA580C]/40 text-center space-y-1.5">
+              <span className="text-[11px] text-amber-300 font-bold block">
+                Are you an Equipment Owner or Vendor?
+              </span>
+              <button
+                type="button"
+                onClick={() => setLoginMode('owner')}
+                className="w-full py-2.5 px-3 rounded-xl bg-[#EA580C] hover:bg-[#D94E07] text-white text-xs font-black uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2"
+              >
+                <Truck className="w-3.5 h-3.5" />
+                <span>Open Owner Vendor Portal Sign In (ভেন্ডর সাইন ইন) →</span>
+              </button>
             </div>
 
             {/* Login Form */}
