@@ -672,6 +672,10 @@ function AdminDashboardContent() {
                                 src={r.equipmentImage}
                                 alt={r.equipmentName}
                                 className="w-10 h-10 rounded-lg object-cover bg-base-200 shrink-0"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src =
+                                    'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=400&q=80';
+                                }}
                               />
                             )}
                             <div>
@@ -793,6 +797,10 @@ function AdminDashboardContent() {
                     src={viewingRental.equipmentImage}
                     alt={viewingRental.equipmentName}
                     className="w-14 h-14 rounded-xl object-cover bg-base-200 shrink-0"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=400&q=80';
+                    }}
                   />
                 )}
                 <div>
