@@ -9,14 +9,14 @@ const categories = [
   {
     id: 'excavators',
     name: 'Excavators',
-    image: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80',
     count: '340+ Units',
     description: 'Tracked, wheeled, and mini excavators for earthmoving and trenching.'
   },
   {
     id: 'cranes',
     name: 'Cranes',
-    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb1861564?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1575538633395-c773c6ea252d?auto=format&fit=crop&w=800&q=80',
     count: '115+ Units',
     description: 'Mobile, all-terrain, crawler, and tower cranes for heavy lifts.'
   },
@@ -128,7 +128,7 @@ export const CategoriesSection: React.FC = () => {
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-85 group-hover:opacity-100"
                   loading="lazy"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80';
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=800&q=80';
                   }}
                 />
 

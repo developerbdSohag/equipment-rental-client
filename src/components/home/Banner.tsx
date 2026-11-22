@@ -189,7 +189,7 @@ export const Banner: React.FC = () => {
           {/* Main Hero Machinery Image Card */}
           <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-white/60 dark:border-white/10 bg-navy-950 min-h-[380px] sm:min-h-[420px] lg:min-h-[460px] flex flex-col justify-end p-5 sm:p-8">
             <img
-              src="https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1600&q=80"
+              src="https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=1600&q=80"
               alt="CAT 320 Next Gen Hydraulic Excavator"
               className="absolute inset-0 w-full h-full object-cover object-center"
               onError={(e) => {

@@ -30,8 +30,8 @@ const SHOWCASE_MACHINES = [
   {
     title: '25 Ton Hydraulic Crane',
     category: 'Mobile Heavy Lifting',
-    image: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80',
-    fallback: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1575538633395-c773c6ea252d?auto=format&fit=crop&w=600&q=80',
+    fallback: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80',
     link: '/equipment/6afff0e18ab535911d632a2c'
   },
   {
@@ -45,7 +45,7 @@ const SHOWCASE_MACHINES = [
     title: '10 Ton Heavy Pneumatic Forklift',
     category: 'Industrial Material Handling',
     image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80',
-    fallback: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80',
+    fallback: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=600&q=80',
     link: '/equipment/6afff0e18ab535911d632a2e'
   },
   {
