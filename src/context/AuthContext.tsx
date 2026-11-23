@@ -49,7 +49,16 @@ export const getGoogleOAuthUrl = (): string => {
   if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL) {
     return process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
   }
-  return 'https://accounts.google.com/v3/signin/accountchooser?client_id=317561215059-j7e3825l0j107cltgge502gd1r2saogt.apps.googleusercontent.com&code_challenge=9tU8H-aNp38zY4pXdDdtcAik3FCqoLvfchUzqb25xcQ&code_challenge_method=S256&include_granted_scopes=true&redirect_uri=https%3A%2F%2Frental-hub-eight-flame.vercel.app%2Fapi%2Fauth%2Fcallback%2Fgoogle&response_type=code&scope=email+profile+openid&state=2k6vlADcsIlfL-SfS3jsjkj7208HcdJc';
+  const clientId = '317561215059-j7e3825l0j107cltgge502gd1r2saogt.apps.googleusercontent.com';
+  const redirectUri = 'https://rental-hub-eight-flame.vercel.app/api/auth/callback/google';
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    response_type: 'code',
+    scope: 'openid email profile',
+    prompt: 'select_account'
+  });
+  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 };
 
 export const getGithubOAuthUrl = (): string => {
