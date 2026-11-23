@@ -202,11 +202,11 @@ export const Navbar: React.FC = () => {
 
           {/* Actions & Profile */}
           <div className="hidden md:flex items-center space-x-3">
-            {/* Theme Toggle Button */}
+            {/* Theme Toggle Button with Holographic Micro-Glass */}
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="nav-link-item p-2.5 rounded-2xl border border-base-300/80 text-base-content/70 hover:text-electric-500 hover:bg-base-200/80 transition-all"
+              className="nav-btn-holographic-icon"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-400" />
@@ -220,7 +220,7 @@ export const Navbar: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="nav-link-item flex items-center space-x-3 pl-2 pr-3 py-1.5 rounded-2xl border border-base-300/80 hover:border-electric-500/50 transition-all bg-base-100/80 backdrop-blur-md shadow-sm"
+                  className="nav-btn-holographic-user"
                 >
                   <img
                     src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name)}`}
@@ -310,26 +310,20 @@ export const Navbar: React.FC = () => {
                 )}
               </div>
             ) : (
-              // Unauthenticated Actions: Crisp & Professional
-              <div className="flex items-center space-x-2">
-                <NextLink
-                  href="/login?role=Owner"
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-orange-600 dark:text-orange-400 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 transition-all flex items-center gap-1.5"
-                >
-                  <Truck className="w-3.5 h-3.5" />
-                  <span>Owner Sign In</span>
-                </NextLink>
+              // Unauthenticated Actions: Holographic Dual-Theme Buttons
+              <div className="flex items-center space-x-2.5">
                 <NextLink
                   href="/login"
-                  className="nav-link-item px-3.5 py-1.5 rounded-xl text-xs font-bold text-base-content/80 hover:text-electric-500 dark:hover:text-cyan-400 hover:bg-base-200/80 transition-colors"
+                  className="nav-btn-holographic-secondary"
                 >
-                  Login
+                  <span>Login</span>
                 </NextLink>
                 <NextLink
                   href="/register"
-                  className="btn-premium-primary px-4 py-1.5 text-xs font-extrabold shadow-sm tracking-wide"
+                  className="nav-btn-holographic-primary"
                 >
-                  Register
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-200" />
+                  <span>Register</span>
                 </NextLink>
               </div>
             )}
@@ -340,7 +334,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="nav-link-item p-2 rounded-xl border border-base-300 text-base-content/80"
+              className="nav-btn-holographic-icon p-2"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
             </button>
@@ -437,28 +431,21 @@ export const Navbar: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <NextLink
-                  href="/login?role=Owner"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="col-span-2 flex items-center justify-center py-2.5 rounded-xl text-xs font-bold bg-orange-500/10 border border-orange-500/30 text-orange-600 dark:text-orange-400"
-                >
-                  <Truck className="w-4 h-4 mr-1.5" />
-                  <span>Machinery Owner Sign In (ভেন্ডর সাইন ইন)</span>
-                </NextLink>
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
                 <NextLink
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center py-2.5 rounded-xl text-xs font-bold border border-base-300 hover:bg-base-200"
+                  className="nav-btn-holographic-secondary w-full py-2.5 text-center"
                 >
-                  Login
+                  <span>Login</span>
                 </NextLink>
                 <NextLink
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center py-2.5 rounded-xl text-xs font-bold btn-premium-primary"
+                  className="nav-btn-holographic-primary w-full py-2.5 text-center"
                 >
-                  Register
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-200" />
+                  <span>Register</span>
                 </NextLink>
               </div>
             )}
