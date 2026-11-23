@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import OwnerLoginPortal from '@/components/auth/OwnerLoginPortal';
+import { GoogleAccountChooserModal } from '@/components/auth/GoogleAccountChooserModal';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -46,6 +47,7 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [googleModalOpen, setGoogleModalOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
   const bgVideoRef = useRef<HTMLVideoElement>(null);
@@ -112,13 +114,26 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleAuth = async () => {
-    setSubmitting(true);
+  const handleGoogleAuth = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('equipment_auth_redirect', redirectPath || '/dashboard/customer');
     }
-    toast.loading('Redirecting to Google Accounts...', { id: 'social-redirect' });
-    await googleLogin();
+    setGoogleModalOpen(true);
+  };
+
+  const handleGoogleAccountSelect = async (
+    selectedEmail: string,
+    selectedName: string,
+    selectedPhoto?: string
+  ): Promise<boolean> => {
+    setSubmitting(true);
+    const success = await googleLogin(selectedEmail, selectedName, selectedPhoto);
+    setSubmitting(false);
+    if (success) {
+      router.push(redirectPath || '/dashboard/customer');
+      return true;
+    }
+    return false;
   };
 
   const handleGithubAuth = async () => {
@@ -638,6 +653,13 @@ export default function LoginPage() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* 6. GOOGLE ACCOUNT CHOOSER MODAL (Customized strictly to equipment-rental-client-three.vercel.app) */}
+      <GoogleAccountChooserModal
+        isOpen={googleModalOpen}
+        onClose={() => setGoogleModalOpen(false)}
+        onSelectAccount={handleGoogleAccountSelect}
+      />
 
     </div>
   );

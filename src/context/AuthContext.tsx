@@ -45,12 +45,20 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 // Google & GitHub OAuth Authorization Endpoints
-export const getGoogleOAuthUrl = (): string => {
+export const getGoogleOAuthUrl = (customRedirect?: string): string => {
   if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL) {
     return process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
   }
-  const clientId = '317561215059-j7e3825l0j107cltgge502gd1r2saogt.apps.googleusercontent.com';
-  const redirectUri = 'https://rental-hub-eight-flame.vercel.app/api/auth/callback/google';
+  const clientId = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) || '317561215059-j7e3825l0j107cltgge502gd1r2saogt.apps.googleusercontent.com';
+  
+  // Exclusively link to equipment-rental-client-three.vercel.app or local origin
+  let redirectUri = customRedirect;
+  if (!redirectUri && typeof window !== 'undefined') {
+    redirectUri = `${window.location.origin}/api/auth/callback/google`;
+  } else if (!redirectUri) {
+    redirectUri = 'https://equipment-rental-client-three.vercel.app/api/auth/callback/google';
+  }
+
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
