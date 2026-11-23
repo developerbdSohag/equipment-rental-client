@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, UserPlus, ArrowRight, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
-import { getGoogleOAuthUrl } from '@/context/AuthContext';
+import { X, UserPlus, Loader2, CheckCircle2 } from 'lucide-react';
 
 interface GoogleAccountChooserModalProps {
   isOpen: boolean;
@@ -47,11 +46,6 @@ export const GoogleAccountChooserModal: React.FC<GoogleAccountChooserModalProps>
     if (!customEmail) return;
     const derivedName = customName || customEmail.split('@')[0];
     await handleAccountClick(customEmail, derivedName);
-  };
-
-  const handleLaunchExternalGoogle = () => {
-    const oauthUrl = getGoogleOAuthUrl();
-    window.location.href = oauthUrl;
   };
 
   return (
@@ -221,18 +215,6 @@ export const GoogleAccountChooserModal: React.FC<GoogleAccountChooserModalProps>
             </form>
           )}
 
-        </div>
-
-        {/* Option 4: Launch external Google Accounts Authorization screen */}
-        <div className="pt-1 pb-3 text-center">
-          <button
-            type="button"
-            onClick={handleLaunchExternalGoogle}
-            className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium"
-          >
-            <span>Launch External Google OAuth Web Redirect</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </button>
         </div>
 
         {/* Bottom Legal Notice */}
