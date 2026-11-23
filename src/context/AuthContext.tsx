@@ -50,7 +50,14 @@ export const getGoogleOAuthUrl = (customRedirect?: string): string => {
     return process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
   }
   const clientId = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) || '317561215059-j7e3825l0j107cltgge502gd1r2saogt.apps.googleusercontent.com';
-  const redirectUri = customRedirect || (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI) || 'https://rental-hub-eight-flame.vercel.app/api/auth/callback/google';
+  
+  // Exclusively redirect to THIS website: equipment-rental-client-three.vercel.app
+  let redirectUri = customRedirect;
+  if (!redirectUri && typeof window !== 'undefined') {
+    redirectUri = `${window.location.origin}/api/auth/callback/google`;
+  } else if (!redirectUri) {
+    redirectUri = 'https://equipment-rental-client-three.vercel.app/api/auth/callback/google';
+  }
 
   const params = new URLSearchParams({
     client_id: clientId,
