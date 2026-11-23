@@ -25,7 +25,6 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { GoogleAccountChooserModal } from '@/components/auth/GoogleAccountChooserModal';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -47,22 +46,6 @@ export default function RegisterPage() {
   );
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [googleModalOpen, setGoogleModalOpen] = useState(false);
-
-  const handleGoogleAccountSelect = async (
-    selectedEmail: string,
-    selectedName: string,
-    selectedPhoto?: string
-  ): Promise<boolean> => {
-    setSubmitting(true);
-    const success = await googleLogin(selectedEmail, selectedName, selectedPhoto);
-    setSubmitting(false);
-    if (success) {
-      router.push('/dashboard/customer');
-      return true;
-    }
-    return false;
-  };
 
   // Password validation indicators
   const hasUpperCase = /[A-Z]/.test(password);
@@ -247,7 +230,7 @@ export default function RegisterPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setGoogleModalOpen(true)}
+                  onClick={() => googleLogin()}
                   className="py-3 px-3 rounded-full bg-base-100 hover:bg-base-200 border border-base-300 text-xs font-bold text-base-content flex items-center justify-center gap-2.5 transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
@@ -545,13 +528,6 @@ export default function RegisterPage() {
             </NextLink>
           </p>
         )}
-
-        {/* Google Account Chooser Modal (Customized strictly to equipment-rental-client-three.vercel.app) */}
-        <GoogleAccountChooserModal
-          isOpen={googleModalOpen}
-          onClose={() => setGoogleModalOpen(false)}
-          onSelectAccount={handleGoogleAccountSelect}
-        />
 
       </div>
     </div>
