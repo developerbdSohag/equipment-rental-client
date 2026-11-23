@@ -80,7 +80,7 @@ export default function LoginPage() {
       const savedRedirect = typeof window !== 'undefined' ? sessionStorage.getItem('equipment_auth_redirect') : null;
       if (provider === 'google') {
         toast.loading('Finalizing Google authentication...', { id: 'social-finalize' });
-        googleLogin('customer.google@rentalhub.com', 'Google Verified Customer').then((success) => {
+        googleLogin('mdsalahuddinsohag218@gmail.com', 'Md. Salahuddin Sohag').then((success) => {
           toast.dismiss('social-finalize');
           if (success) {
             router.push(savedRedirect || redirectPath || '/dashboard/customer');
@@ -88,7 +88,7 @@ export default function LoginPage() {
         });
       } else if (provider === 'github') {
         toast.loading('Finalizing GitHub authentication...', { id: 'social-finalize' });
-        githubLogin('contractor.github@rentalhub.com', 'GitHub Verified Contractor').then((success) => {
+        githubLogin('developerbdsohag@github.com', 'Md. Salahuddin Sohag').then((success) => {
           toast.dismiss('social-finalize');
           if (success) {
             router.push(savedRedirect || redirectPath || '/dashboard/customer');

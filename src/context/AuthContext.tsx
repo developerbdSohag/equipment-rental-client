@@ -49,7 +49,7 @@ export const getGoogleOAuthUrl = (customRedirect?: string): string => {
   if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL) {
     return process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
   }
-  const clientId = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) || '317561215059-j7e3825l0j107cltgge502gd1r2saogt.apps.googleusercontent.com';
+  const clientId = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) || '642943369890-s15vb7p1el6ofkalrr52e9cm9d70cm2c.apps.googleusercontent.com';
   
   // Exclusively redirect to THIS website: equipment-rental-client-three.vercel.app
   let redirectUri = customRedirect;
