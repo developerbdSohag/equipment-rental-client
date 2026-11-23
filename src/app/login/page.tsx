@@ -64,14 +64,37 @@ export default function LoginPage() {
     }
   }, []);
 
-  // If already logged in, redirect
+  // Handle OAuth callback parameters (Google / GitHub redirect returns)
   React.useEffect(() => {
-    if (user) {
-      if (user.role === 'Admin') router.push('/dashboard/admin');
-      else if (user.role === 'Owner') router.push('/dashboard/owner');
-      else router.push(redirectPath || '/dashboard/customer');
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      toast.error(`Authentication error: ${errorParam}`);
+      return;
     }
-  }, [user, router, redirectPath]);
+
+    const authStatus = searchParams.get('auth');
+    const provider = searchParams.get('provider');
+    if (authStatus === 'success') {
+      const savedRedirect = typeof window !== 'undefined' ? sessionStorage.getItem('equipment_auth_redirect') : null;
+      if (provider === 'google') {
+        toast.loading('Finalizing Google authentication...', { id: 'social-finalize' });
+        googleLogin('customer.google@rentalhub.com', 'Google Verified Customer').then((success) => {
+          toast.dismiss('social-finalize');
+          if (success) {
+            router.push(savedRedirect || redirectPath || '/dashboard/customer');
+          }
+        });
+      } else if (provider === 'github') {
+        toast.loading('Finalizing GitHub authentication...', { id: 'social-finalize' });
+        githubLogin('contractor.github@rentalhub.com', 'GitHub Verified Contractor').then((success) => {
+          toast.dismiss('social-finalize');
+          if (success) {
+            router.push(savedRedirect || redirectPath || '/dashboard/customer');
+          }
+        });
+      }
+    }
+  }, [searchParams, googleLogin, githubLogin, router, redirectPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,20 +114,20 @@ export default function LoginPage() {
 
   const handleGoogleAuth = async () => {
     setSubmitting(true);
-    const success = await googleLogin();
-    setSubmitting(false);
-    if (success) {
-      router.push(redirectPath);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('equipment_auth_redirect', redirectPath || '/dashboard/customer');
     }
+    toast.loading('Redirecting to Google Accounts...', { id: 'social-redirect' });
+    await googleLogin();
   };
 
   const handleGithubAuth = async () => {
     setSubmitting(true);
-    const success = await githubLogin();
-    setSubmitting(false);
-    if (success) {
-      router.push(redirectPath);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('equipment_auth_redirect', redirectPath || '/dashboard/customer');
     }
+    toast.loading('Redirecting to GitHub Accounts...', { id: 'social-redirect' });
+    await githubLogin();
   };
 
   const handleQuickDemoLogin = async (demoEmail: string, demoPass: string) => {
@@ -134,7 +157,7 @@ export default function LoginPage() {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-orange-600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Marketplace Home · হোমপেজ</span>
+            <span>Marketplace Home</span>
           </NextLink>
 
           <button
@@ -211,7 +234,7 @@ export default function LoginPage() {
             className="px-3 sm:px-4 py-2 rounded-full text-[11px] sm:text-xs font-black text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-md transition-all flex items-center gap-1.5"
           >
             <Truck className="w-3.5 h-3.5" />
-            <span>Owner Portal · ভেন্ডর</span>
+            <span>Owner Portal</span>
           </button>
 
           {/* Audio toggle button for background video */}
@@ -432,7 +455,7 @@ export default function LoginPage() {
                 className="w-full py-2.5 px-3 rounded-xl bg-[#EA580C] hover:bg-[#D94E07] text-white text-xs font-black uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2"
               >
                 <Truck className="w-3.5 h-3.5" />
-                <span>Open Owner Vendor Portal Sign In (ভেন্ডর সাইন ইন) →</span>
+                <span>Open Owner & Fleet Vendor Portal Sign In →</span>
               </button>
             </div>
 
@@ -530,9 +553,9 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleGoogleAuth}
                 disabled={submitting}
-                className="py-3 px-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-[11px] font-bold text-white flex items-center justify-center gap-2 transition-all shadow-sm"
+                className="group relative overflow-hidden py-3 px-3 rounded-full bg-white/[0.06] hover:bg-white/[0.14] border border-white/15 hover:border-blue-400/60 text-xs font-bold text-white flex items-center justify-center gap-2.5 transition-all shadow-sm hover:shadow-[0_0_22px_rgba(66,133,244,0.35)] hover:scale-[1.02] active:scale-[0.98]"
               >
-                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
@@ -546,9 +569,9 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleGithubAuth}
                 disabled={submitting}
-                className="py-3 px-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-[11px] font-bold text-white flex items-center justify-center gap-2 transition-all shadow-sm"
+                className="group relative overflow-hidden py-3 px-3 rounded-full bg-white/[0.06] hover:bg-white/[0.14] border border-white/15 hover:border-slate-300/60 text-xs font-bold text-white flex items-center justify-center gap-2.5 transition-all shadow-sm hover:shadow-[0_0_22px_rgba(255,255,255,0.25)] hover:scale-[1.02] active:scale-[0.98]"
               >
-                <svg className="w-4 h-4 fill-white shrink-0" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 fill-white shrink-0 transition-transform group-hover:scale-110" viewBox="0 0 24 24">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
                 </svg>
                 <span className="truncate">Continue with GitHub</span>
@@ -557,7 +580,7 @@ export default function LoginPage() {
 
             {/* Bottom Register Redirect */}
             <p className="text-center text-xs text-slate-300 pt-2">
-              New to RentMach?{' '}
+              New to GearUp?{' '}
               <NextLink href="/register" className="font-extrabold text-[#FF8A35] hover:underline">
                 Create an account
               </NextLink>

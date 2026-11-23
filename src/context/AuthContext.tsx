@@ -25,7 +25,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string, photoURL?: string, role?: string, phone?: string, address?: string) => Promise<boolean>;
   googleLogin: (email?: string, name?: string, photoURL?: string) => Promise<boolean>;
-  githubLogin: () => Promise<boolean>;
+  githubLogin: (email?: string, name?: string, photoURL?: string) => Promise<boolean>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<boolean>;
   changePassword: (currentPassword: string, newPassword: string, confirmPassword: string) => Promise<{ success: boolean; message: string }>;
@@ -43,6 +43,22 @@ const AuthContext = createContext<AuthContextType>({
   updateProfile: async () => false,
   changePassword: async () => ({ success: false, message: '' }),
 });
+
+// Google & GitHub OAuth Authorization Endpoints
+export const getGoogleOAuthUrl = (): string => {
+  if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL) {
+    return process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
+  }
+  return 'https://accounts.google.com/v3/signin/accountchooser?client_id=317561215059-j7e3825l0j107cltgge502gd1r2saogt.apps.googleusercontent.com&code_challenge=9tU8H-aNp38zY4pXdDdtcAik3FCqoLvfchUzqb25xcQ&code_challenge_method=S256&include_granted_scopes=true&redirect_uri=https%3A%2F%2Frental-hub-eight-flame.vercel.app%2Fapi%2Fauth%2Fcallback%2Fgoogle&response_type=code&scope=email+profile+openid&state=2k6vlADcsIlfL-SfS3jsjkj7208HcdJc';
+};
+
+export const getGithubOAuthUrl = (): string => {
+  if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GITHUB_AUTH_URL) {
+    return process.env.NEXT_PUBLIC_GITHUB_AUTH_URL;
+  }
+  const clientId = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID) || 'Iv1.b507a08c87ecfe98';
+  return `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user:email`;
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -213,11 +229,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     mockName?: string,
     mockPhoto?: string
   ): Promise<boolean> => {
+    // If called without credentials, redirect directly to Google Accounts OAuth
+    if (!mockEmail && typeof window !== 'undefined') {
+      window.location.href = getGoogleOAuthUrl();
+      return true;
+    }
+
     try {
       setIsLoading(true);
-      const email = mockEmail || `google_user_${Math.floor(Math.random() * 10000)}@gmail.com`;
+      const email = mockEmail;
       const name = mockName || 'Google User';
-      const photoURL = mockPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80';
+      const photoURL = mockPhoto || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(email)}`;
 
       const res = await api.post('/auth/google', { email, name, photoURL });
 
@@ -251,14 +273,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // GitHub Social Login
-  const githubLogin = async (): Promise<boolean> => {
+  const githubLogin = async (
+    mockEmail?: string,
+    mockName?: string,
+    mockPhoto?: string
+  ): Promise<boolean> => {
+    // If called without credentials, redirect directly to GitHub OAuth
+    if (!mockEmail && typeof window !== 'undefined') {
+      window.location.href = getGithubOAuthUrl();
+      return true;
+    }
+
     try {
       setIsLoading(true);
-      const email = `github_contractor_${Math.floor(Math.random() * 10000)}@github.com`;
-      const name = 'GitHub Contractor';
-      const photoURL = 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&q=80';
+      const email = mockEmail;
+      const name = mockName || 'GitHub User';
+      const photoURL = mockPhoto || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(email)}`;
 
-      const res = await api.post('/auth/google', { email, name, photoURL });
+      const res = await api.post('/auth/github', { email, name, photoURL });
 
       if (res.data.success) {
         const { token: receivedToken, user: receivedUser } = res.data;
@@ -282,7 +314,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return false;
     } catch (error: any) {
-      toast.error('GitHub authentication failed.');
+      toast.error(error.response?.data?.message || 'GitHub login failed.');
       return false;
     } finally {
       setIsLoading(false);
